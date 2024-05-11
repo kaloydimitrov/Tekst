@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tekst - {% block title %}{% endblock %}</title>
+
+    {# VueJS integration #}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    {# Load Bootstrap 5 #}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+    {% block main %}
+    {% endblock %}
+</body>
+<script>
+    {% block script %}
+    {% endblock %}
+</script>
+</html>
