@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tekst - {% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
 
     {# VueJS integration #}
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -13,8 +13,17 @@
     {% bootstrap_javascript %}
 </head>
 <body>
-    {% block main %}
-    {% endblock %}
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/docs/4.1/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+            Istorya.bg
+        </a>
+    </nav>
+
+    <div class="container">
+        {% block main %}
+        {% endblock %}
+    </div>
 </body>
 <script>
     {% block script %}

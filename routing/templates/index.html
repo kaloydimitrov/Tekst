@@ -3,34 +3,8 @@
 {% block title %}Home{% endblock %}
 
 {% block main %}
-    <script type='text/javascript'>
-        const people = {{ items_json | safe }};
-    </script>
-
-    <div id="app" class="container">
-        [[ message ]]
-
-        <ul class="list-group">
-            <li v-for="person in people" class="list-group-item">
-                <a v-bind:href="person.url">[[ person.name ]]</a>
-                <button v-on:click="greet(person.name)" class="btn btn-primary">hey</button>
-            </li>
-        </ul>
-    </div>
+    <h1>thats main</h1>
 {% endblock %}
 
 {% block script %}
-    const app = new Vue({
-        delimiters: ['[[', ']]'],
-        el: '#app',
-        data: {
-            message: 'Hello Vue!',
-            people: people,
-        },
-        methods: {
-            greet: function (name) {
-                alert('Hello from ' + name + '!')
-            }
-        }
-    });
 {% endblock %}
