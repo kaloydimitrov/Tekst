@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block main %}
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                {% for value in form.errors.values %}
+                    {% for message in value %}
+                        {{ message|striptags }}<br>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-floating mb-3">
+            {{ form.username }}
+            <label for="username">Username</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            {{ form.email }}
+            <label for="email">Email</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            {{ form.password1 }}
+            <label for="password1">Password</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            {{ form.password2 }}
+            <label for="password2">Password confirmation</label>
+        </div>
+
+        <button type="submit" class="btn btn-secondary">Register and Login</button>
+    </form>
+{% endblock %}

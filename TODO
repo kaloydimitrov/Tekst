@@ -1,2 +1,15 @@
 routing app should be named 'pages' maybe
+authentication
 db schema to reality
+staticfiles
+send email (authorization)
+signup error messages
+
+email send validation
+password reset
+
+
+
+
+
+send email (contacts)
