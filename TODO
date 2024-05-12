@@ -13,3 +13,5 @@ add github secrets
 
 
 send email (contacts)
+add 404, 500 > error pages
+implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
