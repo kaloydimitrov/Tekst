@@ -1,10 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
+from .validators import validate_len
 
 
+# TODO: attach to tags and spaces (create more models)
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, validators=[validate_len])
+    content = models.TextField(validators=[validate_len])
     visibility = models.BooleanField(default=True)
     views = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -28,6 +31,7 @@ class Comment(models.Model):
 
 class ReactionType(models.Model):
     name = models.CharField(max_length=50)
+
     # icon = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):

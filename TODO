@@ -32,3 +32,9 @@ emails:
 when post created
 when post gets more than 200 views
 when someone answers your comment (<10 answers)
+
+
+
+
+FIX:
+vue axios import error
