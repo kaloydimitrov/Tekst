@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Space{% endblock %}
+
+{% block main %}
+    <form method="POST" action="{% url 'create_post' %}" class="form-group">
+        {% csrf_token %}
+        {% include 'errors.html' %}
+
+        <div class="form-floating mb-3">
+            {{ form.name }}
+            <label for="name">Enter Name</label>
+        </div>
+        <div class="form-floating mb-3 form-content">
+            {{ form.description }}
+            <label for="content">Enter description</label>
+        </div>
+        
+        <b><i>*add at least 10 tags in order to create a space</i></b>
+
+        <button type="submit" class="btn btn-secondary">Publish</button>
+    </form>
+{% endblock %}
+
+{% block rest %}
+<style>
+    .form-content>.form-control {
+        height: 150px;
+    }
+
+    .form-group .btn {
+        margin-top: 18px;
+    }
+</style>
+{% endblock %}

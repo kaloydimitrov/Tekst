@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'routing',
     'api',
     'posts',
+    'spaces',
     'authentication',
 ]
 
