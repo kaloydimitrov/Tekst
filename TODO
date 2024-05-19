@@ -1,17 +1,34 @@
-routing app should be named 'pages' maybe
-authentication
 db schema to reality
 staticfiles
-send email (authorization)
-signup error messages
 
-email send validation
-password reset
-
+email send validation (authentication)
+password reset option
 
 add github secrets
 
-
-send email (contacts)
 add 404, 500 > error pages
 implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
+
+load comments (load 10 at a time using VueJS)
+only small text of the post will be shown and when you a user actually clicks the post gets +1 view
+
+load posts (load 10 at a time using VueJS)
+
+
+create new app - spaces
+-name
+-description
+
+
+
+
+
+you can follow posts and spaces
+
+send email (contacts)
+
+emails:
+when post created
+when post gets more than 200 views
+when someone answers your comment (<10 answers)
