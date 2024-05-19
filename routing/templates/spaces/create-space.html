@@ -3,7 +3,7 @@
 {% block title %}Create Space{% endblock %}
 
 {% block main %}
-    <form method="POST" action="{% url 'create_post' %}" class="form-group">
+    <form method="POST" action="{% url 'create_space' %}" class="form-group">
         {% csrf_token %}
         {% include 'errors.html' %}
 
