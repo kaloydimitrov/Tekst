@@ -1,25 +1,33 @@
-db schema to reality
 staticfiles
 
 email send validation (authentication)
 password reset option
 
 add github secrets
+add ci/cd github actions
 
 add 404, 500 > error pages
 implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 
 load comments (load 10 at a time using VueJS)
-only small text of the post will be shown and when you a user actually clicks the post gets +1 view
+only small text of the post will be shown and when user actually clicks the post gets +1 view
 
 load posts (load 10 at a time using VueJS)
+doesnt matter if a user is browsing the feed or space
 
 
+make able to follow spaces
 
-check if tag exists: validate
-error message style change in login register, create post
-you can follow posts and spaces
+when user goes to /space/create/ (message - it looks like you dont need any spaces; here are some tags you might need to include)
+if it goes to (e.g. /space/create/1) that id of SPACE should send to the template. then ajax will be send back to the django rest framework
+and it will respond with the space and its tags
+TODO: https://chatgpt.com/c/9f37bbdb-cff3-493c-a5fb-0bf0940bc6d1
+
+it will have default spaces but also spaces that users created
+on the left screen will be the most followed spaces
+
+also on the header -
 
 send email (contacts)
 
