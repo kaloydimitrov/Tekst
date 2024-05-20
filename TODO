@@ -16,14 +16,9 @@ only small text of the post will be shown and when you a user actually clicks th
 load posts (load 10 at a time using VueJS)
 
 
-create new app - spaces
--name
--description
 
-
-
-
-
+check if tag exists: validate
+error message style change in login register, create post
 you can follow posts and spaces
 
 send email (contacts)

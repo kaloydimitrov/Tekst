@@ -3,7 +3,6 @@ from django.db import models
 from .validators import validate_len
 
 
-# TODO: attach to tags and spaces (create more models)
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, validators=[validate_len])

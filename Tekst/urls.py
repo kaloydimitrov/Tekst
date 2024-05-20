@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('routing.urls')),
     path('post/', include('posts.urls')),
     path('space/', include('spaces.urls')),
-    path('authentication/', include('authentication.urls'))
+    path('authentication/', include('authentication.urls')),
+    path('api/', include('api.urls')),
 ]
