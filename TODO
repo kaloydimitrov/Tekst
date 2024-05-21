@@ -24,6 +24,10 @@ if it goes to (e.g. /space/create/1) that id of SPACE should send to the templat
 and it will respond with the space and its tags
 TODO: https://chatgpt.com/c/9f37bbdb-cff3-493c-a5fb-0bf0940bc6d1
 
+TODO: Fix create space (make it your way so you understand it)
+
+background image to spaces
+
 it will have default spaces but also spaces that users created
 on the left screen will be the most followed spaces
 

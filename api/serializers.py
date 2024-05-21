@@ -13,4 +13,4 @@ class SpaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Space
-        fields = ['name', 'description', 'tags']
+        fields = ['name', 'description', 'tags', 'image']

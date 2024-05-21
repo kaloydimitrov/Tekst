@@ -3,41 +3,50 @@
 {% block title %}Create Space{% endblock %}
 
 {% block main %}
-    <form @submit.prevent="submitForm" class="form-group" id="app">
-        <div v-if="message" class="alert alert-success mt-3" role="alert">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0f5132"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
-            [[ message ]]
-            <a href="{% url 'home' %}" class="link-success">Go <b>home</b></a> or 
-            <a href="#" class="link-success">view {{ request.user.username }}'s <b>spaces</b></a>.
-        </div>
-        <div v-if="error" class="alert alert-danger mt-3" role="alert">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#842029"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240ZM330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm34-80h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z"/></svg>
-            [[ error ]]
-        </div>
-
-        <div class="form-floating mb-3">
-            <input type="text" v-model="name" class="form-control" id="name" placeholder="Enter Name" required>
-            <label for="name">Enter Name</label>
-        </div>
-        <div class="form-floating mb-3">
-            <textarea v-model="description" class="form-control description-field" id="description" placeholder="Enter Description" required></textarea>
-            <label for="description">Enter Description</label>
-        </div>
-
-        <button type="button" class="btn btn-primary add-tag-button" @click="addTag">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z"/></svg>
-            Add Tag
-        </button>
-
-        <div id="tags-container" class="mb-3">
-            <div v-for="(tag, index) in tags" :key="index" class="input-group mb-2">
-                <input type="text" v-model="tags[index]" class="form-control" placeholder="Enter Tag">
-                <button type="button" class="btn btn-danger" @click="removeTag(index)">Remove</button>
+    <div id="app">
+        <form @submit.prevent="submitForm" class="form-group" enctype="multipart/form-data">
+            <div v-if="message" class="alert alert-success mt-3" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0f5132"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+                [[ message ]]
+                <a href="{% url 'home' %}" class="link-success">Go <b>home</b></a> or
+                <a href="#" class="link-success">view {{ request.user.username }}'s <b>spaces</b></a>.
             </div>
-        </div>
+            <div v-if="error" class="alert alert-danger mt-3" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#842029"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240ZM330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm34-80h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z"/></svg>
+                [[ error ]]
+            </div>
 
-        <button type="submit" class="btn btn-secondary mt-3">Publish</button>
-    </form>
+            <div class="image-preview-container mb-3" @click="triggerFileUpload">
+                <img v-if="imageData" :src="imageData" alt="Image Preview" class="image-preview">
+                <div v-else class="image-placeholder">Click to upload image</div>
+            </div>
+
+            <input type="file" ref="fileInput" @change="handleFileUpload" class="d-none" accept="image/*">
+
+            <div class="form-floating mb-3">
+                <input type="text" v-model="name" class="form-control" id="name" placeholder="Enter Name" required>
+                <label for="name">Enter Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea v-model="description" class="form-control description-field" id="description" placeholder="Enter Description" required></textarea>
+                <label for="description">Enter Description</label>
+            </div>
+
+            <button type="button" class="btn btn-primary add-tag-button" @click="addTag">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z"/></svg>
+                Add Tag
+            </button>
+
+            <div id="tags-container" class="mb-3">
+                <div v-for="(tag, index) in tags" :key="index" class="input-group mb-2">
+                    <input type="text" v-model="tags[index]" class="form-control" placeholder="Enter Tag">
+                    <button type="button" class="btn btn-danger" @click="removeTag(index)">Remove</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-secondary mt-3">Publish</button>
+        </form>
+    </div>
 {% endblock %}
 
 {% block rest %}
@@ -52,10 +61,27 @@
             name: '',
             description: '',
             tags: [],
+            image: null,
+            imageData: null,  // Data URL for image preview
             message: '',
             error: ''
         },
         methods: {
+            triggerFileUpload() {
+                this.$refs.fileInput.click();
+            },
+            handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    this.image = file;
+
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        this.imageData = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            },
             addTag() {
                 if (this.tags.some(tag => tag.trim() === '')) {
                     this.error = 'Tags cannot be empty. Please fill the tag.';
@@ -84,10 +110,20 @@
                 }
 
                 try {
-                    const response = await axios.post("{% url 'create_space' %}", {
-                        name: this.name,
-                        description: this.description,
-                        tags: tag_list.map(tag => ({ name: tag }))
+                    const formData = new FormData();
+                    formData.append('name', this.name);
+                    formData.append('description', this.description);
+                    formData.append('image', this.image);
+                    tag_list.forEach(tag => {
+                        formData.append('tags', tag);
+                    });
+
+                    console.log([...formData]); // Log formData entries for debugging
+
+                    const response = await axios.post("{% url 'create_space' %}", formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
                     });
 
                     if (response.status === 201) {
@@ -96,6 +132,9 @@
                         this.name = '';
                         this.description = '';
                         this.tags = [];
+                        this.image = null;
+                        this.imageData = null;
+                        this.$refs.fileInput.value = ''; // Reset file input
                     }
                 } catch (error) {
                     if (error.response && error.response.data) {
@@ -122,6 +161,31 @@
 
     .link-success {
         color: #0f5132;
+    }
+
+    .image-preview-container {
+        height: 200px;
+        border: 1px solid #ddd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* Ensure the image doesn't overflow the container */
+        cursor: pointer;
+    }
+
+    .image-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Make sure the image covers the entire frame */
+    }
+
+    .image-placeholder {
+        color: #888;
+        font-size: 14px;
+    }
+
+    .d-none {
+        display: none;
     }
 </style>
 {% endblock %}

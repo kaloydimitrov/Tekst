@@ -19,6 +19,7 @@ class SpaceAPIView(APIView):
             space = Space.objects.create(
                 name=serializer.validated_data['name'],
                 description=serializer.validated_data['description'],
+                image=request.FILES.get('image'),
                 user=request.user
             )
 
