@@ -4,3 +4,4 @@ py -m venv .venv
 
 Install Requirements:
 pip install -r requirements.txt
+*you can use PyCharm instead

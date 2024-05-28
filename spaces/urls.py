@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import SpaceCreateTemplateView
+from .views import SpaceCreateView
 
 urlpatterns = [
-    path('create/', SpaceCreateTemplateView.as_view(), name='create_space_template')
+    path('create/', SpaceCreateView.as_view(), name='create_space')
 ]
