@@ -1,7 +1,7 @@
 # Virtual Environment
-py -m venv .venv
+py -m venv .venv<br />
 .venv\Scripts\activate.bat
 
 # Install Requirements
 pip install -r requirements.txt
-*you can let PyCharm do it instead
+<br />_***you can let PyCharm do it instead**_
