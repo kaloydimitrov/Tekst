@@ -1,5 +1,3 @@
-staticfiles
-
 email send validation (authentication)
 password reset option
 
@@ -22,6 +20,8 @@ make able to follow spaces
 when user goes to /space/create/ (message - it looks like you dont need any spaces; here are some tags you might need to include)
 if it goes to (e.g. /space/create/1) that id of SPACE should send to the template. then ajax will be send back to the django rest framework
 and it will respond with the space and its tags
+
+*it can have name, description in the url too
 TODO: https://chatgpt.com/c/9f37bbdb-cff3-493c-a5fb-0bf0940bc6d1
 
 TODO: Fix create space (make it your way so you understand it)
@@ -43,5 +43,7 @@ when someone answers your comment (<10 answers)
 
 
 
+random background/image for space if there is no (add static backgrounds)
+
 FIX:
-vue axios import error
+make better ui and ue using vue in create space page

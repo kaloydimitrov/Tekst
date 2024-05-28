@@ -7,7 +7,7 @@ from .validators import validate_description_len, validate_name_len
 class Space(models.Model):
     name = models.CharField(max_length=30, validators=[validate_name_len])
     description = models.TextField(validators=[validate_description_len])
-    image = models.ImageField(upload_to='media/images/', blank=True, null=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

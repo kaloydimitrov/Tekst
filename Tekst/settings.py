@@ -126,10 +126,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'routing/static/'
+STATIC_URL = '/routing/static/'
+STATIC_ROOT = BASE_DIR / 'routing/static'
 
-# Media files (Images)
-MEDIA_URL = 'routing/media/'
+
+# Media files (for Images only)
+
+MEDIA_URL = '/routing/media/'
+MEDIA_ROOT = BASE_DIR / 'routing/media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -138,6 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # SMTP Configuration
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
