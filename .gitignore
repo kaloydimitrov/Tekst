@@ -3,3 +3,6 @@
 __pycache__/
 routing/__pycache__/
 Tekst/__pycache__/
+
+routing/media
+routing/static

@@ -1,12 +1,12 @@
 from django import forms
 from .models import Space, Tag
+from django.core.exceptions import ValidationError
 
 
 class CreateSpaceForm(forms.ModelForm):
     tags = forms.CharField(
-        max_length=255, required=False, help_text="Enter tags separated by commas",
-        widget=forms.Textarea(
-            attrs={'placeholder': 'Enter tags', 'class': 'form-control'}
+        widget=forms.HiddenInput(
+            attrs={'id': 'tags-input'}
         ))
 
     name = forms.CharField(
@@ -28,6 +28,18 @@ class CreateSpaceForm(forms.ModelForm):
     class Meta:
         model = Space
         fields = ['name', 'description', 'image']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        tags = cleaned_data.get('tags', '')
+
+        tag_list = [tag.strip() for tag in tags.split(',') if tag.strip()]
+
+        if len(tag_list) < 3:
+            raise ValidationError("You should provide at least 3 tags.")
+
+        cleaned_data['tags'] = ','.join(tag_list)
+        return cleaned_data
 
     def save(self, commit=True):
         space = super().save(commit=False)
