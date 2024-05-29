@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Create Space{% endblock %}
 
@@ -6,6 +7,11 @@
     <form method="POST" action="{% url 'create_space' %}" class="form-group" id="app" enctype="multipart/form-data">
         {% csrf_token %}
         {% include 'errors.html' %}
+
+        <div class="image-preview-container">
+            <label for="image-preview">Banner Preview</label>
+            <img id="image-preview" src="{% static 'images/default-banner.png' %}" alt="Image Preview">
+        </div>
 
         <div class="form-floating mb-3">
             {{ form.name }}
@@ -68,6 +74,20 @@
             }
         }
     });
+
+    document.getElementById('image-field').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const imagePreview = document.getElementById('image-preview');
+            imagePreview.src = e.target.result;
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
 </script>
 <style>
     .form-floating>.form-control {
@@ -90,6 +110,34 @@
         margin: 16px 0 8px 0;
         color: gray;
         font-style: italic;
+    }
+
+    .image-preview-container {
+        position: relative;
+        height: 250px;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+
+    .image-preview-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-preview-container label {
+        position: absolute;
+        inset: 0 0 0 0;
+        transition: opacity 0.2s;
+        text-align: center;
+        font-size: 9em;
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    .image-preview-container:hover label {
+        opacity: 0;
     }
 </style>
 {% endblock %}

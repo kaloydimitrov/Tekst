@@ -22,7 +22,7 @@ class CreateSpaceForm(forms.ModelForm):
     image = forms.ImageField(
         required=False,
         widget=forms.ClearableFileInput(
-            attrs={'class': 'form-control'}
+            attrs={'class': 'form-control', 'id': 'image-field'}
         ))
 
     class Meta:
