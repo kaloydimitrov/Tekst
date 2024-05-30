@@ -7,6 +7,8 @@
         {% csrf_token %}
         {% include 'errors.html' %}
 
+        <h1>SPACE_ID: {{ space_id }}</h1>
+
         <div class="form-floating mb-3">
             {{ form.name }}
             <label for="name">Enter Name</label>
