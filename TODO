@@ -17,33 +17,19 @@ doesnt matter if a user is browsing the feed or space
 
 make able to follow spaces
 
-when user goes to /space/create/ (message - it looks like you dont need any spaces; here are some tags you might need to include)
-if it goes to (e.g. /space/create/1) that id of SPACE should send to the template. then ajax will be send back to the django rest framework
-and it will respond with the space and its tags
-
-*it can have name, description in the url too
-TODO: https://chatgpt.com/c/9f37bbdb-cff3-493c-a5fb-0bf0940bc6d1
-
-TODO: Fix create space (make it your way so you understand it)
-
-background image to spaces
+TODO: api endpoint for returning space info and its tags
+TODO: one to one with post and space
+if no space_id return message 'it looks like you dont need any spaces; here are some popular spaces you might need to check out'
 
 it will have default spaces but also spaces that users created
 on the left screen will be the most followed spaces
-
 it will be dropdown menu in the header and the first spaces should be the default once and last 'Browse more spaces'
 
 send email (contacts)
 
 emails:
 when post created
-when post gets more than 200 views
-when someone answers your comment (<10 answers)
+when someone tags you in a comment
 
-
-
-
-random background/image for space if there is no (add static backgrounds)
 
 FIX:
-make better ui and ue using vue in create space page
