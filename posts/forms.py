@@ -17,7 +17,8 @@ class CreatePostForm(forms.ModelForm):
         widget=forms.CheckboxInput(
             attrs={'class': 'form-check-input', 'id': 'flexSwitchCheckDefault'}
         ),
-        required=False
+        required=False,
+        initial=True
     )
 
     class Meta:
