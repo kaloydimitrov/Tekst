@@ -5,12 +5,12 @@ from spaces.models import Space, Tag
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class SpaceSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
+    tags = TagSerializer(many=True, read_only=True, source='tag_set')
 
     class Meta:
         model = Space
-        fields = ['name', 'description', 'tags', 'image']
+        fields = ['id', 'name', 'description', 'image', 'user', 'created_at', 'updated_at', 'tags']

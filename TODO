@@ -26,6 +26,15 @@ it will have default spaces but also spaces that users created
 on the left screen will be the most followed spaces
 it will be dropdown menu in the header and the first spaces should be the default once and last 'Browse more spaces'
 
+query parameters (for post):
+space_id
+name
+description
+tags
+
+http://localhost:8000/post/create/?space_id=20&name=nameforthedemo&content=contentforthedemo
+http://localhost:8000/post/create/?space_id=20
+
 send email (contacts)
 
 emails:

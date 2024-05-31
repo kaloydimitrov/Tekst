@@ -1,7 +1,6 @@
 from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
+from .views import SpaceDetail
 
 urlpatterns = [
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('space/<int:pk>/', SpaceDetail.as_view(), name='get_space_details')
+]
