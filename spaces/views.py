@@ -1,8 +1,9 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from .forms import CreateSpaceForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from .models import Space
 
 
 class SpaceCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
@@ -16,3 +17,8 @@ class SpaceCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
 
     def get_success_url(self):
         return reverse_lazy('home')
+
+
+class SpaceListView(ListView, LoginRequiredMixin):
+    template_name = 'spaces/list-spaces.html'
+    model = Space
