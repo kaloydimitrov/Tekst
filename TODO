@@ -18,8 +18,8 @@ doesnt matter if a user is browsing the feed or space
 
 make able to follow spaces
 
-TODO: api endpoint for returning space info and its tags
-TODO: one to one with post and space
+
+TODO: POST MODEL: one to one with space (null=true, blank=true, pk=true); posts can have no tags and no space!
 if no space_id return message 'it looks like you dont need any spaces; here are some popular spaces you might need to check out'
 
 it will have default spaces but also spaces that users created

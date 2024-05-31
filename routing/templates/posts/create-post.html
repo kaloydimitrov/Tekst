@@ -8,7 +8,10 @@
         {% include 'errors.html' %}
 
         <div v-if="noSpaceIdParam">
-            <h1>It looks like you haven't selected any space. You can either browse spaces or choose from the default tags below.</h1>
+            <h1>Are you sure you want to craete post without a space?</h1>
+            <p>Browse spaces</p>
+            <h1>Here are some default tags for you:</h1>
+            <span>tags</span>
         </div>
 
         <div class="form-floating mb-3">
