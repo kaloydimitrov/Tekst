@@ -7,6 +7,7 @@ add ci/cd github actions
 add 404, 500 > error pages
 implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
+add groups, permissions, roles
 
 load comments (load 10 at a time using VueJS)
 only small text of the post will be shown and when user actually clicks the post gets +1 view
