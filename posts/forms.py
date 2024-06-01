@@ -5,12 +5,12 @@ from .models import Post
 class CreatePostForm(forms.ModelForm):
     name = forms.CharField(
         widget=forms.TextInput(
-            attrs={'placeholder': 'Enter Name', 'class': 'form-control'}
+            attrs={'placeholder': 'Enter Name', 'class': 'form-control', 'v-model': 'name'}
         ))
 
     content = forms.CharField(
         widget=forms.Textarea(
-            attrs={'placeholder': 'Enter content', 'class': 'form-control'}
+            attrs={'placeholder': 'Enter content', 'class': 'form-control', 'v-model': 'content'}
         ))
 
     visibility = forms.BooleanField(

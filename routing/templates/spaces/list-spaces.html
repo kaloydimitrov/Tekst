@@ -26,7 +26,7 @@
                         {% endif %}
                     </div>
                     <div class="card-footer">
-                        <a href="{% url 'create_post' %}?space_id={{ space.pk }}" class="btn btn-primary">Create post here</a>
+                        <a href="{% url 'create_post' %}?space_id={{ space.pk }}&name={{ name|default_if_none:"" }}&content={{ content|default_if_none:"" }}" class="btn btn-primary">Create post here</a>
                     </div>
                 </div>
             </div>

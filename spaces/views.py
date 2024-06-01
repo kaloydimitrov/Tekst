@@ -22,3 +22,11 @@ class SpaceCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
 class SpaceListView(ListView, LoginRequiredMixin):
     template_name = 'spaces/list-spaces.html'
     model = Space
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpaceListView, self).get_context_data(*args, **kwargs)
+        name_param = self.request.GET.get('name')
+        content_param = self.request.GET.get('content')
+        context['name'] = name_param
+        context['content'] = content_param
+        return context
