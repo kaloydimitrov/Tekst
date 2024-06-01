@@ -66,8 +66,8 @@
             noSpaceIdParam: false,
             space: {},
             loading: true,
-            name: '',
-            content: ''
+            name: '{{ name|default_if_none:"" }}',
+            content: '{{ content|default_if_none:"" }}'
         },
         methods: {
             generateURL() {
