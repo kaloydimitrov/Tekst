@@ -5,7 +5,7 @@ from .validators import validate_len
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    space = models.OneToOneField('spaces.Space', on_delete=models.CASCADE, blank=True, null=True)
+    space = models.ForeignKey('spaces.Space', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=100, validators=[validate_len])
     content = models.TextField(validators=[validate_len])
     visibility = models.BooleanField(default=True)

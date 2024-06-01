@@ -1,12 +1,14 @@
+import json
+from django.core.exceptions import ValidationError
 from django import forms
 from .models import Post
-from spaces.models import Space
+from spaces.models import Space, Tag
 
 
 class CreatePostForm(forms.ModelForm):
     tags = forms.CharField(
         widget=forms.HiddenInput(
-            attrs={'id': 'tags-input'}
+            attrs={'id': 'tags-input', 'v-model': 'tags'}
         ),
         required=False
     )
@@ -40,3 +42,22 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['name', 'content', 'visibility', 'space']
+
+    def save(self, commit=True):
+        instance = super(CreatePostForm, self).save(commit=False)
+        tags = self.cleaned_data.get('tags', '')
+
+        if commit:
+            instance.save()
+
+        if tags:
+            try:
+                tag_ids = json.loads(tags)
+                tag_objects = Tag.objects.filter(id__in=tag_ids)
+                instance.tags.set(tag_objects)
+            except json.JSONDecodeError:
+                raise ValidationError("Invalid JSON format.")
+
+        if commit:
+            instance.save()
+        return instance
