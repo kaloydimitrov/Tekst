@@ -4,51 +4,61 @@
 {% block title %}List spaces{% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="row">
-        {% for space in space_list %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if space.image %}
-                <img class="card-img-top" src="{{ space.image.url }}" alt="Card image cap">
-                {% else %}
-                <img class="card-img-top" src="{% static 'images/default-banner.png' %}" alt="Card image cap">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ space.name }}</h5>
-                    <p class="card-text">{{ space.description }}</p>
-                </div>
-                <div class="card-footer">
-                    {% if space.created_at == space.updated_at %}
-                        <small class="text-muted">Created {{ space.created_at }}</small>
+    <div class="container" id="app">
+        <div class="row">
+            {% for space in space_list %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if space.image %}
+                    <img class="card-img-top" @click="navigateToSpace({{ space.pk }})" src="{{ space.image.url }}" alt="Card image cap">
                     {% else %}
-                        <small class="text-muted">Created {{ space.created_at }}<br>Last updated {{ space.updated_at }}</small>
+                    <img class="card-img-top" @click="navigateToSpace({{ space.pk }})" src="{% static 'images/default-banner.png' %}" alt="Card image cap">
                     {% endif %}
-                </div>
-                <div class="card-footer">
-                    <a href="{% url 'create_post' %}?space_id={{ space.pk }}" class="btn btn-primary">Create post here</a>
-                    <a href="" class="btn btn-primary">Show posts</a>
+                    <div class="card-body" @click="navigateToSpace({{ space.pk }})">
+                        <h5 class="card-title">{{ space.name }}</h5>
+                        <p class="card-text">{{ space.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        {% if space.created_at == space.updated_at %}
+                            <small class="text-muted">Created {{ space.created_at }}</small>
+                        {% else %}
+                            <small class="text-muted">Created {{ space.created_at }}<br>Last updated {{ space.updated_at }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'create_post' %}?space_id={{ space.pk }}" class="btn btn-primary">Create post here</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 {% endblock %}
 
 {% block rest %}
+<script>
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+            navigateToSpace(spaceId) {
+                window.location.href="{% url 'home' %}";
+                console.log(spaceId)
+            }
+        },
+    })
+</script>
 <style>
-    .card {
-        transition: transform 0.3s;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
     .card img {
         height: 200px;
         object-fit: cover;
+    }
+    
+    .card-img-top:hover, .card-body:hover {
+        cursor: pointer;
     }
 </style>
 {% endblock %}

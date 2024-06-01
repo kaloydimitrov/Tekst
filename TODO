@@ -19,7 +19,6 @@ doesnt matter if a user is browsing the feed or space
 make able to follow spaces
 
 
-TODO: POST MODEL: one to one with space (null=true, blank=true, pk=true); posts can have no tags and no space!
 if no space_id return message 'it looks like you dont need any spaces; here are some popular spaces you might need to check out'
 
 it will have default spaces but also spaces that users created
@@ -35,6 +34,17 @@ tags
 http://localhost:8000/post/create/?space_id=20&name=nameforthedemo&content=contentforthedemo
 http://localhost:8000/post/create/?space_id=20
 
+
+TODO:
+every time when tags are moved TAGS FIELD should be updated and tag arr too
+then save tags and space
+
+TODO: ADD 'also use tags from (not recommended):' and other spaces' names. when user click on a name tthen api req - get tags from space id
+TODO: add one place for all tags; for example at the bottom
+TODO: separate screen in 3 - space one the left; other spaces on the right; and all tags at the bottom
+
+TODO: maybe change the space card to not use % for width
+
 send email (contacts)
 
 emails:
@@ -43,3 +53,5 @@ when someone tags you in a comment
 
 
 FIX:
+glitch on add post with space
+space cards looking bad on smaller screens
