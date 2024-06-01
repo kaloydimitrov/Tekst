@@ -16,18 +16,28 @@
             <p>Browse spaces <a :href="generateURL()" class="link-primary">here</a>.</p>
         </div>
 
-        <div v-else class="card h-100">
-            <img v-if="space.image" class="card-img-top" :src="space.image" alt="Card image cap">
-            <img v-else class="card-img-top" src="{% static 'images/default-banner.png' %}" alt="Card image cap">
+        <div v-else class="tags-space-container">
+            <div class="card h-100">
+                <img v-if="space.image" class="card-img-top" :src="space.image" alt="Card image cap">
+                <img v-else class="card-img-top" src="{% static 'images/default-banner.png' %}" alt="Card image cap">
 
-            <div class="card-body">
-                <h5 class="card-title">[[ space.name ]]</h5>
-                <p class="card-text">[[ space.description ]]</p>
+                <div class="card-body">
+                    <h5 class="card-title">[[ space.name ]]</h5>
+                    <p class="card-text">[[ space.description ]]</p>
+                </div>
             </div>
+
             <div class="card-footer">
                 <span v-for="tag in space.tags" :key="tag.id" class="badge bg-secondary me-2">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z"/></svg>
                     [[ tag.name ]]
+                </span>
+                <br>
+                <a href=""><i>Load more spaces and tags. (not recommended)</i></a>
+                <hr class="hr" />
+                {{ form.tags }}
+                <span>
+                    
                 </span>
             </div>
         </div>
@@ -47,7 +57,9 @@
                 <i v-html="message"></i>
             </label>
         </div>
-
+        
+        {{ form.space }}
+        
         <button type="submit" class="btn btn-secondary">Publish</button>
     </form>
 {% endblock %}
@@ -67,7 +79,8 @@
             space: {},
             loading: true,
             name: '{{ name|default_if_none:"" }}',
-            content: '{{ content|default_if_none:"" }}'
+            content: '{{ content|default_if_none:"" }}',
+            spaceInput: null
         },
         methods: {
             generateURL() {
@@ -84,6 +97,8 @@
             });
 
             {% if 'space_id' in request.GET %}
+                this.spaceInput = {{ space_id }}
+                
                 axios
                 .get('{% url 'get_space_details' pk=space_id %}')
                 .then(response => {
@@ -126,6 +141,10 @@
 
     .badge {
         margin-bottom: 8px;
+    }
+
+    .card-footer {
+        margin-bottom: 16px;
     }
 </style>
 {% endblock %}
