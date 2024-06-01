@@ -1,4 +1,3 @@
-import json
 from django.core.exceptions import ValidationError
 from django import forms
 from .models import Post
@@ -52,11 +51,12 @@ class CreatePostForm(forms.ModelForm):
 
         if tags:
             try:
-                tag_ids = json.loads(tags)
-                tag_objects = Tag.objects.filter(id__in=tag_ids)
-                instance.tags.set(tag_objects)
-            except json.JSONDecodeError:
-                raise ValidationError("Invalid JSON format.")
+                list_tags = tags.split(",")
+                for tag_id in list_tags:
+                    tag = Tag.objects.get(id=tag_id)
+                    tag.post.add(instance)
+            except Exception as e:
+                raise ValidationError(f'Invalid tags: {e}')
 
         if commit:
             instance.save()
