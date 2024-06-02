@@ -1,0 +1,30 @@
+.main-nav {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.main-header .dropdown-toggle:focus,
+.main-header .dropdown-menu a:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.container.main {
+    padding-bottom: 30px;
+}
+
+.authenticated-container {
+    display: flex;
+    gap: 5px;
+}
+
+.main-header {
+    margin-bottom: 20px;
+}
+
+.closing-x {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}

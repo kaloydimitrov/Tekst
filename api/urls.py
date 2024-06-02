@@ -1,6 +1,11 @@
 from django.urls import path
-from .views import SpaceDetail
+from django.urls import include
+from .views import SpaceDetailView, SpaceListView
 
 urlpatterns = [
-    path('space/<int:pk>/', SpaceDetail.as_view(), name='get_space_details')
+    path('space/', include([
+        path('all/', SpaceListView.as_view(), name='get_all_spaces'),
+        path('<int:pk>/', SpaceDetailView.as_view(), name='get_space_details'),
+    ])),
+
 ]

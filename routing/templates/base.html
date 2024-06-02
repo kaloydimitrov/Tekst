@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,34 +21,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     {# Styles #}
-    <style>
-        .main-nav {
-            padding-left: 1em;
-            padding-right: 1em;
-        }
-
-        .main-header .dropdown-toggle:focus,
-        .main-header .dropdown-menu a:focus {
-            outline: none;
-            box-shadow: none;
-        }
-
-        .authenticated-container {
-            display: flex;
-            gap: 5px;
-        }
-
-        .main-header {
-            margin-bottom: 20px;
-        }
-
-        .closing-x {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
     <header class="main-header">
@@ -82,11 +57,6 @@
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
                         Add post
                     </button>
-                
-                    <button onclick="window.location.href='{% url 'create_space' %}'" type="button" class="btn btn-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
-                        Add space
-                    </button>
                 </div>
             {% endif %}
 
@@ -95,6 +65,9 @@
                     <button onclick="window.location.href='{% url 'list_spaces' %}'" type="button" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-80 92L160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11Zm200-528 77-44-237-137-78 45 238 136Zm-160 93 78-45-237-137-78 45 237 137Z"/></svg>
                         Spaces
+                    </button>
+                    <button onclick="window.location.href='{% url 'create_space' %}'" type="button" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
                     </button>
                 {% else %}
                     <button onclick="window.location.href='{% url 'sign-up' %}'" type="button" class="btn btn-primary">
@@ -120,7 +93,7 @@
         {% endfor %}
     {% endif %}
 
-    <div class="container">
+    <div class="container main">
         {% block main %}
         {% endblock %}
 
