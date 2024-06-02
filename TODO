@@ -16,34 +16,12 @@ load posts (load 10 at a time using VueJS)
 doesnt matter if a user is browsing the feed or space
 
 
-make able to follow spaces
-
-
-if no space_id return message 'it looks like you dont need any spaces; here are some popular spaces you might need to check out'
-
-it will have default spaces but also spaces that users created
-on the left screen will be the most followed spaces
-it will be dropdown menu in the header and the first spaces should be the default once and last 'Browse more spaces'
-
-query parameters (for post):
-space_id
-name
-description
-tags
-
-http://localhost:8000/post/create/?space_id=20&name=nameforthedemo&content=contentforthedemo
-http://localhost:8000/post/create/?space_id=20
-
-
-TODO:
-every time when tags are moved TAGS FIELD should be updated and tag arr too
-then save tags and space
-
-TODO: ADD 'also use tags from (not recommended):' and other spaces' names. when user click on a name tthen api req - get tags from space id
-TODO: add one place for all tags; for example at the bottom
-TODO: separate screen in 3 - space one the left; other spaces on the right; and all tags at the bottom
-
+TODO: make able to follow spaces
 TODO: maybe change the space card to not use % for width
+TODO: no create post here in SPACE LIST template
+
+hover on username - popup with info
+if 1000 followers - should look like this '1k' (template filter or something)
 
 send email (contacts)
 
@@ -53,5 +31,4 @@ when someone tags you in a comment
 
 
 FIX:
-glitch on add post with space
 space cards looking bad on smaller screens
