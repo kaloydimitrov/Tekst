@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from .forms import CreateSpaceForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -28,3 +28,8 @@ class SpaceListView(ListView, LoginRequiredMixin):
         context['name'] = self.request.GET.get('name')
         context['content'] = self.request.GET.get('content')
         return context
+
+
+class SpaceDetailView(DetailView, LoginRequiredMixin):
+    template_name = 'spaces/space-details.html'
+    model = Space

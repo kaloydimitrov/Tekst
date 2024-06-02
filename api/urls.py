@@ -7,5 +7,4 @@ urlpatterns = [
         path('all/', SpaceListView.as_view(), name='get_all_spaces'),
         path('<int:pk>/', SpaceDetailView.as_view(), name='get_space_details'),
     ])),
-
 ]
