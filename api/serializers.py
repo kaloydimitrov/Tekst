@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from spaces.models import Space, Tag
+from spaces.models import Space, Tag, UserSpaceFollow
 from django.contrib.auth.models import User
 
 
@@ -22,3 +22,9 @@ class SpaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Space
         fields = ['id', 'name', 'description', 'image', 'user', 'created_at', 'updated_at', 'tags']
+
+
+class UserSpaceFollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSpaceFollow
+        fields = ['id', 'user', 'space', 'created_at']

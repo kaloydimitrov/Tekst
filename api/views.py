@@ -2,12 +2,49 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
-from .serializers import SpaceSerializer, TagSerializer
+from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer
+from rest_framework import views
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.response import Response
+from spaces.models import UserSpaceFollow
 
 
 # --------------------------------------
 # SPACES
 # --------------------------------------
+class FollowSpaceView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def post(request, pk):
+        space = get_object_or_404(Space, pk=pk)
+        user = request.user
+
+        if UserSpaceFollow.objects.filter(user=user, space=space).exists():
+            return Response({"detail": "Already following this space."}, status=status.HTTP_400_BAD_REQUEST)
+
+        follow = UserSpaceFollow.objects.create(user=user, space=space)
+        serializer = UserSpaceFollowSerializer(follow)
+        return Response({"message": "Space followed successfully.", "data": f"{serializer}"}, status=status.HTTP_201_CREATED)
+
+
+class UnfollowSpaceView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    @staticmethod
+    def delete(request, pk):
+        space = get_object_or_404(Space, pk=pk)
+        user = request.user
+
+        follow = UserSpaceFollow.objects.filter(user=user, space=space).first()
+        if not follow:
+            return Response({"detail": "Not following this space."}, status=status.HTTP_400_BAD_REQUEST)
+
+        follow.delete()
+        return Response({"message": "Space unfollowed successfully."}, status=status.HTTP_201_CREATED)
+
+
 class SpaceListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Space.objects.all()

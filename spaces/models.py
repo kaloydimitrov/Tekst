@@ -25,3 +25,9 @@ class Tag(models.Model):
 
     def __str__(self):
         return f"{self.name} (space: {self.space.name})"
+
+
+class UserSpaceFollow(models.Model):
+    user = models.ForeignKey(User, related_name='followed_spaces', on_delete=models.CASCADE)
+    space = models.ForeignKey(Space, related_name='followers', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
