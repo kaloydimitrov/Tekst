@@ -19,23 +19,24 @@
             <div class="loading-container">
                 <div v-if="loading" class="spinner-border" role="status"></div>
             </div>
-            <div v-for="space in searchResult" :key="space.id" class="card">
-                <div class="card-body" @click="navigateToSpace(space.id)">
-                    <h5 class="card-title d-flex justify-content-between">
-                        <span>[[ space.name ]]</span>
-                        <span>24 followers</span>
-                    </h5>
-                    <h6 class="card-subtitle mb-2 text-muted">[[ space.description ]]</h6>
-                    <p class="card-text d-flex justify-content-between">
-                        <small class="d-flex align-items-center">
+
+            <div class="list-group">
+                <div v-for="space in searchResult" :key="space.id" @click="navigateToSpace(space.id)" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">[[ space.name ]]</h5>
+                        <small class="text-muted">3 followers</small>
+                    </div>
+                    <p class="mb-1">[[ space.description ]]</p>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
                             &nbsp[[ space.user.username ]]
-                        </small>
-                    </p>
-                    <hr class="hr" />
-                    <a :href="generateCreatePostURL(space.id)" class="btn btn-primary btn-sm">Create post here</a>
-               </div>
+                        </span>
+                        <a :href="generateCreatePostURL(space.id)" class="btn btn-primary btn-sm">Create post here</a>
+                    </div>
+                </div>
             </div>
+
             <p v-if="searchResult.length == 0">No results found.</p>
         </div>
 
@@ -53,8 +54,11 @@
                         <p class="card-text">{{ space.description }}</p>
                     </div>
                     <div class="card-body d-flex justify-content-between">
-                        <small>42 followers</small>
-                        <button type="button" class="btn btn-primary btn-sm">follow</button>
+                        <small class="text-muted">42 followers</small>
+                        <button type="button" class="btn btn-secondary btn-sm">follow</button>
+                    </div>
+                    <div class="card-body">
+                        <a :href="generateCreatePostURL({{ space.pk }})" class="btn btn-primary btn-sm">Create post here</a>
                     </div>
                     <div class="card-footer">
                         <small class="d-flex align-items-center">
@@ -87,7 +91,7 @@
         },
         methods: {
             generateCreatePostURL(spaceId) {
-                return `{% url 'create_post' %}?space_id=${spaceId}&name={{ name }}&content={{ content }}`;
+                return `{% url 'create_post' %}?space_id=${spaceId}&name={{ name|default_if_none:"" }}&content={{ content|default_if_none:"" }}`;
             },
             navigateToSpace(spaceId) {
                 window.location.href = `/space/${spaceId}/`;

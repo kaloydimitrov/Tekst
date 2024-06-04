@@ -12,8 +12,8 @@
 
         <div v-if="noSpaceIdParam" class="alert alert-primary" role="alert">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#084298"><path d="M440-280h80v-240h-80v240Zm40-320q17 0 28.5-11.5T520-640q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640q0 17 11.5 28.5T480-600Zm0 520q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
-            <h5>Are you sure you want to create a post without a space? You won't be able to pick tags.</h5>
-            <p>Browse spaces <a :href="generateURL()" class="link-primary">here</a>.</p>
+            <h5>Are you sure you want to create a post without a space?</h5>
+            <i><a :href="generateURL()" class="link-primary">Browse spaces here.</a></i>
         </div>
 
         <div v-else class="tags-space-container">
@@ -25,18 +25,49 @@
                     <h5 class="card-title">[[ space.name ]]</h5>
                     <p class="card-text">[[ space.description ]]</p>
                 </div>
+                <div class="card-body">
+                    <a :href="generateURL()" class="btn btn-primary btn-sm position-relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M600-80q-127-48-203.5-158T320-484q0-91 36-172.5T458-800H320v-80h280v280h-80v-148q-57 51-88.5 119.5T400-484q0 102 54 187.5T600-167v87Z"/></svg>
+                        Switch space
+                    </a>
+                </div>
             </div>
 
-            <div class="card-footer">
-                <span v-for="tag in space.tags" :key="tag.id" @click="toggleTag(tag)" :class="getClass(tag.id)">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z"/></svg>
-                    [[ tag.name ]]
-                </span>
-                <br>
-                <i><a href="">Load more spaces and tags.</a> (not recommended)</i>
-                <hr class="hr" />
-                {{ form.tags }}
-                <i><h5>Tags selected: [[ tags.length ]]</h5></i>
+            <div class="card-footer row">
+                <div class="col">
+                    <span v-for="tag in space.tags" :key="tag.id" @click="toggleTag(tag)" class="badge me-2 bg-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z"/></svg>
+                        [[ tag.name ]]
+                    </span>
+                    <br>
+
+                    <p>
+                        <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Select more tags (not recommended)
+                        </button>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <input type="text" class="form-control" placeholder="Search for other tags." v-model="searchInput">
+                        <div v-if="this.searchInput" class="loading-container">
+                            <div v-if="tagsLoading" class="spinner-border" role="status"></div>
+                        </div>
+                        <ul v-for="tag in this.searchResult" :key="tag.id" class="list-group">
+                            <li @click="toggleTag(tag)" :class="getClassLi(tag.id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z"/></svg>
+                                [[ tag.name ]]
+                            </li>
+                        </ul>
+                    </div>
+                    <hr class="hr" />
+                    {{ form.tags }}
+                    <i><h5>Tags selected: [[ tags.length ]]</h5></i>
+                </div>
+                <div class="col">
+                    <span v-for="tag in selectedTags" :key="tag.id" @click="toggleTag(tag)" class="badge me-2 bg-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z" /></svg>
+                        [[ tag.name ]]
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -76,10 +107,15 @@
             noSpaceIdParam: false,
             space: {},
             loading: true,
-            name: '{{ name|default_if_none:"" }}',
-            content: '{{ content|default_if_none:"" }}',
+            tagsLoading: false,
+            searchResult: [],
+            tags: [],
+            selectedTags: [],
+
             spaceInput: null,
-            tags: []
+            searchInput: null,
+            name: '{{ name|default_if_none:"" }}',
+            content: '{{ content|default_if_none:"" }}'
         },
         methods: {
             generateURL() {
@@ -89,18 +125,46 @@
                 const index = this.tags.indexOf(tag.id);
                 if (index === -1) {
                     this.tags.push(tag.id);
+                    this.selectedTags.push(tag);
                 } else {
                     this.tags.splice(index, 1);
+                    const selectedTagIndex = this.selectedTags.findIndex(t => t.id === tag.id);
+                    if (selectedTagIndex !== -1) {
+                        this.selectedTags.splice(selectedTagIndex, 1);
+                    }
                 }
             },
             isSelected(tagId) {
                 return this.tags.includes(tagId);
             },
-            getClass(tagId) {
+            getClassLi(tagId) {
                 if (this.isSelected(tagId)) {
-                    return 'badge me-2 bg-primary';
+                    return 'list-group-item border border-primary';
                 } else {
-                    return 'badge me-2 bg-secondary';
+                    return 'list-group-item';
+                }
+            },
+            fetchSearchResult(searchInput) {
+                this.tagsLoading = true;
+                axios
+                .get(`{% url 'get_all_tags'%}?search=${searchInput}`)
+                .then(response => {
+                    this.searchResult = response.data;
+                    this.tagsLoading = false;
+                })
+                .catch(error => {
+                    console.error(error);
+                    this.tagsLoading = false;
+                });
+            }
+        },
+        watch: {
+            searchInput(newValue, oldValue) {
+                if (newValue) {
+                    this.fetchSearchResult(newValue);
+                } else {
+                    this.searchResult = [];
+                    this.tagsLoading = false;
                 }
             }
         },
@@ -130,6 +194,10 @@
                 this.noSpaceIdParam = true;
                 this.loading = false;
             {% endif %}
+
+            if (this.searchInput) {
+                this.fetchSearchResult(this.searchInput);
+            }
         }
     });
 </script>
@@ -146,6 +214,12 @@
         margin: 0;
     }
 
+    .loading-container {
+        height: 50px;
+        display: flex;
+        align-items: center;
+    }
+
     .card-footer {
         margin-bottom: 16px;
     }
@@ -153,6 +227,14 @@
     .badge {
         margin-bottom: 8px;
         cursor: pointer;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .list-group-item {
+        cursor: pointer;
+        margin-bottom: 5px;
     }
 
     .card {
