@@ -175,7 +175,7 @@
                 axios
                 .get(`{% url 'get_all_tags'%}?search=${searchInput}`)
                 .then(response => {
-                    this.searchResult = response.data;
+                    this.searchResult = response.data.results;
                     this.tagsLoading = false;
                 })
                 .catch(error => {

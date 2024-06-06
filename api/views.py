@@ -2,7 +2,8 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
-from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer
+from posts.models import Post
+from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -57,6 +58,15 @@ class SpaceDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Space.objects.all()
     serializer_class = SpaceSerializer
+
+
+class SpacePostsView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        space_pk = self.kwargs['pk']
+        return Post.objects.filter(space__pk=space_pk)
 
 
 # --------------------------------------

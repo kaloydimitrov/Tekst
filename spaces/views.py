@@ -36,3 +36,9 @@ class SpaceListView(ListView, LoginRequiredMixin):
 class SpaceDetailView(DetailView, LoginRequiredMixin):
     template_name = 'spaces/space-details.html'
     model = Space
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(SpaceDetailView, self).get_context_data()
+        space = self.get_object()
+        context['is_following'] = UserSpaceFollow.objects.filter(user=self.request.user, space=space).exists()
+        return context
