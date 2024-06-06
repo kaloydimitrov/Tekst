@@ -91,12 +91,12 @@
         data: {
             page: 1,
             loading: false,
-
+            noMorePosts: false,
             posts: []
         },
         methods: {
             handleScroll() {
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                if (!this.noMorePosts && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
                     this.getMorePosts();
                 }
             },
@@ -109,8 +109,8 @@
                     this.page += 1;
                     this.loading = false
                 })
-                .catch(error => {
-                    console.error(error);
+                .catch(() => {
+                    this.noMorePosts = true;
                     this.loading = false
                 });
             }
