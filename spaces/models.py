@@ -12,6 +12,10 @@ class Space(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def followers_count(self):
+        return UserSpaceFollow.objects.filter(space=self).count()
+
     def __str__(self):
         return self.name
 

@@ -21,7 +21,7 @@ class SpaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Space
-        fields = ['id', 'name', 'description', 'image', 'user', 'created_at', 'updated_at', 'tags']
+        fields = ['id', 'name', 'description', 'image', 'user', 'followers_count', 'created_at', 'updated_at', 'tags']
 
 
 class UserSpaceFollowSerializer(serializers.ModelSerializer):
