@@ -6,13 +6,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-80 92L160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11Zm200-528 77-44-237-137-78 45 238 136Zm-160 93 78-45-237-137-78 45 237 137Z"/></svg>
             {{ space.name }}
         </div>
-        <div class="card-header d-flex justify-content-evenly">
+        <div class="card-header d-flex justify-content-between align-items-center py-2 px-3">
+            <span>{{ space.posts_count }} posts total</span>
             <span>[[ this.followers ]] followers</span>
-            <button type="button" class="btn btn-secondary btn-sm" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if is_following %}unfollow{% else %}follow{% endif %}</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if is_following %}unfollow{% else %}follow{% endif %}</button>
         </div>
         <div class="card-body">
             <p class="card-text">{{ space.description }}</p>
-            <a class="btn btn-primary">Create post here</a>
+            <a class="btn btn-primary" href="{% url 'create_post' %}?space_id={{ space.pk }}">Create post here</a>
         </div>
         <div class="card-footer text-muted">
             Created by <b>{{ space.user.username }}</b> on <b>{{ space.created_at }}</b>
@@ -22,15 +23,21 @@
         </div>
     </div>
 
-    <div id="app">
-        <div v-for="post in this.posts">
-            <h1>[[ post.name ]]</h1>
-            <h1>[[ post.user.username ]]</h1>
-            <h1>[[ post.content ]]</h1>
-            <h1>[[ post.visibility ]]</h1>
-            <h1>[[ post.views ]]</h1>
-            <h1>[[ post.created_at ]]</h1>
-            <h1>[[ post.updated_at ]]</h1>
+    <div id="app" class="mt-4">
+        <div v-for="post in this.posts" class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">[[ post.name ]]</h5>
+                <h6 class="card-subtitle text-muted">by [[ post.user.username ]]</h6>
+            </div>
+            <div class="card-body">
+                <p class="card-text">[[ post.content ]]</p>
+                <p class="card-text"><small class="text-muted">Visibility: [[ post.visibility ]]</small></p>
+                <p class="card-text"><small class="text-muted">Views: [[ post.views ]]</small></p>
+            </div>
+            <div class="card-footer text-muted">
+                Created on [[ post.created_at ]]
+                <span v-if="post.created_at !== post.updated_at">(Last updated on [[ post.updated_at ]])</span>
+            </div>
         </div>
         <div class="loading-container d-flex justify-content-center align-items-center">
             <div v-if="loading" class="spinner-border" role="status"></div>

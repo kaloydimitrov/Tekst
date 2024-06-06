@@ -57,7 +57,7 @@
                     </div>
                     <div class="card-body d-flex justify-content-between">
                         <small class="text-muted">{{ space.followers_count }} followers</small>
-                        <button type="button" class="btn btn-secondary btn-sm" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if space.pk in followed_spaces %}unfollow{% else %}follow{% endif %}</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if space.pk in followed_spaces %}unfollow{% else %}follow{% endif %}</button>
                     </div>
                     <div class="card-body">
                         <a :href="generateCreatePostURL({{ space.pk }})" class="btn btn-primary btn-sm">Create post here</a>

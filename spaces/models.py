@@ -16,6 +16,10 @@ class Space(models.Model):
     def followers_count(self):
         return UserSpaceFollow.objects.filter(space=self).count()
 
+    @property
+    def posts_count(self):
+        return Post.objects.filter(space=self).count()
+
     def __str__(self):
         return self.name
 

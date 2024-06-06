@@ -32,6 +32,8 @@ class UserSpaceFollowSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Post
         fields = ['id', 'user', 'space', 'name', 'content', 'visibility', 'views', 'created_at', 'updated_at']
