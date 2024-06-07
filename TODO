@@ -9,26 +9,28 @@ implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 add groups, permissions, roles
 
-load comments (load 10 at a time using VueJS)
-only small text of the post will be shown and when user actually clicks the post gets +1 view
+only small text of the post will be shown and when user actually clicks the post or reacts to it or loads the comments it gets +1 view
 
-load posts (load 10 at a time using VueJS)
-doesnt matter if a user is browsing the feed or space
-
-
-TODO: make able to follow spaces
 TODO: maybe change the space card to not use % for width
-TODO: no create post here in SPACE LIST template
 
 hover on username - popup with info
 if 1000 followers - should look like this '1k' (template filter or something)
 
 send email (contacts)
 
+
+space details:
+tags in space details (AJAX)
+tags in post (AJAX)
+load comments (AJAX)
+*to disable pagination in class view - pagination_class = None
+
+list spaces:
+filter - most follows. most posts. oldest. newest
+
 emails:
 when post created
 when someone tags you in a comment
-
 
 FIX:
 space cards looking bad on smaller screens

@@ -22,7 +22,7 @@ class SpaceCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
 class SpaceListView(ListView, LoginRequiredMixin):
     template_name = 'spaces/list-spaces.html'
     model = Space
-    paginate_by = 10
+    paginate_by = 12
 
     def get_context_data(self, *args, **kwargs):
         context = super(SpaceListView, self).get_context_data(*args, **kwargs)
