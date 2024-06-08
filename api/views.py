@@ -3,7 +3,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
 from posts.models import Post
-from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer
+from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -78,3 +78,11 @@ class TagListView(generics.ListAPIView):
     serializer_class = TagSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('name', )
+
+
+# --------------------------------------
+# COMMENTS
+# --------------------------------------
+class CreateCommentView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer

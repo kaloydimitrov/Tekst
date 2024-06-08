@@ -50,8 +50,8 @@
                 </div>
                 <div class="collapse" :id="'collapseExample' + post.id">
                     <hr class="hr">
-                    <h1>comment 1</h1>
-                    <h1>comment 2</h1>
+                    <textarea placeholder="Add comment..." class="form-control comment-textarea" v-model="commentInput"></textarea>
+                    <button class="btn btn-primary btn-sm" @click="createComment(post.id)">Publish</button>
                 </div>
             </div>
         </div>
@@ -108,7 +108,9 @@
             page: 1,
             loading: false,
             noMorePosts: false,
-            posts: []
+            posts: [],
+
+            commentInput: null,
         },
         methods: {
             handleScroll() {
@@ -129,6 +131,30 @@
                     this.noMorePosts = true;
                     this.loading = false
                 });
+            },
+            createComment(postId) {
+                axios.
+                post(`/api/comment/create/`, {
+                    user: {{ request.user.pk }},
+                    post: postId,
+                    content: this.commentInput,
+                })
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            },
+            listComments(postId) {
+                axios.
+                get(`/api/comment/${postId}/`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
             }
         },
         mounted() {
@@ -143,6 +169,10 @@
 <style>
     .col.reactions {
         gap: 5px;
+    }
+
+    .form-control.comment-textarea {
+        height: 100px;
     }
 </style>
 {% endblock %}

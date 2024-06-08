@@ -1,6 +1,7 @@
 from django.urls import path
 from django.urls import include
-from .views import SpaceDetailView, SpaceListView, TagListView, FollowSpaceView, UnfollowSpaceView, SpacePostsView
+from .views import (SpaceDetailView, SpaceListView, TagListView, FollowSpaceView, UnfollowSpaceView, SpacePostsView,
+                    CreateCommentView)
 
 urlpatterns = [
     path('space/', include([
@@ -12,5 +13,9 @@ urlpatterns = [
     ])),
     path('tags/', include([
         path('all/', TagListView.as_view(), name='get_all_tags')
+    ])),
+    path('comment/', include([
+        path('create/', CreateCommentView.as_view(), name='create_comment'),
+        path('<int:post_pk>/', SpacePostsView.as_view(), name='get_post_comments')
     ]))
 ]

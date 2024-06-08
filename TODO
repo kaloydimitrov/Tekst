@@ -25,6 +25,8 @@ tags in post (AJAX)
 load comments (AJAX)
 *to disable pagination in class view - pagination_class = None
 
+limit the tags users can create to 30-50 (both in spaces and posts)
+
 list spaces:
 filter - most follows. most posts. oldest. newest
 
