@@ -35,10 +35,10 @@
                 <p class="card-text"><small class="text-muted">Views: [[ post.views ]]</small></p>
             </div>
             <div class="card-footer text-muted">
-                Created on [[ post.created_at ]]
-                <span v-if="post.created_at !== post.updated_at">(Last updated on [[ post.updated_at ]])</span>
+                Created on [[ convertIso8601Format(post.created_at) ]]
+                <span v-if="!post.created_at === post.updated_at">(Last updated on [[ convertIso8601Format(post.updated_at) ]])</span>
             </div>
-            <div class="card-footer">
+            <div class="card-footer post">
                 <div class="row">
                     <a class="col d-flex justify-content-center align-items-center" data-bs-toggle="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id" role="button" aria-expanded="false" aria-controls="collapseExample">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
@@ -51,6 +51,9 @@
                 <div class="collapse" :id="'collapse' + post.id">
                     <textarea placeholder="Add comment..." class="form-control comment-textarea" :id="'commentInput' + post.id"></textarea>
                     <button class="btn btn-primary btn-sm btn-comment" @click="createComment(post.id)" :id="'commentButton' + post.id">Publish</button>
+                    <div class="loading-container d-flex justify-content-center align-items-center" :id="'loadingContainer' + post.id">
+                        <div class="spinner-border" role="status"></div>
+                    </div>
                     <comment v-if="comments[post.id]" :comments="comments[post.id]"></comment>
                 </div>
             </div>
@@ -66,8 +69,8 @@
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
-    {% include 'includes/vue-component-comment.html' %}
-    {% include 'includes/vue-app-posts.html' %}
+    {% include 'includes/vue-component-comment.js' %}
+    {% include 'includes/vue-app-posts.js' %}
 
     new Vue({
         delimiters: ['[[', ']]'],
@@ -105,39 +108,6 @@
     });
 </script>
 <style>
-    {# Posts & Comments #}
-    .col.reactions {
-        gap: 5px;
-    }
-
-    .form-control.comment-textarea {
-        margin-top: 20px;
-        height: 100px;
-    }
-
-    .btn-comment {
-        margin: 10px 0;
-    }
-
-    .show-input-container {
-        padding-bottom: 7px;
-    }
-
-    .input-container {
-        display: none;
-        padding: 16px 0 20px 20px;
-    }
-
-    .input-container .d-flex {
-        gap: 5px;
-    }
-
-    .card-text.comment {
-        margin: 5px;
-    }
-
-    .comment.card-body {
-        border-left: 1px solid red;
-    }
+    {% include 'includes/style-comments-posts.css' %}
 </style>
 {% endblock %}

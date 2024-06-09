@@ -9,6 +9,20 @@ const postsApp = new Vue({
         comments: {},
     },
     methods: {
+        convertIso8601Format(isoTimestamp) {
+            const date = new Date(isoTimestamp);
+
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+            };
+
+            return date.toLocaleString('en-US', options);
+        },
         organizeComments(commentsData) {
             const commentsMap = {};
             const nestedComments = [];
@@ -74,13 +88,17 @@ const postsApp = new Vue({
             });
         },
         listComments(postId) {
+            const spinner= document.querySelector(`#loadingContainer${postId} .spinner-border`);
+
             axios.
             get(`/api/comment/${postId}/`)
             .then((response) => {
                 this.$set(this.comments, postId, this.organizeComments(response.data));
+                spinner.style.display = "none";
             })
             .catch((error) => {
                 console.error(error);
+                spinner.style.display = "none";
             });
         }
     },

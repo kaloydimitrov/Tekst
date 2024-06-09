@@ -1,0 +1,61 @@
+.col.reactions {
+    gap: 5px;
+}
+
+.form-control.comment-textarea {
+    margin-top: 20px;
+    height: 100px;
+}
+
+.btn-comment {
+    margin: 10px 0;
+}
+
+.show-input-container {
+    padding-bottom: 7px;
+}
+
+.input-container {
+    display: none;
+    padding: 16px 0 20px 20px;
+}
+
+.input-container .d-flex {
+    gap: 5px;
+}
+
+.card-text.comment {
+    margin: 5px;
+}
+
+.reply-link {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.reply-link:hover {
+    text-decoration: underline;
+}
+
+.comment.card-body {
+    border-left: 1px solid red;
+}
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
+
+.loading-container {
+    height: 55px;
+}
+
+.card-footer.post .row .col {
+    height: 40px;
+    border-radius: .25rem;
+}
+
+.card-footer.post .row .col:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
