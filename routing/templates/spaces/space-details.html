@@ -40,7 +40,7 @@
             </div>
             <div class="card-footer">
                 <div class="row">
-                    <a class="col d-flex justify-content-center align-items-center" data-bs-toggle="collapse" :href="'#collapseExample' + post.id" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <a class="col d-flex justify-content-center align-items-center" data-bs-toggle="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id" role="button" aria-expanded="false" aria-controls="collapseExample">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
                     </a>
                     <div class="col reactions d-flex justify-content-center align-items-center">
@@ -48,10 +48,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-840h440v520L400-40l-50-50q-7-7-11.5-19t-4.5-23v-14l44-174H120q-32 0-56-24t-24-56v-80q0-7 2-15t4-15l120-282q9-20 30-34t44-14Zm360 80H240L120-480v80h360l-54 220 174-174v-406Zm0 406v-406 406Zm80 34v-80h120v-360H680v-80h200v520H680Z"/></svg>
                     </div>
                 </div>
-                <div class="collapse" :id="'collapseExample' + post.id">
-                    <hr class="hr">
-                    <textarea placeholder="Add comment..." class="form-control comment-textarea" v-model="commentInput"></textarea>
-                    <button class="btn btn-primary btn-sm" @click="createComment(post.id)">Publish</button>
+                <div class="collapse" :id="'collapse' + post.id">
+                    <textarea placeholder="Add comment..." class="form-control comment-textarea" :id="'commentInput' + post.id"></textarea>
+                    <button class="btn btn-primary btn-sm btn-comment" @click="createComment(post.id)" :id="'commentButton' + post.id">Publish</button>
+                    <comment v-if="comments[post.id]" :comments="comments[post.id]"></comment>
                 </div>
             </div>
         </div>
@@ -65,6 +65,35 @@
 <script>
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+
+    Vue.component('comment', {
+        props: ['comments'],
+        delimiters: ['[[', ']]'],
+        data() {
+            return {
+                showReplies: true
+            };
+        },
+        template: `
+            <div class="card">
+                <div class="card-body" v-for="comment in comments" :key="comment.id">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="card-subtitle mb-2 text-muted d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#6c757d"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
+                            [[ comment.user.username ]] - [[ comment.created_at ]]
+                        </small>
+                        <button v-if="comment.replies.length" class="btn btn-primary btn-sm" @click="showReplies = !showReplies">
+                            [[ showReplies ? 'Hide Replies' : 'Show Replies' ]] ([[ comment.replies.length ]])
+                        </button>
+                    </div>
+                    <p class="card-text">[[ comment.content ]]</p>
+                    <div v-if="showReplies && comment.replies.length">
+                        <comment :comments="comment.replies" class="ml-4"></comment>
+                    </div>
+                </div>
+            </div>
+        `,
+    });
 
     new Vue({
         delimiters: ['[[', ']]'],
@@ -109,10 +138,28 @@
             loading: false,
             noMorePosts: false,
             posts: [],
-
-            commentInput: null,
+            comments: {},
         },
         methods: {
+            organizeComments(commentsData) {
+                const commentsMap = {};
+                const nestedComments = [];
+
+                commentsData.forEach(comment => {
+                    comment.replies = [];
+                    commentsMap[comment.id] = comment;
+                });
+
+                commentsData.forEach(comment => {
+                    if (comment.parent_comment !== null) {
+                        commentsMap[comment.parent_comment].replies.push(comment);
+                    } else {
+                        nestedComments.push(comment);
+                    }
+                });
+
+                return nestedComments;
+            },
             handleScroll() {
                 if (!this.noMorePosts && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
                     this.getMorePosts();
@@ -133,24 +180,39 @@
                 });
             },
             createComment(postId) {
+                const commentInput = document.getElementById(`commentInput${postId}`);
+                const commentButton = document.getElementById(`commentButton${postId}`);
+
+                if (!commentInput.value) {
+                    return;
+                }
+
+                commentButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> <span class="sr-only">Loading...</span>';
+
                 axios.
                 post(`/api/comment/create/`, {
-                    user: {{ request.user.pk }},
                     post: postId,
-                    content: this.commentInput,
+                    content: commentInput.value,
                 })
                 .then((response) => {
-                    console.log(response);
+                    if (response.status >= 200 && response.status < 300) {
+                        this.comments[postId].unshift(
+                            { "user": { "username": '{{ request.user.username }}' }, "content": commentInput.value, "tagged_users": [], "created_at": "Just now", "updated_at": "", "replies": [] }
+                        );
+                        commentInput.value = "";
+                    }
+                    commentButton.innerHTML = "Publish";
                 })
                 .catch((error) => {
                     console.error(error);
+                    commentButton.innerHTML = "Publish";
                 });
             },
             listComments(postId) {
                 axios.
                 get(`/api/comment/${postId}/`)
                 .then((response) => {
-                    console.log(response);
+                    this.$set(this.comments, postId, this.organizeComments(response.data));
                 })
                 .catch((error) => {
                     console.error(error);
@@ -172,7 +234,12 @@
     }
 
     .form-control.comment-textarea {
+        margin-top: 20px;
         height: 100px;
+    }
+
+    .btn-comment {
+        margin: 10px 0;
     }
 </style>
 {% endblock %}

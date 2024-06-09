@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
-from posts.models import Post
+from posts.models import Post, Comment
 from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer
 from rest_framework import views
 from django.shortcuts import get_object_or_404
@@ -86,3 +86,17 @@ class TagListView(generics.ListAPIView):
 class CreateCommentView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class CommentListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.filter()
+    pagination_class = None
+
+    def get_queryset(self):
+        post_pk = self.kwargs.get('post_pk')
+        return Comment.objects.filter(post_id=post_pk)
