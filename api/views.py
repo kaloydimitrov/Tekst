@@ -99,4 +99,4 @@ class CommentListView(generics.ListAPIView):
 
     def get_queryset(self):
         post_pk = self.kwargs.get('post_pk')
-        return Comment.objects.filter(post_id=post_pk)
+        return Comment.objects.filter(post_id=post_pk).order_by('-created_at')
