@@ -2,8 +2,8 @@ const postsApp = new Vue({
     delimiters: ['[[', ']]'],
     el: '#app',
     data: {
-        page: 1,
         loading: false,
+        next: `{% url 'get_space_posts' pk=space.pk %}?page=1`,
         noMorePosts: false,
         posts: [],
         comments: {},
@@ -44,22 +44,25 @@ const postsApp = new Vue({
             return nestedComments;
         },
         handleScroll() {
-            if (!this.noMorePosts && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+            if (!this.noMorePosts && !this.loading && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
                 this.getMorePosts();
             }
         },
         getMorePosts() {
             this.loading = true
             axios.
-            get(`{% url 'get_space_posts' pk=space.pk %}?page=${this.page}`)
+            get(this.next)
             .then((response) => {
                 this.posts = this.posts.concat(response.data.results);
-                this.page += 1;
-                this.loading = false
+                this.next = response.data.next;
+                if (!this.next) {
+                    this.noMorePosts = true;
+                }
+                this.loading = false;
             })
             .catch(() => {
                 this.noMorePosts = true;
-                this.loading = false
+                this.loading = false;
             });
         },
         createComment(postId) {
