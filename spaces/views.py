@@ -3,7 +3,7 @@ from django.views.generic import CreateView, ListView, DetailView
 from .forms import CreateSpaceForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from .models import Space, UserSpaceFollow
+from .models import Space, UserSpaceFollow, Tag
 
 
 class SpaceCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
@@ -41,4 +41,5 @@ class SpaceDetailView(DetailView, LoginRequiredMixin):
         context = super(SpaceDetailView, self).get_context_data()
         space = self.get_object()
         context['is_following'] = UserSpaceFollow.objects.filter(user=self.request.user, space=space).exists()
+        context['tags'] = Tag.objects.filter(space=space)
         return context

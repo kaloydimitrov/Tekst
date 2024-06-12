@@ -11,8 +11,19 @@
     margin: 10px 0;
 }
 
-.show-input-container {
+.likes-reply-container {
     padding-bottom: 7px;
+    gap: 6px;
+}
+
+.like-button {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+}
+
+.like-button:hover {
+    background: rgba(211, 211, 211, 0.5);
 }
 
 .input-container {
@@ -49,6 +60,14 @@
 
 .loading-container {
     height: 55px;
+}
+
+.card-footer.stats {
+    gap: 20px;
+}
+
+.card-footer.post .card {
+    border: 0;
 }
 
 .card-footer.post .row .col {

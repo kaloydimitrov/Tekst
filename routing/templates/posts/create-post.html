@@ -6,7 +6,7 @@
 {% block main %}
     <form method="POST" action="{% url 'create_post' %}" class="form-group" id="app">
         {% csrf_token %}
-        {% include 'errors.html' %}
+        {% include 'includes/errors.html' %}
 
         <div v-if="loading" class="spinner-border" role="status"></div>
 

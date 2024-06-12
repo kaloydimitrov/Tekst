@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from .validators import validate_len
+from django.apps import apps
 
 
 class Post(models.Model):
@@ -12,6 +13,15 @@ class Post(models.Model):
     views = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def comments_count(self):
+        return Comment.objects.filter(post=self).count()
+
+    @property
+    def tags(self):
+        Tag = apps.get_model('spaces', 'Tag')
+        return Tag.objects.filter(post=self)
 
     def __str__(self):
         return self.name
@@ -26,8 +36,20 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def likes_count(self):
+        return self.likes.count()
+
     def __str__(self):
         return f'Comment by {self.user.username} on {self.post.name} ({self.content})'
+
+
+class CommentLikes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_likes')
+    comment = models.ForeignKey('posts.Comment', on_delete=models.CASCADE, related_name='likes')
+
+    def __str__(self):
+        return f'{self.user.username} likes comment {self.comment.id}'
 
 
 class ReactionType(models.Model):

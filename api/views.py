@@ -2,8 +2,8 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
-from posts.models import Post, Comment
-from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer
+from posts.models import Post, Comment, CommentLikes
+from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer, CommentLikeSerializer
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -27,7 +27,8 @@ class FollowSpaceView(views.APIView):
 
         follow = UserSpaceFollow.objects.create(user=user, space=space)
         serializer = UserSpaceFollowSerializer(follow)
-        return Response({"message": "Space followed successfully.", "data": f"{serializer}"}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Space followed successfully.", "data": f"{serializer}"},
+                        status=status.HTTP_201_CREATED)
 
 
 class UnfollowSpaceView(views.APIView):
@@ -77,7 +78,7 @@ class TagListView(generics.ListAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     filter_backends = (SearchFilter, OrderingFilter)
-    search_fields = ('name', )
+    search_fields = ('name',)
 
 
 # --------------------------------------
@@ -100,3 +101,29 @@ class CommentListView(generics.ListAPIView):
     def get_queryset(self):
         post_pk = self.kwargs.get('post_pk')
         return Comment.objects.filter(post_id=post_pk).order_by('-created_at')
+
+
+class LikeCommentView(views.APIView):
+    @staticmethod
+    def post(request, pk):
+        user_id = request.user.pk
+        like = CommentLikes.objects.filter(comment=pk, user=user_id)
+        if like.exists():
+            return Response({'error': 'You have already liked this comment'}, status=status.HTTP_400_BAD_REQUEST)
+
+        like_serializer = CommentLikeSerializer(data={'comment': pk, 'user': user_id})
+        if like_serializer.is_valid():
+            like_serializer.save()
+            return Response({'message': 'Comment liked'}, status=status.HTTP_201_CREATED)
+        return Response(like_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DislikeCommentView(views.APIView):
+    @staticmethod
+    def delete(request, pk):
+        comment = Comment.objects.get(pk=pk)
+        user_likes = CommentLikes.objects.filter(comment=comment, user=request.user)
+        if user_likes.exists():
+            user_likes.delete()
+            return Response({'message': 'Comment disliked'}, status=status.HTTP_201_CREATED)
+        return Response({'error': 'You have not liked this comment'}, status=status.HTTP_400_BAD_REQUEST)

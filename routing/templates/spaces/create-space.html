@@ -6,7 +6,7 @@
 {% block main %}
     <form method="POST" action="{% url 'create_space' %}" class="form-group" id="app" enctype="multipart/form-data">
         {% csrf_token %}
-        {% include 'errors.html' %}
+        {% include 'includes/errors.html' %}
 
         <div class="image-preview-container">
             <label for="image-preview">

@@ -1,7 +1,7 @@
 from django.urls import path
 from django.urls import include
 from .views import (SpaceDetailView, SpaceListView, TagListView, FollowSpaceView, UnfollowSpaceView, SpacePostsView,
-                    CreateCommentView, CommentListView)
+                    CreateCommentView, CommentListView, LikeCommentView, DislikeCommentView)
 
 urlpatterns = [
     path('space/', include([
@@ -16,6 +16,8 @@ urlpatterns = [
     ])),
     path('comment/', include([
         path('create/', CreateCommentView.as_view(), name='create_comment'),
-        path('<int:post_pk>/', CommentListView.as_view(), name='get_post_comments')
+        path('<int:post_pk>/', CommentListView.as_view(), name='get_post_comments'),
+        path('<int:pk>/like/', LikeCommentView.as_view(), name='like_comment'),
+        path('<int:pk>/dislike/', DislikeCommentView.as_view(), name='dislike_comment')
     ]))
 ]

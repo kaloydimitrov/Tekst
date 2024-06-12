@@ -1,0 +1,55 @@
+<div id="app" class="mt-4">
+    <div v-for="post in this.posts" class="card mb-3">
+        <div class="card-header">
+            <h5 class="card-title">[[ post.name ]]</h5>
+            <h6 class="card-subtitle text-muted d-flex justify-content-between">
+                <span class="d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#6c757d"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
+                    &nbsp;[[ post.user.username ]]
+                </span>
+                <span>
+                    [[ convertIso8601Format(post.created_at) ]]
+                    <span v-if="!post.created_at === post.updated_at">(Last updated on [[ convertIso8601Format(post.updated_at) ]])</span>
+                </span>
+            </h6>
+        </div>
+        <div class="card-body">
+            <p class="card-text">[[ post.content ]]</p>
+        </div>
+        <div class="card-body text-muted">
+            <span v-for="tag in post.tags" class="badge me-2 bg-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z" /></svg>
+                [[ tag.name ]]
+            </span>
+        </div>
+        <div class="card-footer text-muted d-flex stats">
+            <span>[[ post.comments_count ]] comments</span>
+            <span>[[ post.views ]] view points</span>
+            <span>100 reactions</span>
+
+            {# [[ post.visibility ]] #}
+        </div>
+        <div class="card-footer post">
+            <div class="row">
+                <a class="col d-flex justify-content-center align-items-center" data-bs-toggle="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
+                </a>
+                <div class="col reactions d-flex justify-content-center align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M360-240h220q17 0 31.5-8.5T632-272l84-196q2-5 3-10t1-10v-32q0-17-11.5-28.5T680-560H496l24-136q2-10-1-19t-10-16l-29-29-184 200q-8 8-12 18t-4 22v200q0 33 23.5 56.5T360-240ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-840h440v520L400-40l-50-50q-7-7-11.5-19t-4.5-23v-14l44-174H120q-32 0-56-24t-24-56v-80q0-7 2-15t4-15l120-282q9-20 30-34t44-14Zm360 80H240L120-480v80h360l-54 220 174-174v-406Zm0 406v-406 406Zm80 34v-80h120v-360H680v-80h200v520H680Z"/></svg>
+                </div>
+            </div>
+            <div class="collapse" :id="'collapse' + post.id">
+                <textarea placeholder="Add comment..." class="form-control comment-textarea" :id="'commentInput' + post.id"></textarea>
+                <button class="btn btn-primary btn-sm btn-comment" @click="createComment(post.id)" :id="'commentButton' + post.id">Publish</button>
+                <div class="loading-container d-flex justify-content-center align-items-center" :id="'loadingContainer' + post.id">
+                    <div class="spinner-border" role="status"></div>
+                </div>
+                <comment v-if="comments[post.id]" :comments="comments[post.id]"></comment>
+            </div>
+        </div>
+    </div>
+    <div class="loading-container d-flex justify-content-center align-items-center">
+        <div v-if="loading" class="spinner-border" role="status"></div>
+    </div>
+</div>
