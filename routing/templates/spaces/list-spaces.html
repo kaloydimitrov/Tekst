@@ -4,6 +4,7 @@
 {% block title %}List spaces{% endblock %}
 
 {% block main %}
+    {% include 'includes/message.html' %}
     <div class="container" id="app">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -110,6 +111,8 @@
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
+    {% include 'includes/js/vue-app-message.js' %}
+
     new Vue({
         delimiters: ['[[', ']]'],
         el: '#app',
@@ -145,7 +148,7 @@
                     axios.
                     post(`/api/space/follow/${spaceId}/`)
                     .then(response => {
-                        // this.response = response.data.message;
+                        messageApp.triggerNotification(response.data.message);
                         btn.textContent = "unfollow"
                     })
                     .catch(error => {
@@ -155,7 +158,7 @@
                     axios.
                     delete(`/api/space/unfollow/${spaceId}/`)
                     .then(response => {
-                        // this.response = response.data.message;
+                        messageApp.triggerNotification(response.data.message);
                         btn.textContent = "follow"
                     })
                     .catch(error => {
@@ -182,6 +185,8 @@
     });
 </script>
 <style>
+    {% include 'includes/css/message.css' %}
+
     .input-group-text {
         border-radius: .25rem 0 0 .25rem;
     }

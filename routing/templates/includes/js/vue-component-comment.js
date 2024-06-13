@@ -2,20 +2,7 @@ Vue.component('comment', {
     props: ['comments'],
     delimiters: ['[[', ']]'],
     methods: {
-        convertIso8601Format(isoTimestamp) {
-            const date = new Date(isoTimestamp);
-
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric',
-            };
-
-            return date.toLocaleString('en-US', options);
-        },
+        {% include 'includes/js/vue-method-convert-iso-8601.js' %}
         showCommentForm(commentId) {
             document.getElementById(`inputContainer${commentId}`).style.display = "block";
         },
@@ -58,9 +45,9 @@ Vue.component('comment', {
                 axios.
                 delete(`/api/comment/${comment.id}/dislike/`)
                 .then(response => {
-                    console.log(response.data.message)
                     comment.likes_count -= 1;
                     comment.is_liked = false;
+                    messageApp.triggerNotification(response.data.message);
                 })
                 .catch(error => {
                     console.error(error)
@@ -69,9 +56,9 @@ Vue.component('comment', {
                 axios.
                 post(`/api/comment/${comment.id}/like/`)
                 .then(response => {
-                    console.log(response.data.message)
                     comment.likes_count += 1;
                     comment.is_liked = true;
+                    messageApp.triggerNotification(response.data.message);
                 })
                 .catch(error => {
                     console.error(error)

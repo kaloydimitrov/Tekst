@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+import socket
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,6 +27,12 @@ SECRET_KEY = 'django-insecure-+78+om5@_ryl_z8&y%9+%kjlu4j766q=mfg8wc5#+mdrdh3oli
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# hostname = socket.gethostname()
+# ip_address = socket.gethostbyname(hostname)
+# ALLOWED_HOSTS = [ip_address]
+# # python manage.py runserver 0.0.0.0:8001
+# print(f"----------------------------------\n{ip_address}:8001\n----------------------------------")
 
 
 # Application definition

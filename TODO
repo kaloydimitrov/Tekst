@@ -12,6 +12,7 @@ add groups, permissions, roles
 only small text of the post will be shown and when user actually clicks the post or reacts to it or loads the comments it gets +1 view
 
 TODO: maybe change the space card to not use % for width
+TODO: fix everything to be the VUE way. for example post.comments = [] (no ids on everything)
 
 hover on username - popup with info
 if 1000 followers - should look like this '1k' (template filter or something)
@@ -22,11 +23,6 @@ when someone tags you in a comment
 send email (contacts)
 
 space details:
-tags in space details (AJAX)
-tags in post (AJAX)
-*limit the tags or comments users can create to 30-50 (both in spaces and posts)
-in the footer where is created_at. instead add comments_count, likes_count, views_count
-add created_at on header
 in the view filter queryset all if visibility = True
 
 list spaces:
