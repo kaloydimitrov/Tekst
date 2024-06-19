@@ -10,6 +10,7 @@ const postsApp = new Vue({
     },
     methods: {
         {% include 'includes/js/vue-method-convert-iso-8601.js' %}
+        {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
         organizeComments(commentsData) {
             const commentsMap = {};
             const nestedComments = [];
@@ -78,17 +79,17 @@ const postsApp = new Vue({
             });
         },
         listComments(postId) {
-            const spinner= document.querySelector(`#loadingContainer${postId} .spinner-border`);
+            const spinner = document.getElementById(`loadingContainer${postId}`);
 
             axios.
             get(`/api/comment/${postId}/`)
             .then((response) => {
                 this.$set(this.comments, postId, this.organizeComments(response.data));
-                spinner.style.display = "none";
+                spinner.remove();
             })
             .catch((error) => {
                 console.error(error);
-                spinner.style.display = "none";
+                spinner.remove();
             });
         },
         toggleReaction(reaction, post) {
@@ -101,6 +102,7 @@ const postsApp = new Vue({
                 })
                 .then(() => {
                     reaction.is_reacted = false;
+                    messageApp.triggerNotification('Reaction removed');
                 })
                 .catch((error) => {
                     console.error(error.response.data);
@@ -114,6 +116,7 @@ const postsApp = new Vue({
                 .then(() => {
                     post.reactions.forEach((reaction) => reaction.is_reacted = false);
                     reaction.is_reacted = true;
+                    messageApp.triggerNotification('Reacted successfully');
                 })
                 .catch((error) => {
                     console.error(error.response.data);

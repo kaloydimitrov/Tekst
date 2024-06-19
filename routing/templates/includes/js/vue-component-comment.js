@@ -3,6 +3,7 @@ Vue.component('comment', {
     delimiters: ['[[', ']]'],
     methods: {
         {% include 'includes/js/vue-method-convert-iso-8601.js' %}
+        {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
         showCommentForm(commentId) {
             document.getElementById(`inputContainer${commentId}`).style.display = "block";
         },
@@ -93,7 +94,7 @@ Vue.component('comment', {
                 </div>
                 <div class="input-container" :id="'inputContainer' + comment.id">
                     <div class="d-flex align-items-start">
-                        <textarea class="form-control" placeholder="Add reply..."></textarea>
+                        <textarea class="form-control comment-textarea" placeholder="Add reply..." @input="adjustTextAreaHeight"></textarea>
                         <button class="btn btn-outline-secondary btn-sm" @click="hideCommentForm(comment.id)">Cancel</button>
                         <button class="btn btn-outline-primary btn-sm" @click="createNestedComment(comment, $event)">Publish</button>
                     </div>

@@ -1,3 +1,8 @@
+.loading-container {
+    height: 55px;
+}
+
+/* POSTS TEMPLATE */
 .col.reactions {
     gap: 8px;
 }
@@ -29,13 +34,37 @@
     visibility: visible;
 }
 
+.reaction-icon:hover svg {
+    fill: #0d6efd;
+}
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
+
 .form-control.comment-textarea {
+    overflow: hidden;
+    resize: none;
+}
+
+.form-control.comment-textarea:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.form-control.main-comment-textarea {
     margin-top: 20px;
-    height: 100px;
 }
 
 .btn-comment {
     margin: 10px 0;
+}
+
+/* COMMENT COMPONENT */
+.comments-container .card {
+    border: 0;
 }
 
 .likes-reply-container {
@@ -78,31 +107,4 @@
 
 .comment.card-body {
     border-left: 1px solid red;
-}
-
-.collapsing {
-    -webkit-transition: none;
-    transition: none;
-    display: none;
-}
-
-.loading-container {
-    height: 55px;
-}
-
-.card-footer.stats {
-    gap: 20px;
-}
-
-.card-footer.post .card {
-    border: 0;
-}
-
-.card-footer.post .row .col {
-    height: 40px;
-    border-radius: .25rem;
-}
-
-.card-footer.post .row .col:hover {
-    background: rgba(0, 0, 0, 0.1);
 }
