@@ -38,7 +38,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'views', 'reactions', 'comments_count', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'views', 'reactions', 'reactions_count', 'comments_count', 'created_at', 'updated_at']
 
     def get_reactions(self, obj):
         request = self.context.get('request')

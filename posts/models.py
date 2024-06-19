@@ -19,6 +19,10 @@ class Post(models.Model):
         return Comment.objects.filter(post=self).count()
 
     @property
+    def reactions_count(self):
+        return Reaction.objects.filter(post=self).count()
+
+    @property
     def tags(self):
         Tag = apps.get_model('spaces', 'Tag')
         return Tag.objects.filter(post=self)
