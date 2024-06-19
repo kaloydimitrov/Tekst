@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from spaces.models import Space, Tag, UserSpaceFollow
-from posts.models import Post, Comment, CommentLikes
+from posts.models import Post, Comment, CommentLikes, Reaction, ReactionType
 from django.contrib.auth.models import User
 
 
@@ -34,10 +34,33 @@ class UserSpaceFollowSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
+    reactions = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'views', 'comments_count', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'views', 'reactions', 'comments_count', 'created_at', 'updated_at']
+
+    def get_reactions(self, obj):
+        request = self.context.get('request')
+        user = request.user
+        reaction_types = ReactionType.objects.all()
+        user_reactions = Reaction.objects.filter(user=user, post=obj).select_related('reaction_type')
+        reacted_types = {reaction.reaction_type_id: True for reaction in user_reactions}
+
+        if request and request.user.is_authenticated:
+            reactions = []
+            for reaction_type in reaction_types:
+                is_reacted = reacted_types.get(reaction_type.id, False)
+                reactions.append({
+                    'id': reaction_type.id,
+                    'name': reaction_type.name,
+                    'icon': reaction_type.icon,
+                    'is_reacted': is_reacted
+                })
+
+            return reactions
+
+        return [{'id': rt.id, 'name': rt.name, 'icon': rt.icon, 'is_reacted': False} for rt in reaction_types]
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -59,3 +82,10 @@ class CommentLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentLikes
         fields = ['user', 'comment']
+
+
+class ReactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reaction
+        fields = ['user', 'post', 'reaction_type']
+        read_only_fields = ['user']

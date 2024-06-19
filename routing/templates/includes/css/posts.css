@@ -1,5 +1,32 @@
 .col.reactions {
-    gap: 5px;
+    gap: 8px;
+}
+
+.reaction-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.reaction-icon::after {
+    content: attr(data-reaction-name);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #323232;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.reaction-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
 }
 
 .form-control.comment-textarea {
@@ -29,6 +56,7 @@
 .input-container {
     display: none;
     padding: 16px 0 20px 20px;
+    border-left: 1px solid red;
 }
 
 .input-container .d-flex {

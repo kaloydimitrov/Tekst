@@ -2,8 +2,9 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
-from posts.models import Post, Comment, CommentLikes
-from .serializers import SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer, CommentLikeSerializer
+from posts.models import Post, Comment, CommentLikes, Reaction
+from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer,
+                          CommentLikeSerializer, ReactionSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -104,6 +105,8 @@ class CommentListView(generics.ListAPIView):
 
 
 class LikeCommentView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def post(request, pk):
         user_id = request.user.pk
@@ -119,6 +122,8 @@ class LikeCommentView(views.APIView):
 
 
 class DislikeCommentView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
     @staticmethod
     def delete(request, pk):
         comment = Comment.objects.get(pk=pk)
@@ -127,3 +132,36 @@ class DislikeCommentView(views.APIView):
             user_likes.delete()
             return Response({'message': 'Comment disliked'}, status=status.HTTP_201_CREATED)
         return Response({'error': 'You have not liked this comment'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# --------------------------------------
+# REACTIONS
+# --------------------------------------
+class CreateReactionView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ReactionSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        post_id = serializer.validated_data['post'].id
+
+        reaction = Reaction.objects.filter(user=user, post_id=post_id)
+        if reaction.exists():
+            reaction.delete()
+
+        serializer.save(user=user)
+
+
+class DeleteReactionView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        post_id = request.data.get('post')
+        reaction_type_id = request.data.get('reaction_type')
+
+        try:
+            reaction = Reaction.objects.get(user=request.user, post_id=post_id, reaction_type_id=reaction_type_id)
+            reaction.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Reaction.DoesNotExist:
+            return Response({'error': 'Reaction not found.'}, status=status.HTTP_404_NOT_FOUND)

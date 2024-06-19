@@ -90,6 +90,35 @@ const postsApp = new Vue({
                 console.error(error);
                 spinner.style.display = "none";
             });
+        },
+        toggleReaction(reaction, post) {
+            if (reaction.is_reacted) {
+                axios.delete(`{% url 'delete_reaction' %}`, {
+                    data: {
+                        post: post.id,
+                        reaction_type: reaction.id,
+                    }
+                })
+                .then(() => {
+                    reaction.is_reacted = false;
+                })
+                .catch((error) => {
+                    console.error(error.response.data);
+                });
+            } else {
+                axios.
+                post(`{% url 'create_reaction' %}`, {
+                    post: post.id,
+                    reaction_type: reaction.id,
+                })
+                .then(() => {
+                    post.reactions.forEach((reaction) => reaction.is_reacted = false);
+                    reaction.is_reacted = true;
+                })
+                .catch((error) => {
+                    console.error(error.response.data);
+                });
+            }
         }
     },
     mounted() {
