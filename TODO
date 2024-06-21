@@ -9,11 +9,6 @@ implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 add groups, permissions, roles
 
-only small text of the post will be shown and when user actually clicks the post or reacts to it or loads the comments it gets +1 view
-
-TODO: maybe change the space card to not use % for width
-TODO: fix everything to be the VUE way. for example post.comments = [] (no ids on everything)
-
 hover on username - popup with info
 if 1000 followers - should look like this '1k' (template filter or something)
 
@@ -23,12 +18,19 @@ when someone tags you in a comment
 send email (contacts)
 
 space details:
-in the view filter queryset all if visibility = True
+reinvent the API (api/space/int:pk>/posts/) - add only one view for posts with many filters (in space details we will filter by space and it will show only the posts in that space)
+that way you can make your feed - all posts from last week with highest rating, randomly ordered
 
 list spaces:
 filter - most follows. most posts. oldest. newest
 
 
+user details:
+only one page
+if you want to see 'user-posts' for example
+{% url 'user_details' %}#user-posts
+
+there you can edit your posts or spaces
+
 FIX:
-space details loads same posts multiple times
-space cards looking bad on smaller screens
+comments has no pagination
