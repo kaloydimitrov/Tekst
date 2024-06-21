@@ -28,7 +28,7 @@ class FollowSpaceView(views.APIView):
 
         follow = UserSpaceFollow.objects.create(user=user, space=space)
         serializer = UserSpaceFollowSerializer(follow)
-        return Response({"message": "Space followed successfully.", "data": f"{serializer}"},
+        return Response({"message": "Space followed successfully", "data": f"{serializer}"},
                         status=status.HTTP_201_CREATED)
 
 
@@ -45,7 +45,7 @@ class UnfollowSpaceView(views.APIView):
             return Response({"detail": "Not following this space."}, status=status.HTTP_400_BAD_REQUEST)
 
         follow.delete()
-        return Response({"message": "Space unfollowed successfully."}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Space unfollowed successfully"}, status=status.HTTP_201_CREATED)
 
 
 class SpaceListView(generics.ListAPIView):

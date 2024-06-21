@@ -2,7 +2,30 @@
     height: 55px;
 }
 
+.half-opacity {
+    opacity: 0.5;
+}
+
 /* POSTS TEMPLATE */
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.sticky-header .list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+.sticky-header .list-group-item:first-child {
+    border-top: none;
+}
+
+.sticky-header .list-group-item:last-child {
+    border-bottom: none;
+}
+
 .col.reactions {
     gap: 8px;
 }
@@ -44,6 +67,10 @@
     display: none;
 }
 
+.collapse.comments-container {
+    padding: 16px 16px;
+}
+
 .form-control.comment-textarea {
     overflow: hidden;
     resize: none;
@@ -52,10 +79,6 @@
 .form-control.comment-textarea:focus {
     box-shadow: none;
     outline: none;
-}
-
-.form-control.main-comment-textarea {
-    margin-top: 20px;
 }
 
 .btn-comment {

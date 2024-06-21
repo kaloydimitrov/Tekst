@@ -24,37 +24,42 @@
             </span>
         </div>
         <div class="list-group list-group-flush text-muted">
-            <li class="list-group-item d-flex justify-content-between">
-                <span data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id">
-                    [[ post.comments_count ]] comments
-                </span>
-                <span>[[ post.views ]] view points</span>
-                <span>[[ post.reactions_count ]] reactions</span>
+            <header class="sticky-header">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id">
+                        [[ post.comments_count ]] comments
+                    </span>
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m136-240-56-56 296-298 160 160 208-206H640v-80h240v240h-80v-104L536-320 376-480 136-240Z"/></svg>
+                        [[ post.rating ]] rating
+                    </span>
+                    <span>[[ post.reactions_count ]] reactions</span>
 
-                {# [[ post.visibility ]] #}
-            </li>
-            <li class="list-group-item">
-                <div class="row">
-                    <a class="col d-flex justify-content-center align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
-                    </a>
-                    <div class="col reactions d-flex justify-content-center align-items-center">
-                        <div v-for="reaction in post.reactions" :key="reaction.id" @click="toggleReaction(reaction, post)" :data-reaction-name="reaction.name" class="reaction-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" :fill="reaction.is_reacted ? '#0d6efd' : '#5f6368'" class="">
-                                <path :d="reaction.icon"/>
-                            </svg>
+                    {# [[ post.visibility ]] #}
+                </li>
+                <li class="list-group-item">
+                    <div class="row">
+                        <a class="col d-flex justify-content-center align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
+                        </a>
+                        <div class="col reactions d-flex justify-content-center align-items-center">
+                            <div v-for="reaction in post.reactions" :key="reaction.id" @click="toggleReaction(reaction, post)" :data-reaction-name="reaction.name" class="reaction-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" :fill="reaction.is_reacted ? '#0d6efd' : '#5f6368'">
+                                    <path :d="reaction.icon"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
+                </li>
+            </header>
+            <div class="collapse comments-container" :id="'collapse' + post.id">
+                <div class="loading-container d-flex justify-content-center align-items-center" :id="'loadingContainer' + post.id">
+                    <div class="spinner-border" role="status"></div>
                 </div>
-                <div class="collapse comments-container" :id="'collapse' + post.id">
-                    <div class="loading-container d-flex justify-content-center align-items-center" :id="'loadingContainer' + post.id">
-                        <div class="spinner-border" role="status"></div>
-                    </div>
-                    <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea main-comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
-                    <button class="btn btn-primary btn-sm btn-comment" @click="createComment(post.id)" :id="'commentButton' + post.id">Publish</button>
-                    <comment v-if="comments[post.id]" :comments="comments[post.id]"></comment>
-                </div>
-            </li>
+                <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea main-comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
+                <button class="btn btn-primary btn-sm btn-comment" @click="createComment(post.id)" :id="'commentButton' + post.id">Publish</button>
+                <comment v-if="comments[post.id]" :comments="comments[post.id]"></comment>
+            </div>
         </div>
     </div>
     <div class="loading-container d-flex justify-content-center align-items-center">

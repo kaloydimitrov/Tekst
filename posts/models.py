@@ -23,6 +23,14 @@ class Post(models.Model):
         return Reaction.objects.filter(post=self).count()
 
     @property
+    def rating(self):
+        weight_comments = 0.6
+        weight_reactions = 0.4
+
+        return (weight_comments * self.comments_count) + (weight_reactions * self.reactions_count)
+
+
+    @property
     def tags(self):
         Tag = apps.get_model('spaces', 'Tag')
         return Tag.objects.filter(post=self)

@@ -31,11 +31,6 @@ const postsApp = new Vue({
 
             return nestedComments;
         },
-        handleScroll() {
-            if (!this.noMorePosts && !this.loading && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
-                this.getMorePosts();
-            }
-        },
         getMorePosts() {
             this.loading = true
             axios.
@@ -122,7 +117,12 @@ const postsApp = new Vue({
                     console.error(error.response.data);
                 });
             }
-        }
+        },
+        handleScroll() {
+            if (!this.noMorePosts && !this.loading && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                this.getMorePosts();
+            }
+        },
     },
     mounted() {
         this.getMorePosts();
