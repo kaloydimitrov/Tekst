@@ -4,7 +4,7 @@
 {% block title %}Create Space{% endblock %}
 
 {% block main %}
-    <form method="POST" action="{% url 'create_space' %}" class="form-group" id="app" enctype="multipart/form-data">
+    <form method="POST" action="{% url 'create_space' %}" class="form-group" id="app" enctype="multipart/form-data" ref="form" @submit.prevent>
         {% csrf_token %}
         {% include 'includes/errors.html' %}
 
@@ -18,24 +18,26 @@
         </div>
 
         <div class="image-preview-container">
-            <label for="image-preview">
+            <label for="image-field">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0000007F"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-480H200v480Zm280-80q-82 0-146.5-44.5T240-440q29-71 93.5-115.5T480-600q82 0 146.5 44.5T720-440q-29 71-93.5 115.5T480-280Zm0-60q56 0 102-26.5t72-73.5q-26-47-72-73.5T480-540q-56 0-102 26.5T306-440q26 47 72 73.5T480-340Zm0-100Zm0 60q25 0 42.5-17.5T540-440q0-25-17.5-42.5T480-500q-25 0-42.5 17.5T420-440q0 25 17.5 42.5T480-380Z"/></svg>
                 Banner Preview
             </label>
             <img id="image-preview" src="{% static 'images/default-banner.png' %}" alt="Image Preview">
         </div>
 
-        {{ form.image }}
+        <div class="form-floating mb-3 image-form">
+            {{ form.image }}
+        </div>
 
-        <p class="warning-message">
+        <p class="warning-message d-flex align-items-center">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#808080"><path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
-            Add at least 3 tags in order to create the space!
+            &nbsp;Add at least 3 tags in order to create the space!
         </p>
 
         <div class="form-floating mb-3 tags-container">
             {{ form.tags }}
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter a tag" v-model="newTag" @keyup.enter="addTag">
+                <input type="text" class="form-control" placeholder="Enter tag/s (separate by comma)" v-model="newTag" @keyup.enter="addTag">
                 <button type="button" class="btn btn-secondary" style="margin: 0" @click="addTag">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                 </button>
@@ -49,7 +51,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-secondary">Create Space</button>
+        <button type="button" class="btn btn-secondary" @click="submitForm">Create Space</button>
     </form>
 {% endblock %}
 
@@ -63,9 +65,14 @@
             tags: []
         },
         methods: {
+            submitForm() {
+                this.$refs.form.submit();
+            },
             addTag() {
                 if (this.newTag.trim() !== '') {
-                    this.tags.push(this.newTag.trim());
+                    const tagsToAdd = this.newTag.split(",").map(tag => tag.trim()).filter(tag => tag !== '');
+                    this.tags.push(...tagsToAdd);
+
                     this.newTag = '';
                     this.updateTagsInput();
                 }
@@ -135,6 +142,7 @@
     }
 
     .image-preview-container label {
+        cursor: pointer;
         position: absolute;
         inset: 0 0 0 0;
         transition: opacity 0.2s;
@@ -145,6 +153,10 @@
 
     .image-preview-container:hover label {
         opacity: 0;
+    }
+
+    .image-form {
+        display: none;
     }
 </style>
 {% endblock %}
