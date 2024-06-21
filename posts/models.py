@@ -10,7 +10,6 @@ class Post(models.Model):
     name = models.CharField(max_length=100, validators=[validate_len])
     content = models.TextField(validators=[validate_len])
     visibility = models.BooleanField(default=True)
-    views = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -28,7 +27,6 @@ class Post(models.Model):
         weight_reactions = 0.4
 
         return (weight_comments * self.comments_count) + (weight_reactions * self.reactions_count)
-
 
     @property
     def tags(self):

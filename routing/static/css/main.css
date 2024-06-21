@@ -1,6 +1,14 @@
+*, ::before, ::after {
+    box-sizing: border-box;
+}
+
 .main-nav {
     padding-left: 1em;
     padding-right: 1em;
+}
+
+#bootstrap-override .responsive-dropdown {
+    display: none;
 }
 
 .main-header .dropdown-toggle:focus,

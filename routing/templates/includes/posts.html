@@ -24,14 +24,14 @@
             </span>
         </div>
         <div class="list-group list-group-flush text-muted">
-            <header class="sticky-header">
+            <header class="sticky-header" :id="'stickyHeader' + post.id">
                 <li class="list-group-item d-flex justify-content-between">
                     <span data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse" @click="listComments(post.id)" :href="'#collapse' + post.id">
                         [[ post.comments_count ]] comments
                     </span>
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m136-240-56-56 296-298 160 160 208-206H640v-80h240v240h-80v-104L536-320 376-480 136-240Z"/></svg>
-                        [[ post.rating ]] rating
+                        [[ (Math.round(post.rating * 100) / 100).toFixed(1) ]] rating
                     </span>
                     <span>[[ post.reactions_count ]] reactions</span>
 

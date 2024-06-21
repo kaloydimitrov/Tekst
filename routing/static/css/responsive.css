@@ -1,0 +1,19 @@
+@media only screen and (max-width: 600px) {
+    #bootstrap-override .image-preview-container,
+    #bootstrap-override .tags-space-container .card
+    {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .main-nav .authenticated-container,
+    .main-nav .btn-group
+    {
+        display: none;
+    }
+
+    #bootstrap-override .responsive-dropdown {
+        display: block;
+    }
+}

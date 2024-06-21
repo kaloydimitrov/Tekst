@@ -75,6 +75,9 @@ const postsApp = new Vue({
         },
         listComments(postId) {
             const spinner = document.getElementById(`loadingContainer${postId}`);
+            const section = document.getElementById(`stickyHeader${postId}`);
+
+            section.scrollIntoView({ behavior: 'smooth' });
 
             axios.
             get(`/api/comment/${postId}/`)
