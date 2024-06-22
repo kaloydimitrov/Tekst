@@ -20,10 +20,17 @@ send email (contacts)
 space details:
 reinvent the API (api/space/int:pk>/posts/) - add only one view for posts with many filters (in space details we will filter by space and it will show only the posts in that space)
 that way you can make your feed - all posts from last week with highest rating, randomly ordered
+add option to hide the replies
 
 list spaces:
 filter - most follows. most posts. oldest. newest
 
+
+filter comments
+-top
+-newest
+
+make users to be able to do text decorations
 
 user details:
 only one page

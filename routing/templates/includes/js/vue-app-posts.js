@@ -5,38 +5,22 @@ const postsApp = new Vue({
         loading: false,
         next: `{% url 'get_space_posts' pk=space.pk %}?page=1`,
         noMorePosts: false,
-        posts: [],
-        comments: {},
+        posts: []
     },
     methods: {
         {% include 'includes/js/vue-method-convert-iso-8601.js' %}
         {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
-        organizeComments(commentsData) {
-            const commentsMap = {};
-            const nestedComments = [];
-
-            commentsData.forEach(comment => {
-                comment.showReplies = true;
-                comment.replies = [];
-                commentsMap[comment.id] = comment;
-            });
-
-            commentsData.forEach(comment => {
-                if (comment.parent_comment !== null) {
-                    commentsMap[comment.parent_comment].replies.push(comment);
-                } else {
-                    nestedComments.push(comment);
-                }
-            });
-
-            return nestedComments;
-        },
         getMorePosts() {
             this.loading = true
             axios.
             get(this.next)
             .then((response) => {
-                this.posts = this.posts.concat(response.data.results);
+                const posts = response.data.results.map((post) => {
+                    post.comments = [];
+                    post.loading_comments = true;
+                    return post;
+                });
+                this.posts = this.posts.concat(posts);
                 this.next = response.data.next;
                 if (!this.next) {
                     this.noMorePosts = true;
@@ -48,9 +32,9 @@ const postsApp = new Vue({
                 this.loading = false;
             });
         },
-        createComment(postId) {
-            const commentInput = document.getElementById(`commentInput${postId}`);
-            const commentButton = document.getElementById(`commentButton${postId}`);
+        createComment(post) {
+            const commentInput = document.getElementById(`commentInput${post.id}`);
+            const commentButton = document.getElementById(`commentButton${post.id}`);
 
             if (!commentInput.value) {
                 return;
@@ -60,11 +44,11 @@ const postsApp = new Vue({
 
             axios.
             post(`{% url 'create_comment' %}`, {
-                post: postId,
+                post: post.id,
                 content: commentInput.value,
             })
             .then(() => {
-                this.listComments(postId);
+                this.listComments(post, false);
                 commentInput.value = "";
                 commentButton.innerHTML = "Publish";
             })
@@ -73,21 +57,21 @@ const postsApp = new Vue({
                 commentButton.innerHTML = "Publish";
             });
         },
-        listComments(postId) {
-            const spinner = document.getElementById(`loadingContainer${postId}`);
-            const section = document.getElementById(`stickyHeader${postId}`);
-
-            section.scrollIntoView({ behavior: 'smooth' });
+        listComments(post, goToSection = true) {
+            if (goToSection) {
+                const section = document.getElementById(`stickyHeader${post.id}`);
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
 
             axios.
-            get(`/api/comment/${postId}/`)
+            get(`/api/comment/${post.id}/`)
             .then((response) => {
-                this.$set(this.comments, postId, this.organizeComments(response.data));
-                spinner.remove();
+                post.comments = response.data;
+                post.loading_comments = false;
             })
             .catch((error) => {
                 console.error(error);
-                spinner.remove();
+                post.loading_comments = false;
             });
         },
         toggleReaction(reaction, post) {

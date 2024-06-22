@@ -50,6 +50,9 @@ class Comment(models.Model):
     def likes_count(self):
         return self.likes.count()
 
+    def is_liked_by(self, user):
+        return CommentLikes.objects.filter(comment=self, user=user).exists()
+
     def __str__(self):
         return f'Comment by {self.user.username} on {self.post.name} ({self.content})'
 

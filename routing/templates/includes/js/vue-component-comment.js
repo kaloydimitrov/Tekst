@@ -11,7 +11,7 @@ Vue.component('comment', {
             document.getElementById(`inputContainer${commentId}`).style.display = "none";
         },
         toggleReplies(comment) {
-            comment.showReplies = !comment.showReplies;
+            comment.show_replies = !comment.show_replies;
         },
         createNestedComment(comment, event) {
             const publishButton = event.target;
@@ -31,7 +31,8 @@ Vue.component('comment', {
                 parent_comment: comment.id
             })
             .then(() => {
-                postsApp.listComments(comment.post);
+                const post = postsApp.posts.find(post => post.id === comment.post);
+                postsApp.listComments(post, false);
                 this.hideCommentForm(comment.id);
                 commentInput.value = "";
                 publishButton.innerHTML = "Publish";
@@ -77,7 +78,7 @@ Vue.component('comment', {
                     </small>
                     <button v-if="comment.replies.length" class="btn btn-primary btn-sm" @click="toggleReplies(comment)">
                         <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF">
-                            <path v-if="comment.showReplies" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+                            <path v-if="comment.show_replies" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
                             <path v-else d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
                         </svg>
                         [[ comment.replies.length ]] reply/ies
@@ -99,7 +100,7 @@ Vue.component('comment', {
                         <button class="btn btn-outline-primary btn-sm" @click="createNestedComment(comment, $event)">Publish</button>
                     </div>
                 </div>
-                <div v-if="comment.showReplies && comment.replies.length" id="replies">
+                <div v-if="comment.replies.length && comment.show_replies" id="replies">
                     <comment :comments="comment.replies" class="ml-4"></comment>
                 </div>
             </div>

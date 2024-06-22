@@ -66,16 +66,24 @@ class PostSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     is_liked = serializers.SerializerMethodField()
+    replies = serializers.SerializerMethodField()
+    show_replies = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'post', 'content', 'parent_comment', 'likes_count', 'is_liked', 'tagged_users', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'post', 'content', 'parent_comment', 'likes_count', 'is_liked', 'replies', 'show_replies', 'tagged_users', 'created_at', 'updated_at']
 
     def get_is_liked(self, obj):
         request = self.context.get('request')
         if request and request.user.is_authenticated:
-            return obj.likes.filter(user=request.user).exists()
+            return obj.is_liked_by(request.user)
         return False
+
+    def get_replies(self, obj):
+        return CommentSerializer(obj.replies.all().order_by('-created_at'), many=True, context=self.context).data
+
+    def get_show_replies(self, obj):
+        return True
 
 
 class CommentLikeSerializer(serializers.ModelSerializer):

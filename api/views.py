@@ -96,12 +96,11 @@ class CreateCommentView(generics.CreateAPIView):
 class CommentListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
-    queryset = Comment.objects.filter()
     pagination_class = None
 
     def get_queryset(self):
         post_pk = self.kwargs.get('post_pk')
-        return Comment.objects.filter(post_id=post_pk).order_by('-created_at')
+        return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).order_by('-created_at')
 
 
 class LikeCommentView(views.APIView):
