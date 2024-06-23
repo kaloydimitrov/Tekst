@@ -12,8 +12,8 @@ const postsApp = new Vue({
         {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
         getMorePosts() {
             this.loading = true
-            axios.
-            get(this.next)
+            axios
+            .get(this.next)
             .then((response) => {
                 const posts = response.data.results.map((post) => {
                     post.comments = [];
@@ -43,13 +43,13 @@ const postsApp = new Vue({
 
             commentButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> <span class="sr-only">Loading...</span>';
 
-            axios.
-            post(`{% url 'create_comment' %}`, {
+            axios
+            .post(`{% url 'create_comment' %}`, {
                 post: post.id,
                 content: commentInput.value,
             })
-            .then(() => {
-                this.listComments(post, false);
+            .then((response) => {
+                post.comments.unshift(response.data);
                 commentInput.value = "";
                 commentButton.innerHTML = "Publish";
             })
@@ -58,11 +58,9 @@ const postsApp = new Vue({
                 commentButton.innerHTML = "Publish";
             });
         },
-        listComments(post, goToSection = true) {
-            if (goToSection) {
-                const section = document.getElementById(`stickyHeader${post.id}`);
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
+        listComments(post) {
+            const section = document.getElementById(`stickyHeader${post.id}`);
+            section.scrollIntoView({ behavior: 'smooth' });
 
             if (!post.next_comment_page) {
                 return;
@@ -70,8 +68,8 @@ const postsApp = new Vue({
 
             post.loading_comments = true;
 
-            axios.
-            get(post.next_comment_page)
+            axios
+            .get(post.next_comment_page)
             .then((response) => {
                 post.comments = post.comments.concat(response.data.results);
                 post.next_comment_page = response.data.next;
@@ -98,8 +96,8 @@ const postsApp = new Vue({
                     console.error(error.response.data);
                 });
             } else {
-                axios.
-                post(`{% url 'create_reaction' %}`, {
+                axios
+                .post(`{% url 'create_reaction' %}`, {
                     post: post.id,
                     reaction_type: reaction.id,
                 })

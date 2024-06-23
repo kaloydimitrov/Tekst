@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %}{{ space.name }} space{% endblock %}
+
 {% block main %}
     {% include 'includes/message.html' %}
     <div class="card text-center" id="card-app">
@@ -56,8 +58,8 @@
                 const btn = event.target;
 
                 if (btn.textContent === "follow") {
-                    axios.
-                    post(`/api/space/follow/${spaceId}/`)
+                    axios
+                    .post(`/api/space/follow/${spaceId}/`)
                     .then((response) => {
                         btn.textContent = "unfollow";
                         this.followers += 1;
@@ -67,8 +69,8 @@
                         console.error(error);
                     });
                 } else if (btn.textContent === "unfollow") {
-                    axios.
-                    delete(`/api/space/unfollow/${spaceId}/`)
+                    axios
+                    .delete(`/api/space/unfollow/${spaceId}/`)
                     .then((response) => {
                         btn.textContent = "follow";
                         this.followers -= 1;

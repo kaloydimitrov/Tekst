@@ -24,15 +24,14 @@ Vue.component('comment', {
 
             publishButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
 
-            axios.
-            post(`{% url 'create_comment' %}`, {
+            axios
+            .post(`{% url 'create_comment' %}`, {
                 post: comment.post,
                 content: commentInput.value,
                 parent_comment: comment.id
             })
-            .then(() => {
-                const post = postsApp.posts.find(post => post.id === comment.post);
-                postsApp.listComments(post, false);
+            .then((response) => {
+                comment.replies.unshift(response.data);
                 this.hideCommentForm(comment.id);
                 commentInput.value = "";
                 publishButton.innerHTML = "Publish";
@@ -44,8 +43,8 @@ Vue.component('comment', {
         },
         likeDislikeComment(comment) {
             if (comment.is_liked) {
-                axios.
-                delete(`/api/comment/${comment.id}/dislike/`)
+                axios
+                .delete(`/api/comment/${comment.id}/dislike/`)
                 .then(response => {
                     comment.likes_count -= 1;
                     comment.is_liked = false;
@@ -55,8 +54,8 @@ Vue.component('comment', {
                     console.error(error)
                 })
             } else {
-                axios.
-                post(`/api/comment/${comment.id}/like/`)
+                axios
+                .post(`/api/comment/${comment.id}/like/`)
                 .then(response => {
                     comment.likes_count += 1;
                     comment.is_liked = true;
