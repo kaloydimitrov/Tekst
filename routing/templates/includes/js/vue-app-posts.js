@@ -17,7 +17,8 @@ const postsApp = new Vue({
             .then((response) => {
                 const posts = response.data.results.map((post) => {
                     post.comments = [];
-                    post.loading_comments = true;
+                    post.loading_comments = false;
+                    post.next_comment_page = `/api/comment/${post.id}/?page=1`;
                     return post;
                 });
                 this.posts = this.posts.concat(posts);
@@ -63,10 +64,17 @@ const postsApp = new Vue({
                 section.scrollIntoView({ behavior: 'smooth' });
             }
 
+            if (!post.next_comment_page) {
+                return;
+            }
+
+            post.loading_comments = true;
+
             axios.
-            get(`/api/comment/${post.id}/`)
+            get(post.next_comment_page)
             .then((response) => {
-                post.comments = response.data;
+                post.comments = post.comments.concat(response.data.results);
+                post.next_comment_page = response.data.next;
                 post.loading_comments = false;
             })
             .catch((error) => {

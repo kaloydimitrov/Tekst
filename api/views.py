@@ -96,7 +96,6 @@ class CreateCommentView(generics.CreateAPIView):
 class CommentListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
-    pagination_class = None
 
     def get_queryset(self):
         post_pk = self.kwargs.get('post_pk')
