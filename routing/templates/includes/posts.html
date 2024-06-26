@@ -1,5 +1,5 @@
 <div id="app" class="mt-4">
-    <div v-for="post in this.posts" class="card mb-3">
+    <div v-for="post in this.posts" class="card mb-3" :id="'postCard' + post.id">
         <div class="card-body">
             <h5 class="card-title">[[ post.name ]]</h5>
             <p class="card-text text-muted d-flex justify-content-between">
@@ -24,9 +24,9 @@
             </span>
         </div>
         <div class="list-group list-group-flush text-muted">
-            <header class="sticky-header" :id="'stickyHeader' + post.id">
+            <header class="sticky-header">
                 <li class="list-group-item d-flex justify-content-between">
-                    <span data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse" @click="listComments(post)" :href="'#collapse' + post.id">
+                    <span @click="toggleCommentsSection(post)" class="cursor-pointer">
                         [[ post.comments_count ]] comments
                     </span>
                     <span>
@@ -39,9 +39,13 @@
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <a class="col d-flex justify-content-center align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapse" @click="listComments(post)" :href="'#collapse' + post.id">
+                        <div class="col d-flex justify-content-center align-items-center cursor-pointer" @click="toggleCommentsSection(post)">
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
-                        </a>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5f6368">
+                                <path v-if="post.show_comments_section" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+                                <path v-else d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
+                            </svg>
+                        </div>
                         <div class="col reactions d-flex justify-content-center align-items-center">
                             <div v-for="reaction in post.reactions" :key="reaction.id" @click="toggleReaction(reaction, post)" :data-reaction-name="reaction.name" class="reaction-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" :fill="reaction.is_reacted ? '#0d6efd' : '#5f6368'">
@@ -52,14 +56,19 @@
                     </div>
                 </li>
             </header>
-            <div class="collapse comments-container" :id="'collapse' + post.id">
-                <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea main-comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
-                <button class="btn btn-primary btn-sm btn-comment" @click="createComment(post)" :id="'commentButton' + post.id">Publish</button>
+            <div v-if="post.show_comments_section" class="comments-container">
+                <div :class="['btn-group', 'mb-3', { 'half-opacity': !post.comments.length }]" role="group" aria-label="Filter options">
+                    <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == '' }]" @click="toggleCommentOrder('', post)">Newest</button>
+                    <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'oldest' }]" @click="toggleCommentOrder('oldest', post)">Oldest</button>
+                    <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'top' }]" @click="toggleCommentOrder('top', post)">Top</button>
+                </div>
+                <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
+                <button class="btn btn-primary btn-sm mb-3 mt-3" @click="createComment(post)" :id="'commentButton' + post.id">Publish</button>
                 <comment v-if="post.comments" :comments="post.comments"></comment>
+                <button v-if="post.next_comment_page && post.loading_comments === false" type="button" class="btn btn-primary mt-4 w-100" @click="listComments(post)">Load More Comments</button>
                 <div v-if="post.loading_comments" class="loading-container d-flex justify-content-center align-items-center">
                     <div class="spinner-border" role="status"></div>
                 </div>
-                <button v-if="post.next_comment_page" type="button" class="btn btn-link mt-4" @click="listComments(post)">Load more...</button>
             </div>
         </div>
     </div>

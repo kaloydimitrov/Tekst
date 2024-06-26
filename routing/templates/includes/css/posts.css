@@ -6,6 +6,11 @@
     opacity: 0.5;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+    user-select: none;
+}
+
 /* POSTS TEMPLATE */
 .sticky-header {
     position: sticky;
@@ -67,7 +72,7 @@
     display: none;
 }
 
-.collapse.comments-container {
+.comments-container {
     padding: 16px 16px;
 }
 
@@ -79,10 +84,6 @@
 .form-control.comment-textarea:focus {
     box-shadow: none;
     outline: none;
-}
-
-.btn-comment {
-    margin: 10px 0;
 }
 
 /* COMMENT COMPONENT */

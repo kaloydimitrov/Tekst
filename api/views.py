@@ -7,6 +7,7 @@ from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSeriali
                           CommentLikeSerializer, ReactionSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
 from rest_framework import status
 from rest_framework.response import Response
 from spaces.models import UserSpaceFollow
@@ -99,6 +100,13 @@ class CommentListView(generics.ListAPIView):
 
     def get_queryset(self):
         post_pk = self.kwargs.get('post_pk')
+        order = self.request.GET["order"]
+
+        if order == 'oldest':
+            return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).order_by('created_at')
+        elif order == 'top':
+            return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).annotate(total_likes=Count('likes')).order_by('-total_likes')
+
         return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).order_by('-created_at')
 
 

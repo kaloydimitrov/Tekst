@@ -18,7 +18,10 @@ const postsApp = new Vue({
                 const posts = response.data.results.map((post) => {
                     post.comments = [];
                     post.loading_comments = false;
-                    post.next_comment_page = `/api/comment/${post.id}/?page=1`;
+                    post.comment_order = '';
+                    post.next_comment_page = `/api/comment/${post.id}/?page=1&order=${post.comment_order}`;
+                    post.show_comments_section = false;
+                    post.comments_listed = false;
                     return post;
                 });
                 this.posts = this.posts.concat(posts);
@@ -59,9 +62,6 @@ const postsApp = new Vue({
             });
         },
         listComments(post) {
-            const section = document.getElementById(`stickyHeader${post.id}`);
-            section.scrollIntoView({ behavior: 'smooth' });
-
             if (!post.next_comment_page) {
                 return;
             }
@@ -79,6 +79,42 @@ const postsApp = new Vue({
                 console.error(error);
                 post.loading_comments = false;
             });
+        },
+        toggleCommentsSection(post) {
+            if (!post.comments_listed) {
+                post.comments_listed = true;
+                this.listComments(post);
+            }
+
+            if (post.show_comments_section) {
+                post.show_comments_section = false;
+                const section = document.getElementById(`postCard${post.id}`);
+                const offset = -16;
+                const topPos = section.getBoundingClientRect().top + window.pageYOffset + offset;
+                window.scrollTo({
+                    top: topPos,
+                    behavior: 'smooth'
+                });
+            } else {
+                post.show_comments_section = true;
+            }
+        },
+        toggleCommentOrder(order, post) {
+            if (order === post.comment_order) {
+                return;
+            }
+
+            if (order === '') {
+                post.comment_order = '';
+            } else if (order === 'oldest') {
+                post.comment_order = 'oldest';
+            } else if (order === 'top') {
+                post.comment_order = 'top';
+            }
+
+            post.next_comment_page = `/api/comment/${post.id}/?page=1&order=${post.comment_order}`;
+            post.comments = [];
+            this.listComments(post);
         },
         toggleReaction(reaction, post) {
             if (reaction.is_reacted) {

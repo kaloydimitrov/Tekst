@@ -83,7 +83,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return CommentSerializer(obj.replies.all().order_by('-created_at'), many=True, context=self.context).data
 
     def get_show_replies(self, obj):
-        return True
+        return False
 
 
 class CommentLikeSerializer(serializers.ModelSerializer):
