@@ -24,6 +24,16 @@ class SpaceListView(ListView, LoginRequiredMixin):
     model = Space
     paginate_by = 12
 
+    def get_queryset(self):
+        order = self.request.GET.get('order')
+
+        if order == 'newest':
+            return Space.objects.all().order_by('-created_at')
+        elif order == 'oldest':
+            return Space.objects.all().order_by('created_at')
+
+        return Space.objects.all().order_by('name')
+
     def get_context_data(self, *args, **kwargs):
         context = super(SpaceListView, self).get_context_data(*args, **kwargs)
         context['name'] = self.request.GET.get('name')

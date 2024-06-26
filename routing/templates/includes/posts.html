@@ -59,7 +59,7 @@
                 <div v-if="post.loading_comments" class="loading-container d-flex justify-content-center align-items-center">
                     <div class="spinner-border" role="status"></div>
                 </div>
-                <button v-if="post.next_comment_page" type="button" class="btn btn-link" @click="listComments(post)">Load more...</button>
+                <button v-if="post.next_comment_page" type="button" class="btn btn-link mt-4" @click="listComments(post)">Load more...</button>
             </div>
         </div>
     </div>
