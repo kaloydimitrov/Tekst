@@ -56,7 +56,7 @@
                     </div>
                 </li>
             </header>
-            <div v-if="post.show_comments_section" class="comments-container">
+            <div v-if="post.show_comments_section" class="comments-container" @scroll="handleCommentsScroll(post, $event)">
                 <div :class="['btn-group', 'mb-3', { 'half-opacity': !post.comments.length }]" role="group" aria-label="Filter options">
                     <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == '' }]" @click="toggleCommentOrder('', post)">Newest</button>
                     <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'oldest' }]" @click="toggleCommentOrder('oldest', post)">Oldest</button>
@@ -65,9 +65,8 @@
                 <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
                 <button class="btn btn-primary btn-sm mb-3 mt-3" @click="createComment(post)" :id="'commentButton' + post.id">Publish</button>
                 <comment v-if="post.comments" :comments="post.comments"></comment>
-                <button v-if="post.next_comment_page && post.loading_comments === false" type="button" class="btn btn-primary mt-4 w-100" @click="listComments(post)">Load More Comments</button>
-                <div v-if="post.loading_comments" class="loading-container d-flex justify-content-center align-items-center">
-                    <div class="spinner-border" role="status"></div>
+                <div v-if="post.next_comment_page" class="loading-container d-flex justify-content-center align-items-center">
+                    <div v-if="post.loading_comments" class="spinner-border" role="status"></div>
                 </div>
             </div>
         </div>

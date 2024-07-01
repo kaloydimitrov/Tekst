@@ -73,7 +73,29 @@
 }
 
 .comments-container {
+    position: relative;
+    max-height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
     padding: 16px 16px;
+}
+
+.comments-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.comments-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.comments-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.comments-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .form-control.comment-textarea {

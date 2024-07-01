@@ -62,10 +62,6 @@ const postsApp = new Vue({
             });
         },
         listComments(post) {
-            if (!post.next_comment_page) {
-                return;
-            }
-
             post.loading_comments = true;
 
             axios
@@ -145,6 +141,13 @@ const postsApp = new Vue({
                 .catch((error) => {
                     console.error(error.response.data);
                 });
+            }
+        },
+        handleCommentsScroll(post, event) {
+            const element = event.target;
+
+            if (post.next_comment_page && !post.loading_comments && (element.scrollTop + element.clientHeight >= element.scrollHeight - 40)) {
+                this.listComments(post);
             }
         },
         handleScroll() {
