@@ -56,11 +56,20 @@
                     </div>
                 </li>
             </header>
-            <div v-if="post.show_comments_section" class="comments-container" @scroll="handleCommentsScroll(post, $event)">
-                <div :class="['btn-group', 'mb-3', { 'half-opacity': !post.comments.length }]" role="group" aria-label="Filter options">
-                    <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == '' }]" @click="toggleCommentOrder('', post)">Newest</button>
-                    <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'oldest' }]" @click="toggleCommentOrder('oldest', post)">Oldest</button>
-                    <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'top' }]" @click="toggleCommentOrder('top', post)">Top</button>
+            <div v-if="post.show_comments_section" :class="['comments-container', { 'fullscreen': post.comments_fullscreen }]" @scroll="handleCommentsScroll(post, $event)">
+                <div class="mb-3 d-flex justify-content-between">
+                    <div :class="['btn-group', { 'half-opacity': !post.comments.length }]" role="group" aria-label="Filter options">
+                        <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == '' }]" @click="toggleCommentOrder('', post)">Newest</button>
+                        <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'oldest' }]" @click="toggleCommentOrder('oldest', post)">Oldest</button>
+                        <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'top' }]" @click="toggleCommentOrder('top', post)">Top</button>
+                    </div>
+                    <button class="btn btn-sm btn-secondary d-flex align-items-center" @click="toggleCommentsFullScreen(post)">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="#FFFFFF">
+                            <path v-if="post.comments_fullscreen" d="m136-80-56-56 264-264H160v-80h320v320h-80v-184L136-80Zm344-400v-320h80v184l264-264 56 56-264 264h184v80H480Z"/>
+                            <path v-else d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/>
+                        </svg>
+                        &nbsp;[[ post.comments_fullscreen ? 'Exit Full Screen' : 'Full Screen' ]]
+                    </button>
                 </div>
                 <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
                 <button class="btn btn-primary btn-sm mb-3 mt-3" @click="createComment(post)" :id="'commentButton' + post.id">Publish</button>

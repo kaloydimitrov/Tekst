@@ -22,6 +22,7 @@ const postsApp = new Vue({
                     post.next_comment_page = `/api/comment/${post.id}/?page=1&order=${post.comment_order}`;
                     post.show_comments_section = false;
                     post.comments_listed = false;
+                    post.comments_fullscreen = false;
                     return post;
                 });
                 this.posts = this.posts.concat(posts);
@@ -111,6 +112,14 @@ const postsApp = new Vue({
             post.next_comment_page = `/api/comment/${post.id}/?page=1&order=${post.comment_order}`;
             post.comments = [];
             this.listComments(post);
+        },
+        toggleCommentsFullScreen(post) {
+            if (post.comments_fullscreen) {
+                document.body.style.overflow = '';
+            } else {
+                document.body.style.overflow = 'hidden';
+            }
+            post.comments_fullscreen = !post.comments_fullscreen;
         },
         toggleReaction(reaction, post) {
             if (reaction.is_reacted) {
