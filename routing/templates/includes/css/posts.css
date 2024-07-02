@@ -11,14 +11,14 @@
     user-select: none;
 }
 
-.fullscreen {
+#bootstrap-override .fullscreen {
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     z-index: 4;
-    max-height: 100% !important;
+    max-height: 100%;
     background-color: white;
 }
 
@@ -126,6 +126,14 @@
 .likes-reply-container {
     padding-bottom: 7px;
     gap: 6px;
+}
+
+.answer-button {
+    border: 0;
+    background: transparent;
+    border-left: 1px solid red;
+    border-top: 1px solid red;
+    border-top-left-radius: 10px;
 }
 
 .like-button {

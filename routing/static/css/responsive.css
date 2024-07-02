@@ -4,6 +4,14 @@
     {
         width: 100%;
     }
+
+    .sticky-header li:nth-child(1) span:nth-child(2) {
+        display: none;
+    }
+
+    .user-date-container {
+        flex-direction: column;
+    }
 }
 
 @media only screen and (max-width: 1000px) {

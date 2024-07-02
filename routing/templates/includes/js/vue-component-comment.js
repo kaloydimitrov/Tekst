@@ -71,22 +71,10 @@ Vue.component('comment', {
     template: `
         <div class="card">
             <div class="comment card-body" v-for="comment in comments" :key="comment.id">
-                <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#6c757d"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
-                        &nbsp;[[ comment.user.username ]] - [[ convertIso8601Format(comment.created_at) ]]
-                    </small>
-                    <hr v-if="comment.replies.length" class="flex-grow-1 mx-5">
-                    <button v-if="comment.replies.length" :class="['btn', 'btn-sm', 'btn-primary', { 'half-opacity': !comment.show_replies }]" @click="toggleReplies(comment)">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF">
-                            <path v-if="comment.show_replies" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
-                            <path v-else d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
-                        </svg>
-                        [[ comment.replies.length ]]
-                        <span v-if="comment.replies.length === 1">reply</span>
-                        <span v-else>replies</span>
-                    </button>
-                </div>
+                <small class="text-muted d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#6c757d"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
+                    &nbsp;[[ comment.user.username ]] - [[ convertIso8601Format(comment.created_at) ]]
+                </small>
                 <p class="card-text comment">[[ comment.content ]]</p>
                 <div class="d-flex align-items-center likes-reply-container">
                     <span @click="likeDislikeComment(comment)" class="d-flex align-items-center justify-content-center like-button">
@@ -96,6 +84,15 @@ Vue.component('comment', {
                     <span id="likes" v-if="comment.likes_count > 0" class="text-muted">[[ comment.likes_count ]]</span>
                     <small><a class="link-secondary reply-link" @click="showCommentForm(comment.id)">Reply</a></small>
                 </div>
+                <button v-if="comment.replies.length" :class="['answer-button', 'text-muted', 'd-flex', 'align-items-center', {'half-opacity': comment.show_replies}]" @click="toggleReplies(comment)">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#6c757d">
+                        <path v-if="comment.show_replies" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
+                        <path v-else d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
+                    </svg>
+                    &nbsp;[[ comment.replies.length ]]&nbsp;
+                    <span v-if="comment.replies.length === 1">answer</span>
+                    <span v-else>answers</span>
+                </button>
                 <div class="input-container" :id="'inputContainer' + comment.id">
                     <div class="d-flex align-items-start">
                         <textarea class="form-control comment-textarea" placeholder="Add reply..." @input="adjustTextAreaHeight"></textarea>
