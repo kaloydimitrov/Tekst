@@ -12,6 +12,10 @@
     .user-date-container {
         flex-direction: column;
     }
+
+    .tags-space-container .card-footer.row {
+        flex-direction: column;
+    }
 }
 
 @media only screen and (max-width: 1000px) {

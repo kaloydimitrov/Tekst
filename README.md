@@ -9,3 +9,7 @@
 name - **tekst_db**
 <br />`python manage.py makemigrations`
 <br />`python manage.py migrate`
+
+# Create .env file
+EMAIL_HOST_USER=<br />
+EMAIL_HOST_PASSWORD=
