@@ -1,7 +1,7 @@
 .idea
 .venv
+.env
+venv
 __pycache__/
-routing/__pycache__/
-Tekst/__pycache__/
 
 routing/media
