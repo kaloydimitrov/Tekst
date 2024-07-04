@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div :class="['tags-space-container', {'opacity-0': loading}]">
+        <div v-else :class="['tags-space-container', {'opacity-0': loading}]">
             <div class="card h-100">
                 <img v-if="space.image" class="card-img-top" :src="space.image" alt="Card image cap">
                 <img v-else class="card-img-top" src="{% static 'images/default-banner.png' %}" alt="Card image cap">
