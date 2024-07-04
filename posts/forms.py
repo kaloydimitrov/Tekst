@@ -52,7 +52,6 @@ class CreatePostForm(forms.ModelForm):
         if tags:
             try:
                 list_tags = tags.split(",")
-                print(list_tags)
                 for tag_id in list_tags:
                     tag = Tag.objects.get(id=tag_id)
                     tag.post.add(instance)
