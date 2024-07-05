@@ -1,8 +1,8 @@
-email send validation (authentication)
-password reset option
+forgot password option
 
 add github secrets
 add ci/cd github actions
+-unit, ui tests
 
 add 404, 500 > error pages
 implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
@@ -10,35 +10,80 @@ implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 add groups, permissions, roles
 
 hover on username - popup with info
-if 1000 followers - should look like this '1k' (template filter or something)
 
-emails:
-when post created
-when someone tags you in a comment
-send email (contacts)
+text decorations - post content, space description
 
-space details:
-reinvent the API (api/space/int:pk>/posts/) - add only one view for posts with many filters (in space details we will filter by space and it will show only the posts in that space)
-that way you can make your feed - all posts from last week with highest rating, randomly ordered
-add option to hide the replies
+Filter
+Top spaces
+add filters for posts
 
-list spaces:
-filter - most follows. most posts. oldest. newest
+Report, block spaces
+Report, block user
+
+Extend user:
+Required Email
+Bio
+
+User settings:
+username, email
+bio, change bio
+Change password
+Blocked spaces
+Blocked users
+* option to unblock them
+
+My posts:
+Delete post
+Edit post
+
+My spaces:
+Delete space
+Edit space
+Blocked spaces -> user settings -> Blocked spaces
+
+My comments:
+Delete comment
+Edit comment
+view in post button
 
 
-filter comments
--top
--newest
 
-make users to be able to do text decorations
 
-user details:
-only one page
-if you want to see 'user-posts' for example
-{% url 'user_details' %}#user-posts
 
-there you can edit your posts or spaces
 
-FIX:
-comments has no pagination
-create comment and reply (listComment)
+posts (if in space details or in feed):
+isOwner(userId):
+	return string(userId) === string({{ request.user.pk }})
+
+if isOwner make viewPost button visible
+
+viewPost(postId):
+	windows.href.url = `{% url 'user_posts' %}#post-${postId}`
+
+user/posts.html
+<div id="post-1">
+</div>
+<div id="post-2">
+</div>
+<div id="post-3">
+</div>
+<div id="post-4">
+</div>
+
+*same with comments and spaces except that with comments delete and edit should also be able to do in the post
+
+
+
+
+
+
+user_spaces:
+if button view blocked spaces clicked -
+{% url 'user_settings' %}#blocked-spaces
+
+user/settings.html
+<div id="change-password">
+</div>
+...
+<div id="blocked-spaces">
+</div>

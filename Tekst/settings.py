@@ -137,6 +137,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Authentication validation
+# https://docs.djangoproject.com/en/5.0/topics/auth/customizing/
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'authentication.backends.UsernameOrEmailBackend',
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
