@@ -11,6 +11,7 @@ from django.db.models import Count
 from rest_framework import status
 from rest_framework.response import Response
 from spaces.models import UserSpaceFollow
+from .permissions import IsOwner
 
 
 # --------------------------------------
@@ -138,6 +139,18 @@ class DislikeCommentView(views.APIView):
             user_likes.delete()
             return Response({'message': 'Comment disliked'}, status=status.HTTP_201_CREATED)
         return Response({'error': 'You have not liked this comment'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteCommentView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class UpdateCommentView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 
 # --------------------------------------

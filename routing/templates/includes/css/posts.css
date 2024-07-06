@@ -137,12 +137,24 @@
 }
 
 .like-button {
+    cursor: pointer;
     border-radius: 50%;
     height: 30px;
     width: 30px;
 }
 
 .like-button:hover {
+    background: rgba(211, 211, 211, 0.5);
+}
+
+.comment-options {
+    cursor: pointer;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+}
+
+.comment-options:hover {
     background: rgba(211, 211, 211, 0.5);
 }
 

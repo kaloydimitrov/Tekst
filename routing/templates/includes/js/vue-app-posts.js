@@ -56,6 +56,7 @@ const postsApp = new Vue({
                 post.comments.unshift(response.data);
                 commentInput.value = "";
                 commentButton.innerHTML = "Publish";
+                messageApp.triggerNotification('Comment created');
             })
             .catch((error) => {
                 console.error(error);
