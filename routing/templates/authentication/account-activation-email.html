@@ -1,9 +1,92 @@
 {% load static %}
+{% load tz %}
 
 {% autoescape off %}
-Hi {{ user.username }},<br>
-Please click the link below to confirm your email address and activate your account:<br>
-<a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Validate my account</a>
-<hr>
-Istoria.bg
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .header img {
+            max-width: 150px;
+        }
+        .content {
+            padding: 20px 0;
+            color: #333333;
+        }
+        .content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .content a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #007BFF;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .content a:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 12px;
+            color: #777777;
+            border-top: 1px solid #eeeeee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            {# TODO: uncomment when httpS (gmail blocks requests from http) #}
+            {# <img src="http://{{ domain }}{% static 'images/logo.png' %}" alt="Istoria.bg Logo"> #}
+        </div>
+        <div class="content">
+            <h1>Hello, {{ user.username }}!</h1>
+            <p>
+                Thank you for registering with Istoria.bg. Please click the button below to confirm your email address and activate your account.
+            </p>
+            <p>
+                <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Validate my account</a>
+            </p>
+            <p>
+                If you did not create an account, no further action is required.
+            </p>
+        </div>
+        <div class="footer">
+            &copy; {% now "Y" %} Istoria.bg. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>
 {% endautoescape %}

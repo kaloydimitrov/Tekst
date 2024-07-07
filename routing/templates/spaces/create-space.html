@@ -34,9 +34,9 @@
             &nbsp;Add at least 3 tags in order to create the space!
         </p>
 
-        <div class="form-floating mb-3 tags-container">
+        <div class="form-floating mb-3">
             {{ form.tags }}
-            <div class="input-group mb-3">
+            <div class="input-group mb-3 tags-container">
                 <input type="text" class="form-control" placeholder="Enter tag/s (separate by comma)" v-model="newTag" @keyup.enter="addTag">
                 <button type="button" class="btn btn-secondary" style="margin: 0" @click="addTag">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
