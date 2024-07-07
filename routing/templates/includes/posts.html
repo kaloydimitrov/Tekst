@@ -1,5 +1,5 @@
 <div id="app" class="mt-4">
-    <div v-for="post in this.posts" class="card mb-3" :id="'postCard' + post.id">
+    <div v-for="post in this.posts" class="post-container card mb-3" :id="'postCard' + post.id">
         <div class="card-body">
             <h5 class="card-title">[[ post.name ]]</h5>
             <p class="card-text text-muted d-flex justify-content-between user-date-container">

@@ -5,6 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import login
+from django.contrib import messages
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_encode
@@ -87,6 +88,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        messages.success(request, 'Your account has been activated successfully.')
         return redirect('home')
     else:
         return render(request, 'authentication/account-activation-invalid.html')

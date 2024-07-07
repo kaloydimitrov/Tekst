@@ -4,10 +4,11 @@
 {% block title %}Account activation{% endblock %}
 
 {% block main %}
-    <div class="card mt-3">
+    <div class="card mt-3" id="app">
         <div class="card-body d-flex flex-column align-items-center">
             <img src="{% static 'images/logo.png' %}" width="100" height="100" alt="logo-img">
             <h1 class="mt-3">Account validation</h1>
+            <h3 v-if="this.startCountdown">You are authenticated and will be redirected in [[ countdown ]] seconds</h3>
             <p class="text-center">
                 Check your email address in order to sign in to the service. We've sent you a verification link.
                 Click the button <b>Validate my account</b> in the email.
@@ -22,5 +23,70 @@
 <script>
     const header = document.querySelector('.main-header');
     header.style.display = "none";
+
+    // --------------------------------------------------------------------------------------------------------------
+    // Checks if user is authenticated (if csrf is different from the old one)
+    // --------------------------------------------------------------------------------------------------------------
+    const csrfToken = getCookie('csrftoken');
+
+    function checkCsrfAndClose() {
+        const currentCsrfToken = getCookie('csrftoken');
+        if (currentCsrfToken !== csrfToken) {
+            countdownApp.startCountdown = true;
+        } else {
+            setTimeout(checkCsrfAndClose, 2000);
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    window.onload = function() {
+        checkCsrfAndClose();
+    };
+
+    // --------------------------------------------------------------------------------------------------------------
+    // Vue app for handling when user is authenticated (redirects after 5 seconds)
+    // --------------------------------------------------------------------------------------------------------------
+    const countdownApp = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        data: {
+            startCountdown: false,
+            countdown: 5,
+            countdownInterval: null,
+        },
+        methods: {
+            startCountdownMethod() {
+                this.countdownInterval = setInterval(() => {
+                    if (this.countdown > 0) {
+                        this.countdown--;
+                    } else {
+                        clearInterval(this.countdownInterval);
+                        window.location.href='{% url 'home' %}';
+                    }
+                }, 1000);
+            },
+        },
+        watch: {
+            startCountdown(newValue) {
+                if (newValue) {
+                    this.startCountdownMethod();
+                }
+            }
+        }
+    });
 </script>
 {% endblock %}

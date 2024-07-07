@@ -23,6 +23,12 @@
 }
 
 /* POSTS TEMPLATE */
+.post-container {
+    max-width: 777px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .sticky-header {
     position: sticky;
     top: 0;
