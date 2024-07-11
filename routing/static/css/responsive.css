@@ -1,11 +1,10 @@
 @media only screen and (max-width: 600px) {
     #bootstrap-override .image-preview-container,
-    #bootstrap-override .tags-space-container .card
-    {
+    #bootstrap-override .tags-space-container .card {
         width: 100%;
     }
 
-    .sticky-header .rating-container {
+    .rating-container {
         display: none;
     }
 
@@ -24,6 +23,14 @@
 
     .spaces-filter-container .btn svg {
         display: none;
+    }
+
+    #bootstrap-override .modal-custom .modal-dialog {
+        max-width: 100%;
+    }
+
+    #bootstrap-override .comments-container {
+        height: 82vh;
     }
 }
 

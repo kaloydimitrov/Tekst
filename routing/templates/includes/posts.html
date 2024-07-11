@@ -34,63 +34,62 @@
             </div>
         {% endif %}
         <div class="list-group list-group-flush text-muted">
-            <header class="sticky-header">
-                <li class="list-group-item d-flex justify-content-between">
-                    <span @click="toggleCommentsSection(post)" class="cursor-pointer">
-                        [[ post.comments_count ]] comments
-                    </span>
-                    <div class="rating-container">
-                        <div class="d-flex gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m136-240-56-56 296-298 160 160 208-206H640v-80h240v240h-80v-104L536-320 376-480 136-240Z"/></svg>
-                            <div class="vr"></div>
-                            <span>[[ (Math.round(post.rating * 100) / 100).toFixed(1) ]] rating</span>
-                        </div>
+            <li class="list-group-item d-flex justify-content-between">
+                <span @click="toggleCommentsSection(post)" class="cursor-pointer">
+                    [[ post.comments_count ]] comments
+                </span>
+                <div class="rating-container">
+                    <div class="d-flex gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m136-240-56-56 296-298 160 160 208-206H640v-80h240v240h-80v-104L536-320 376-480 136-240Z"/></svg>
+                        <div class="vr"></div>
+                        <span>[[ (Math.round(post.rating * 100) / 100).toFixed(1) ]] rating</span>
                     </div>
-                    <span>[[ post.reactions_count ]] reactions</span>
+                </div>
+                <span>[[ post.reactions_count ]] reactions</span>
 
-                    {# [[ post.visibility ]] #}
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col d-flex justify-content-center align-items-center cursor-pointer" @click="toggleCommentsSection(post)">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5f6368">
-                                <path v-if="post.show_comments_section" d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/>
-                                <path v-else d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
+                {# [[ post.visibility ]] #}
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col d-flex justify-content-center align-items-center cursor-pointer" @click="toggleCommentsSection(post)">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-400h480v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM880-80 720-240H160q-33 0-56.5-23.5T80-320v-480q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v720ZM160-320h594l46 45v-525H160v480Zm0 0v-480 480Z"/></svg>
+                    </div>
+                    <div class="col reactions d-flex justify-content-center align-items-center">
+                        <div v-for="reaction in post.reactions" :key="reaction.id" @click="toggleReaction(reaction, post)" :data-reaction-name="reaction.name" class="reaction-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" :fill="reaction.is_reacted ? '#0d6efd' : '#5f6368'">
+                                <path :d="reaction.icon"/>
                             </svg>
                         </div>
-                        <div class="col reactions d-flex justify-content-center align-items-center">
-                            <div v-for="reaction in post.reactions" :key="reaction.id" @click="toggleReaction(reaction, post)" :data-reaction-name="reaction.name" class="reaction-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" :fill="reaction.is_reacted ? '#0d6efd' : '#5f6368'">
-                                    <path :d="reaction.icon"/>
-                                </svg>
+                    </div>
+                </div>
+            </li>
+            <div v-if="post.show_comments_section" class="modal d-block modal-custom" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title no-wrap">[[ post.name ]]</h5>
+                            <button type="button" class="btn-close" aria-label="Close" @click="toggleCommentsSection(post)"></button>
+                        </div>
+                        <div class="modal-body comments-container" @scroll="handleCommentsScroll(post, $event)">
+                            <div :class="['mb-3', 'btn-group', { 'half-opacity': !post.comments.length }]" role="group" aria-label="Filter options">
+                                <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == '' }]" @click="toggleCommentOrder('', post)">Newest</button>
+                                <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'oldest' }]" @click="toggleCommentOrder('oldest', post)">Oldest</button>
+                                <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'top' }]" @click="toggleCommentOrder('top', post)">Top</button>
+                            </div>
+                            <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
+                            <button class="btn btn-primary btn-sm mb-3 mt-3" @click="createComment(post)" :id="'commentButton' + post.id">Publish</button>
+                            <comment v-if="post.comments" :comments="post.comments"></comment>
+                            <div v-if="post.next_comment_page" class="loading-container d-flex justify-content-center align-items-center">
+                                <div v-if="post.loading_comments" class="spinner-border" role="status"></div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" @click="toggleCommentsSection(post)">Close</button>
+                        </div>
                     </div>
-                </li>
-            </header>
-            <div v-if="post.show_comments_section" :class="['comments-container', { 'fullscreen': post.comments_fullscreen }]" @scroll="handleCommentsScroll(post, $event)">
-                <div class="mb-3 d-flex justify-content-between">
-                    <div :class="['btn-group', { 'half-opacity': !post.comments.length }]" role="group" aria-label="Filter options">
-                        <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == '' }]" @click="toggleCommentOrder('', post)">Newest</button>
-                        <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'oldest' }]" @click="toggleCommentOrder('oldest', post)">Oldest</button>
-                        <button :class="['btn', 'btn-sm', 'btn-outline-primary', { active: post.comment_order == 'top' }]" @click="toggleCommentOrder('top', post)">Top</button>
-                    </div>
-                    <button class="btn btn-sm btn-secondary d-flex align-items-center" @click="toggleCommentsFullScreen(post)">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 -960 960 960" width="15px" fill="#FFFFFF">
-                            <path v-if="post.comments_fullscreen" d="m136-80-56-56 264-264H160v-80h320v320h-80v-184L136-80Zm344-400v-320h80v184l264-264 56 56-264 264h184v80H480Z"/>
-                            <path v-else d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z"/>
-                        </svg>
-                        &nbsp;[[ post.comments_fullscreen ? 'Exit Full Screen' : 'Full Screen' ]]
-                    </button>
-                </div>
-                <textarea placeholder="Add comment as {{ request.user.username }}..." class="form-control comment-textarea" :id="'commentInput' + post.id" @input="adjustTextAreaHeight"></textarea>
-                <button class="btn btn-primary btn-sm mb-3 mt-3" @click="createComment(post)" :id="'commentButton' + post.id">Publish</button>
-                <comment v-if="post.comments" :comments="post.comments"></comment>
-                <div v-if="post.next_comment_page" class="loading-container d-flex justify-content-center align-items-center">
-                    <div v-if="post.loading_comments" class="spinner-border" role="status"></div>
                 </div>
             </div>
+            <div v-if="post.show_comments_section" class="modal-backdrop fade show"></div>
         </div>
     </div>
     <div class="loading-container d-flex justify-content-center align-items-center">

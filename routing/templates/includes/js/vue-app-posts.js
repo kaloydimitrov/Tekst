@@ -89,15 +89,10 @@ const postsApp = new Vue({
 
             if (post.show_comments_section) {
                 post.show_comments_section = false;
-                const section = document.getElementById(`postCard${post.id}`);
-                const offset = -16;
-                const topPos = section.getBoundingClientRect().top + window.pageYOffset + offset;
-                window.scrollTo({
-                    top: topPos,
-                    behavior: 'smooth'
-                });
+                document.body.style.overflow = 'visible';
             } else {
                 post.show_comments_section = true;
+                document.body.style.overflow = 'hidden';
             }
         },
         toggleCommentOrder(order, post) {
@@ -116,14 +111,6 @@ const postsApp = new Vue({
             post.next_comment_page = `/api/comment/${post.id}/?page=1&order=${post.comment_order}`;
             post.comments = [];
             this.listComments(post);
-        },
-        toggleCommentsFullScreen(post) {
-            if (post.comments_fullscreen) {
-                document.body.style.overflow = '';
-            } else {
-                document.body.style.overflow = 'hidden';
-            }
-            post.comments_fullscreen = !post.comments_fullscreen;
         },
         toggleReaction(reaction, post) {
             if (reaction.is_reacted) {
