@@ -15,12 +15,12 @@
             <h5>Are you sure you want to create a post without a space?</h5>
             <i><a :href="generateURL()" class="link-primary">Browse spaces here.</a></i>
             <p>
-                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTags" aria-expanded="false" aria-controls="collapseTags">
                     Select tags without a space...
                 </button>
             </p>
-            <div class="collapse row" id="collapseExample">
-                <div class="col">
+            <div class="row">
+                <div class="col collapse" id="collapseTags">
                     <input type="text" class="form-control" placeholder="Search for tags" v-model="searchInput">
                     <div v-if="this.searchInput" class="loading-container">
                         <div v-if="tagsLoading" class="spinner-border" role="status"></div>
