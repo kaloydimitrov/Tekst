@@ -35,6 +35,7 @@ class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     reactions = serializers.SerializerMethodField()
+    space = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -61,6 +62,16 @@ class PostSerializer(serializers.ModelSerializer):
             return reactions
 
         return [{'id': rt.id, 'name': rt.name, 'icon': rt.icon, 'is_reacted': False} for rt in reaction_types]
+
+    def get_space(self, obj):
+        space = getattr(obj, 'space', None)
+        if space is not None:
+            return {
+                'id': space.id,
+                'name': space.name
+            }
+        else:
+            return None
 
 
 class CommentSerializer(serializers.ModelSerializer):

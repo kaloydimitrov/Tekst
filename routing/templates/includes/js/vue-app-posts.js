@@ -3,13 +3,16 @@ const postsApp = new Vue({
     el: '#app',
     data: {
         loading: false,
-        next: `{% url 'get_space_posts' pk=space.pk %}?page=1`,
+        next: `${postsURL}?page=1`,
         noMorePosts: false,
         posts: []
     },
     methods: {
         {% include 'includes/js/vue-method-convert-iso-8601.js' %}
         {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
+        navigateToSpace(spaceId) {
+            window.location.href = `/space/${spaceId}/`;
+        },
         getMorePosts() {
             this.loading = true
             axios

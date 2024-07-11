@@ -18,7 +18,7 @@ Vue.component('comment', {
         },
         createNestedComment(comment, event) {
             const publishButton = event.target;
-            const parentElement = publishButton.parentNode;
+            const parentElement = publishButton.parentNode.parentNode;
             const commentInput = parentElement.querySelector('textarea');
 
             if (!commentInput.value) {
@@ -160,10 +160,12 @@ Vue.component('comment', {
                     <span v-else>answers</span>
                 </button>
                 <div class="input-container" :id="'inputContainer' + comment.id">
-                    <div class="d-flex align-items-start">
+                    <div class="d-flex flex-column">
                         <textarea class="form-control comment-textarea" placeholder="Add reply..." @input="adjustTextAreaHeight"></textarea>
-                        <button class="btn btn-outline-secondary btn-sm" @click="hideCommentForm(comment.id)">Cancel</button>
-                        <button class="btn btn-outline-primary btn-sm" @click="createNestedComment(comment, $event)">Publish</button>
+                        <div class="mt-2 gap-1 d-flex">
+                            <button class="btn btn-outline-secondary btn-sm" @click="hideCommentForm(comment.id)">Cancel</button>
+                            <button class="btn btn-outline-primary btn-sm" @click="createNestedComment(comment, $event)">Publish</button>
+                        </div>
                     </div>
                 </div>
                 <div v-if="comment.replies.length && comment.show_replies" id="replies">

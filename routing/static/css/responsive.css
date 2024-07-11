@@ -5,7 +5,7 @@
         width: 100%;
     }
 
-    .sticky-header li:nth-child(1) span:nth-child(2) {
+    .sticky-header .rating-container {
         display: none;
     }
 
@@ -15,6 +15,15 @@
 
     .tags-space-container .card-footer.row {
         flex-direction: column;
+    }
+
+    .spaces-filter-container .btn {
+        font-size: 0.8rem;
+        padding: 7px 10px;
+    }
+
+    .spaces-filter-container .btn svg {
+        display: none;
     }
 }
 

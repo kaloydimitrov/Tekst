@@ -3,6 +3,7 @@ from django.views.generic import CreateView, ListView, DetailView
 from .forms import CreateSpaceForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Count
 from .models import Space, UserSpaceFollow, Tag
 
 
@@ -31,6 +32,8 @@ class SpaceListView(ListView, LoginRequiredMixin):
             return Space.objects.all().order_by('-created_at')
         elif order == 'oldest':
             return Space.objects.all().order_by('created_at')
+        elif order == 'top':
+            return Space.objects.annotate(num_followers=Count('followers')).order_by('-num_followers')
 
         return Space.objects.all().order_by('name')
 
@@ -50,6 +53,7 @@ class SpaceDetailView(DetailView, LoginRequiredMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(SpaceDetailView, self).get_context_data()
         space = self.get_object()
+        context['in_space_details'] = True
         context['is_following'] = UserSpaceFollow.objects.filter(user=self.request.user, space=space).exists()
         context['tags'] = Tag.objects.filter(space=space)
         return context

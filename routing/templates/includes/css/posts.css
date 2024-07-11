@@ -29,6 +29,24 @@
     margin-right: auto;
 }
 
+.space-container-wrapper {
+    padding: 0 16px 16px;
+}
+
+.space-container {
+    cursor: pointer;
+    padding: 5px 8px;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(0, 0, 0, .125);
+}
+
+.rating-container {
+    cursor: default;
+    padding: 0 5px;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.25rem;
+}
+
 .sticky-header {
     position: sticky;
     top: 0;
@@ -168,10 +186,6 @@
     display: none;
     padding: 16px 0 20px 20px;
     border-left: 1px solid red;
-}
-
-.input-container .d-flex {
-    gap: 5px;
 }
 
 .card-text.comment {

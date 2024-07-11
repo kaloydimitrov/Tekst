@@ -10,7 +10,7 @@
             <h5 class="d-inline mb-0">{{ space.name }}</h5>
         </div>
         <div class="card-header d-flex justify-content-between align-items-center py-2 px-3">
-            <span>{{ space.posts_count }} posts total</span>
+            <span>{{ space.posts_count }} post/s</span>
             <span>[[ this.followers ]] followers</span>
             <button type="button" class="btn btn-sm btn-outline-primary" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if is_following %}unfollow{% else %}follow{% endif %}</button>
         </div>
@@ -43,6 +43,7 @@
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
+    const postsURL = '{% url 'get_space_posts' pk=space.pk %}';
     {% include 'includes/js/vue-app-message.js' %}
     {% include 'includes/js/vue-component-comment.js' %}
     {% include 'includes/js/vue-app-posts.js' %}

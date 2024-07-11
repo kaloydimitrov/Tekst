@@ -3,10 +3,22 @@
 {% block title %}Home{% endblock %}
 
 {% block main %}
-    <h1>thats main</h1>
-    <h1>
-        {% if request.user.is_authenticated %}
-            <p>Welcome {{ user.username }} !!!</p>
-        {% endif %}
-    </h1>
+    {% include 'includes/message.html' %}
+    {% include 'includes/posts.html' %}
+{% endblock %}
+
+{% block rest %}
+<script>
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+
+    const postsURL = '{% url 'get_all_posts' %}';
+    {% include 'includes/js/vue-app-message.js' %}
+    {% include 'includes/js/vue-component-comment.js' %}
+    {% include 'includes/js/vue-app-posts.js' %}
+</script>
+<style>
+    {% include 'includes/css/posts.css' %}
+    {% include 'includes/css/message.css' %}
+</style>
 {% endblock %}

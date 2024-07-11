@@ -7,7 +7,7 @@ from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSeriali
                           CommentLikeSerializer, ReactionSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
-from django.db.models import Count
+from django.db.models import Count, F, FloatField, ExpressionWrapper
 from rest_framework import status
 from rest_framework.response import Response
 from spaces.models import UserSpaceFollow
@@ -184,3 +184,26 @@ class DeleteReactionView(generics.DestroyAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Reaction.DoesNotExist:
             return Response({'error': 'Reaction not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+# --------------------------------------
+# POSTS
+# --------------------------------------
+class PostListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        weight_comments = 0.6
+        weight_reactions = 0.4
+
+        trending_posts = Post.objects.annotate(
+            num_comments=Count('comments'),
+            num_reactions=Count('reactions')
+        ).annotate(
+            weighted_score=ExpressionWrapper(
+                weight_comments * F('num_comments') + weight_reactions * F('num_reactions'),
+                output_field=FloatField()
+            )
+        ).order_by('-weighted_score')
+
+        return trending_posts
