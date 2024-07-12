@@ -2,6 +2,10 @@
 
 {% block title %}Home{% endblock %}
 
+{% block head %}
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+{% endblock %}
+
 {% block main %}
     {% include 'includes/message.html' %}
     {% include 'includes/posts.html' %}

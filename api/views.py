@@ -196,7 +196,7 @@ class PostListView(generics.ListAPIView):
         weight_comments = 0.6
         weight_reactions = 0.4
 
-        trending_posts = Post.objects.annotate(
+        queryset = Post.objects.annotate(
             num_comments=Count('comments'),
             num_reactions=Count('reactions')
         ).annotate(
@@ -206,4 +206,18 @@ class PostListView(generics.ListAPIView):
             )
         ).order_by('-weighted_score')
 
-        return trending_posts
+        filter_param = self.request.GET.get('filter')
+        date_param = self.request.GET.get('date')
+
+        if filter_param == 'newest':
+            queryset = Post.objects.order_by('-created_at')
+        elif filter_param == 'oldest':
+            queryset = Post.objects.order_by('created_at')
+        elif filter_param == 'comments':
+            queryset = Post.objects.annotate(comment_count=Count('comments')).order_by('-comment_count')
+
+        if date_param:
+            from_date, to_date = date_param.split('|')
+            queryset = queryset.filter(created_at__gte=from_date, created_at__lte=to_date)
+
+        return queryset

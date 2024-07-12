@@ -8,6 +8,8 @@
 
     <title>{% block title %}{% endblock %}</title>
 
+    {% block head %}{% endblock %}
+
     {# VueJS integration #}
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
@@ -99,7 +101,7 @@
                     </a>
                     <ul class="list-group list-group-flush">
                        <li class="list-group-item"><a class="text-decoration-none" href="">My spaces</a></li>
-                       <li class="list-group-item"><a class="text-decoration-none" href="">My posts</a></li> 
+                       <li class="list-group-item"><a class="text-decoration-none" href="">My posts</a></li>
                     </ul>
                 </li>
                 <li class="list-group-item">

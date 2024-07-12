@@ -15,4 +15,5 @@ EMAIL_HOST_USER=<br />
 EMAIL_HOST_PASSWORD=
 
 # PyCharm
-Configure Inspections: `Ctrl` `Alt` `Shift` `H`
+Configure Inspections: `Ctrl` `Alt` `Shift` `H`<br />
+Reformat file: `Ctrl` `Alt` `L`

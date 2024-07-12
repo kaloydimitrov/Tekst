@@ -1,8 +1,14 @@
 const postsApp = new Vue({
-    delimiters: ['[[', ']]'],
     el: '#app',
+    delimiters: ['[[', ']]'],
+    components: {
+        vuejsDatepicker
+    },
     data: {
         loading: false,
+        filter: 'trending',
+        fromDate: null,
+        toDate: null,
         next: `${postsURL}?page=1`,
         noMorePosts: false,
         posts: []
@@ -15,6 +21,7 @@ const postsApp = new Vue({
         },
         getMorePosts() {
             this.loading = true
+
             axios
             .get(this.next)
             .then((response) => {
@@ -95,23 +102,6 @@ const postsApp = new Vue({
                 document.body.style.overflow = 'hidden';
             }
         },
-        toggleCommentOrder(order, post) {
-            if (order === post.comment_order) {
-                return;
-            }
-
-            if (order === '') {
-                post.comment_order = '';
-            } else if (order === 'oldest') {
-                post.comment_order = 'oldest';
-            } else if (order === 'top') {
-                post.comment_order = 'top';
-            }
-
-            post.next_comment_page = `/api/comment/${post.id}/?page=1&order=${post.comment_order}`;
-            post.comments = [];
-            this.listComments(post);
-        },
         toggleReaction(reaction, post) {
             if (reaction.is_reacted) {
                 axios.delete(`{% url 'delete_reaction' %}`, {
@@ -143,6 +133,37 @@ const postsApp = new Vue({
                 });
             }
         },
+        switchCommentsOrder(order, post) {
+            if (order === post.comment_order) {
+                return;
+            }
+
+            if (order === '') {
+                post.comment_order = '';
+            } else if (order === 'oldest') {
+                post.comment_order = 'oldest';
+            } else if (order === 'top') {
+                post.comment_order = 'top';
+            }
+
+            post.next_comment_page = `/api/comment/${post.id}/?page=1&order=${post.comment_order}`;
+            post.comments = [];
+            this.listComments(post);
+        },
+        switchPostsFilter(filter, date = null) {
+            if (filter === this.filter && date === null) {
+                return;
+            }
+
+            this.posts = [];
+            if (date) {
+                this.next = `${postsURL}?page=1&filter=${filter}&date=${date}`;
+            } else {
+                this.next = `${postsURL}?page=1&filter=${filter}`;
+            }
+            this.getMorePosts();
+            this.filter = filter;
+        },
         handleCommentsScroll(post, event) {
             const element = event.target;
 
@@ -155,6 +176,14 @@ const postsApp = new Vue({
                 this.getMorePosts();
             }
         },
+    },
+    watch: {
+        fromDate(newValue) {
+            this.switchPostsFilter(this.filter, `${newValue}|${this.toDate}`)
+        },
+        toDate(newValue) {
+            this.switchPostsFilter(this.filter, `${this.fromDate}|${newValue}`)
+        }
     },
     mounted() {
         this.getMorePosts();
