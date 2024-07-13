@@ -1,19 +1,19 @@
 <div id="app" class="mt-4">
-    <div :class="['mb-5', 'align-items-start', 'd-flex', 'justify-content-between', { 'half-opacity': loading }]">
-        <div class="posts-filter-buttons-container d-flex gap-2">
+    <div :class="['mb-5', 'posts-filter-container', 'align-items-start', 'd-flex', 'justify-content-between', { 'half-opacity': loading }]">
+        <div class="posts-filter-buttons-container d-flex gap-2 flex-wrap">
+            {% if not in_space_details %}
             <span @click="switchPostsFilter('trending')" :class="['badge', 'badge-pill', filter === 'trending' ? 'bg-primary' : 'bg-light', filter !== 'trending' && 'text-dark']">Trending</span>
+            {% endif %}
             <span @click="switchPostsFilter('newest')" :class="['badge', 'badge-pill', filter === 'newest' ? 'bg-primary' : 'bg-light', filter !== 'newest' && 'text-dark']">Newest</span>
             <span @click="switchPostsFilter('oldest')" :class="['badge', 'badge-pill', filter === 'oldest' ? 'bg-primary' : 'bg-light', filter !== 'oldest' && 'text-dark']">Oldest</span>
             <span @click="switchPostsFilter('comments')" :class="['badge', 'badge-pill', filter === 'comments' ? 'bg-primary' : 'bg-light', filter !== 'comments' && 'text-dark']">Most comments</span>
         </div>
-        <div class="row">
-            <div class="form-group col">
-                <vuejs-datepicker v-model="fromDate" placeholder="From date" input-class="form-control"></vuejs-datepicker>
-            </div>
-            <div class="form-group col">
-                <vuejs-datepicker v-model="toDate" placeholder="To date" :class="{ 'half-opacity': !fromDate }" input-class="form-control" :disabled="!fromDate"></vuejs-datepicker>
-            </div>
+        {% if not in_space_details %}
+        <div class="posts-filter-date-container d-flex gap-2">
+            <vuejs-datepicker v-model="fromDate" placeholder="From date" input-class="form-control"></vuejs-datepicker>
+            <vuejs-datepicker v-model="toDate" placeholder="To date" :class="{ 'half-opacity': !fromDate }" input-class="form-control" :disabled="!fromDate"></vuejs-datepicker>
         </div>
+        {% endif %}
     </div>
     <div v-for="post in this.posts" class="post-container card mb-3" :id="'postCard' + post.id">
         <div class="card-body">
@@ -58,7 +58,7 @@
                     <div class="d-flex gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m136-240-56-56 296-298 160 160 208-206H640v-80h240v240h-80v-104L536-320 376-480 136-240Z"/></svg>
                         <div class="vr"></div>
-                        <span>[[ (Math.round(post.rating * 100) / 100).toFixed(1) ]] rating</span>
+                        <small class="d-flex align-items-center">[[ (Math.round(post.rating * 100) / 100).toFixed(1) ]] rating</small>
                     </div>
                 </div>
                 <span>[[ post.reactions_count ]] reactions</span>

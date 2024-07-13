@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
@@ -8,6 +9,7 @@ from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSeriali
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, F, FloatField, ExpressionWrapper
+from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.response import Response
 from spaces.models import UserSpaceFollow
@@ -70,7 +72,18 @@ class SpacePostsView(generics.ListAPIView):
 
     def get_queryset(self):
         space_pk = self.kwargs['pk']
-        return Post.objects.filter(space__pk=space_pk)
+        queryset = Post.objects.filter(space__pk=space_pk)
+
+        filter_param = self.request.GET.get('filter')
+
+        if filter_param == 'oldest':
+            queryset = queryset.order_by('created_at')
+        elif filter_param == 'comments':
+            queryset = queryset.annotate(comment_count=Count('comments')).order_by('-comment_count')
+        else:
+            queryset = queryset.order_by('-created_at')
+
+        return queryset
 
 
 # --------------------------------------
@@ -106,7 +119,8 @@ class CommentListView(generics.ListAPIView):
         if order == 'oldest':
             return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).order_by('created_at')
         elif order == 'top':
-            return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).annotate(total_likes=Count('likes')).order_by('-total_likes')
+            return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).annotate(
+                total_likes=Count('likes')).order_by('-total_likes')
 
         return Comment.objects.filter(post_id=post_pk, parent_comment__isnull=True).order_by('-created_at')
 
@@ -193,19 +207,6 @@ class PostListView(generics.ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        weight_comments = 0.6
-        weight_reactions = 0.4
-
-        queryset = Post.objects.annotate(
-            num_comments=Count('comments'),
-            num_reactions=Count('reactions')
-        ).annotate(
-            weighted_score=ExpressionWrapper(
-                weight_comments * F('num_comments') + weight_reactions * F('num_reactions'),
-                output_field=FloatField()
-            )
-        ).order_by('-weighted_score')
-
         filter_param = self.request.GET.get('filter')
         date_param = self.request.GET.get('date')
 
@@ -215,9 +216,32 @@ class PostListView(generics.ListAPIView):
             queryset = Post.objects.order_by('created_at')
         elif filter_param == 'comments':
             queryset = Post.objects.annotate(comment_count=Count('comments')).order_by('-comment_count')
+        else:
+            weight_comments = 0.6
+            weight_reactions = 0.4
+
+            queryset = Post.objects.annotate(
+                num_comments=Count('comments'),
+                num_reactions=Count('reactions')
+            ).annotate(
+                weighted_score=ExpressionWrapper(
+                    weight_comments * F('num_comments') + weight_reactions * F('num_reactions'),
+                    output_field=FloatField()
+                )
+            ).order_by('-weighted_score')
 
         if date_param:
             from_date, to_date = date_param.split('|')
-            queryset = queryset.filter(created_at__gte=from_date, created_at__lte=to_date)
+
+            from_year, from_month, from_day = from_date.split(',')
+            from_datetime_object = make_aware(datetime(int(from_year), int(from_month), int(from_day), 0, 0, 0, 0))
+
+            if to_date:
+                to_year, to_month, to_day = to_date.split(',')
+                to_datetime_object = make_aware(datetime(int(to_year), int(to_month), int(to_day), 23, 59, 59, 999999))
+
+                queryset = queryset.filter(created_at__range=(from_datetime_object, to_datetime_object))
+            else:
+                queryset = queryset.filter(created_at__date=from_datetime_object)
 
         return queryset

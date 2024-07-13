@@ -2,15 +2,14 @@ const postsApp = new Vue({
     el: '#app',
     delimiters: ['[[', ']]'],
     components: {
-        vuejsDatepicker
+        {% if not in_space_details %}vuejsDatepicker{% endif %}
     },
     data: {
         loading: false,
-        filter: 'trending',
+        filter: {% if not in_space_details %}'trending'{% else %}'newest'{% endif %},
         fromDate: null,
         toDate: null,
         next: `${postsURL}?page=1`,
-        noMorePosts: false,
         posts: []
     },
     methods: {
@@ -37,13 +36,9 @@ const postsApp = new Vue({
                 });
                 this.posts = this.posts.concat(posts);
                 this.next = response.data.next;
-                if (!this.next) {
-                    this.noMorePosts = true;
-                }
                 this.loading = false;
             })
             .catch(() => {
-                this.noMorePosts = true;
                 this.loading = false;
             });
         },
@@ -150,19 +145,31 @@ const postsApp = new Vue({
             post.comments = [];
             this.listComments(post);
         },
-        switchPostsFilter(filter, date = null) {
-            if (filter === this.filter && date === null) {
+        switchPostsFilter(filter, ignoreFilterCheck = false) {
+            if (filter === this.filter && !ignoreFilterCheck) {
                 return;
             }
 
-            this.posts = [];
-            if (date) {
-                this.next = `${postsURL}?page=1&filter=${filter}&date=${date}`;
+            if (this.fromDate || this.toDate) {
+                this.next = `${postsURL}?page=1&filter=${filter}&date=${this.reformatDate(this.fromDate)}|${this.reformatDate(this.toDate)}`;
             } else {
                 this.next = `${postsURL}?page=1&filter=${filter}`;
             }
+            this.posts = [];
             this.getMorePosts();
             this.filter = filter;
+        },
+        reformatDate(date) {
+            if (!date) {
+                return '';
+            }
+
+            const dateObj = new Date(date);
+            const year = dateObj.getFullYear();
+            const month = dateObj.getMonth() + 1;
+            const day = dateObj.getDate();
+
+            return `${year},${month},${day}`;
         },
         handleCommentsScroll(post, event) {
             const element = event.target;
@@ -172,22 +179,25 @@ const postsApp = new Vue({
             }
         },
         handleScroll() {
-            if (!this.noMorePosts && !this.loading && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+            if (this.next && !this.loading && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
                 this.getMorePosts();
             }
         },
     },
     watch: {
         fromDate(newValue) {
-            this.switchPostsFilter(this.filter, `${newValue}|${this.toDate}`)
+            this.switchPostsFilter(this.filter, true)
         },
         toDate(newValue) {
-            this.switchPostsFilter(this.filter, `${this.fromDate}|${newValue}`)
+            this.switchPostsFilter(this.filter, true)
         }
     },
     mounted() {
         this.getMorePosts();
         window.addEventListener('scroll', this.handleScroll);
+
+        document.body.style.overflow = 'scroll';
+        document.body.style.overflowX = 'hidden';
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.handleScroll);

@@ -44,4 +44,12 @@
     #bootstrap-override .responsive-dropdown {
         display: block;
     }
+
+    .posts-filter-container {
+        flex-direction: column;
+    }
+
+    .posts-filter-container .posts-filter-date-container {
+        margin-top: 10px;
+    }
 }
