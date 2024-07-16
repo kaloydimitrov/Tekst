@@ -6,25 +6,29 @@
 {% block main %}
     {% include 'includes/message.html' %}
     <div class="container" id="app">
-        <div class="alert alert-secondary spaces-filter-container">
+        <div class="alert alert-secondary d-flex gap-2 spaces-filter-container">
             <div class="btn-group" role="group" aria-label="Filter options">
-                <a href="{% url 'list_spaces' %}?order=" class="btn btn-outline-primary {% if not request.GET.order %}active{% endif %}">
+                <a href="{% url 'list_spaces' %}?order={% if request.GET.verified %}&verified=true{% endif %}" class="btn btn-outline-primary {% if not request.GET.order %}active{% endif %}">
                     <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m80-280 150-400h86l150 400h-82l-34-96H196l-32 96H80Zm140-164h104l-48-150h-6l-50 150Zm328 164v-76l202-252H556v-72h282v76L638-352h202v72H548ZM360-760l120-120 120 120H360ZM480-80 360-200h240L480-80Z"/></svg>
                     Alphabetically
                 </a>
-                <a href="{% url 'list_spaces' %}?order=newest" class="btn btn-outline-primary {% if request.GET.order == 'newest' %}active{% endif %}">
+                <a href="{% url 'list_spaces' %}?order=newest{% if request.GET.verified %}&verified=true{% endif %}" class="btn btn-outline-primary {% if request.GET.order == 'newest' %}active{% endif %}">
                     <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg>
                     Newest
                 </a>
-                <a href="{% url 'list_spaces' %}?order=oldest" class="btn btn-outline-primary {% if request.GET.order == 'oldest' %}active{% endif %}">
+                <a href="{% url 'list_spaces' %}?order=oldest{% if request.GET.verified %}&verified=true{% endif %}" class="btn btn-outline-primary {% if request.GET.order == 'oldest' %}active{% endif %}">
                     <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg>
                     Oldest
                 </a>
-                <a href="{% url 'list_spaces' %}?order=top" class="btn btn-outline-primary {% if request.GET.order == 'top' %}active{% endif %}">
+                <a href="{% url 'list_spaces' %}?order=top{% if request.GET.verified %}&verified=true{% endif %}" class="btn btn-outline-primary {% if request.GET.order == 'top' %}active{% endif %}">
                     <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m136-240-56-56 296-298 160 160 208-206H640v-80h240v240h-80v-104L536-320 376-480 136-240Z"/></svg>
                     Top
                 </a>
             </div>
+            <button @click="toggleVerified" class="btn btn-outline-primary {% if request.GET.verified %}active{% endif %}">
+                <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/></svg>
+                Verified
+            </button>
         </div>
 
         <div class="input-group mb-3">
@@ -75,7 +79,12 @@
                     <img class="card-img-top" src="{% static 'images/default-banner.png' %}" alt="Card image cap">
                     {% endif %}
                     <div class="card-body" onclick="window.location.href='{% url 'space_details' pk=space.pk %}'">
-                        <h5 class="card-title">{{ space.name }}</h5>
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title overflow-hidden">{{ space.name }}</h5>
+                            {% if space.verified %}
+                                <svg class="verified-icon" xmlns="http://www.w3.org/2000/svg" height="27px" viewBox="0 -960 960 960" width="27px" fill="#000000"><path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/></svg>
+                            {% endif %}
+                        </div>
                         <p class="card-text">{{ space.description|truncatechars:160 }}</p>
                     </div>
                     <div class="card-body d-flex justify-content-between">
@@ -197,6 +206,14 @@
                         console.error(error);
                     });
                 }
+            },
+            toggleVerified() {
+                const url = new URL(window.location.href);
+                if (url.searchParams.has('verified')) {
+                    window.location.href = '{% url 'list_spaces' %}?order={{ request.GET.order }}';
+                } else {
+                    window.location.href = '{% url 'list_spaces' %}?order={{ request.GET.order }}&verified=true';
+                }
             }
         },
         watch: {
@@ -240,16 +257,16 @@
         object-fit: cover;
     }
 
-    .btn-group .btn .filter-icon {
+    .spaces-filter-container .filter-icon {
         transition: fill 0.3s;
     }
 
-    .btn-group .btn:hover .filter-icon,
-    .btn-group .btn.active .filter-icon {
+    .spaces-filter-container .btn:hover .filter-icon,
+    .spaces-filter-container .btn.active .filter-icon {
         fill: #FFFFFF;
     }
 
-    .btn-group .btn .filter-icon {
+    .spaces-filter-container .filter-icon {
         fill: #0d6efd;
     }
 </style>

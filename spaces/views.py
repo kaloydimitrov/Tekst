@@ -26,16 +26,24 @@ class SpaceListView(ListView, LoginRequiredMixin):
     paginate_by = 12
 
     def get_queryset(self):
+        queryset = Space.objects.all()
+
         order = self.request.GET.get('order')
+        verified = self.request.GET.get('verified')
 
         if order == 'newest':
-            return Space.objects.all().order_by('-created_at')
+            queryset = queryset.order_by('-created_at')
         elif order == 'oldest':
-            return Space.objects.all().order_by('created_at')
+            queryset = queryset.order_by('created_at')
         elif order == 'top':
-            return Space.objects.annotate(num_followers=Count('followers')).order_by('-num_followers')
+            queryset = queryset.annotate(num_followers=Count('followers')).order_by('-num_followers')
+        else:
+            queryset = queryset.order_by('name')
 
-        return Space.objects.all().order_by('name')
+        if verified:
+            queryset = queryset.filter(verified=True)
+
+        return queryset
 
     def get_context_data(self, *args, **kwargs):
         context = super(SpaceListView, self).get_context_data(*args, **kwargs)

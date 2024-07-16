@@ -7,6 +7,18 @@
 {% endblock %}
 
 {% block main %}
+    {% for space in top_10_spaces %}
+        <h1>{{ space.name }}</h1>
+        <i>{{ space.verified }}</i>
+    {% endfor %}
+    <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href=`{% url 'list_spaces' %}?order=top`">View all</button>
+    
+    {% for space in 10_verified_spaces %}
+        <h1>{{ space.name }}</h1>
+        <i>{{ space.verified }}</i>
+    {% endfor %}
+    <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href=`{% url 'list_spaces' %}?verified=true`">View all</button>
+
     {% include 'includes/message.html' %}
     {% include 'includes/posts.html' %}
 {% endblock %}

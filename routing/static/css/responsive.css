@@ -52,4 +52,8 @@
     .posts-filter-container .posts-filter-date-container {
         margin-top: 10px;
     }
+
+    #bootstrap-override .spaces-filter-container {
+        flex-direction: column;
+    }
 }

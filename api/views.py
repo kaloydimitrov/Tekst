@@ -109,7 +109,6 @@ class CreateCommentView(generics.CreateAPIView):
 
 
 class CommentListView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
 
     def get_queryset(self):

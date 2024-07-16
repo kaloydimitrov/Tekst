@@ -5,12 +5,16 @@ const postsApp = new Vue({
         {% if not in_space_details %}vuejsDatepicker{% endif %}
     },
     data: {
+        is_authenticated: {% if request.user.is_authenticated %}true{% else %}false{% endif %},
         loading: false,
+        next: `${postsURL}?page=1`,
+        posts: [],
+
+        // Filters
+        showFilters: false,
         filter: {% if not in_space_details %}'trending'{% else %}'newest'{% endif %},
         fromDate: null,
         toDate: null,
-        next: `${postsURL}?page=1`,
-        posts: []
     },
     methods: {
         {% include 'includes/js/vue-method-convert-iso-8601.js' %}
@@ -91,7 +95,7 @@ const postsApp = new Vue({
 
             if (post.show_comments_section) {
                 post.show_comments_section = false;
-                document.body.style.overflow = 'visible';
+                document.body.style.overflow = 'scroll';
             } else {
                 post.show_comments_section = true;
                 document.body.style.overflow = 'hidden';

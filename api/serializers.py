@@ -22,7 +22,7 @@ class SpaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Space
-        fields = ['id', 'name', 'description', 'image', 'user', 'followers_count', 'created_at', 'updated_at', 'tags']
+        fields = ['id', 'name', 'description', 'image', 'user', 'followers_count', 'verified', 'created_at', 'updated_at', 'tags']
 
 
 class UserSpaceFollowSerializer(serializers.ModelSerializer):
@@ -43,12 +43,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_reactions(self, obj):
         request = self.context.get('request')
-        user = request.user
         reaction_types = ReactionType.objects.all()
-        user_reactions = Reaction.objects.filter(user=user, post=obj).select_related('reaction_type')
-        reacted_types = {reaction.reaction_type_id: True for reaction in user_reactions}
 
         if request and request.user.is_authenticated:
+            user = request.user
+            user_reactions = Reaction.objects.filter(user=user, post=obj).select_related('reaction_type')
+            reacted_types = {reaction.reaction_type_id: True for reaction in user_reactions}
             reactions = []
             for reaction_type in reaction_types:
                 is_reacted = reacted_types.get(reaction_type.id, False)
@@ -68,7 +68,8 @@ class PostSerializer(serializers.ModelSerializer):
         if space is not None:
             return {
                 'id': space.id,
-                'name': space.name
+                'name': space.name,
+                'verified': space.verified
             }
         else:
             return None

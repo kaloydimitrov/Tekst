@@ -41,7 +41,7 @@ ALLOWED_HOSTS = []
 
 # hostname = socket.gethostname()
 # ip_address = socket.gethostbyname(hostname)
-# ALLOWED_HOSTS = [ip_address]
+# ALLOWED_HOSTS = ['*']
 # # python manage.py runserver 0.0.0.0:8001
 # print(f"----------------------------------\n{ip_address}:8001\n----------------------------------")
 

@@ -9,6 +9,7 @@ class Space(models.Model):
     description = models.TextField(validators=[validate_description_len])
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
