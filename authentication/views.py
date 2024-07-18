@@ -1,6 +1,6 @@
 from Tekst.settings import EMAIL_HOST_USER
 from django.contrib.auth import get_user_model
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.messages.views import SuccessMessageMixin
@@ -36,6 +36,7 @@ class SignUpView(SuccessMessageMixin, CreateView):
         html_message = render_to_string('authentication/account-activation-email.html', {
             'user': user,
             'domain': current_site.domain,
+            'protocol': 'https' if self.request.is_secure() else 'http',
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': default_token_generator.make_token(user),
         })
@@ -92,3 +93,45 @@ def activate(request, uidb64, token):
         return redirect('home')
     else:
         return render(request, 'authentication/account-activation-invalid.html')
+
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'authentication/password-reset.html'
+    email_template_name = 'authentication/password-reset-email.html'
+    subject_template_name = 'authentication/password-reset-subject.txt'
+    success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        email = form.cleaned_data["email"]
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return super().form_valid(form)
+
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        context = {
+            'user': user,
+            'domain': self.request.META['HTTP_HOST'],
+            'protocol': 'http' if not self.request.is_secure() else 'https',
+            'uid': uid,
+            'token': token,
+        }
+
+        html_content = render_to_string(self.email_template_name, context)
+        text_content = strip_tags(html_content)
+        subject = render_to_string(self.subject_template_name, context).strip()
+        from_email = EMAIL_HOST_USER
+        to_email = email
+
+        message = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+        message.attach_alternative(html_content, "text/html")
+        message.send()
+
+        messages.success(self.request, self.success_message)
+
+        return super(PasswordResetView, self).form_valid(form)
