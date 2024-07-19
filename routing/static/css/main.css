@@ -2,6 +2,23 @@
     box-sizing: border-box;
 }
 
+.ql-zone h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+}
+
+.ql-zone .ql-align-center  {
+    text-align: center;
+}
+
+.ql-zone .ql-align-right {
+    text-align: right;
+}
+
+.ql-zone .ql-align-justify {
+    text-align: justify;
+}
+
 .main-nav {
     padding-left: 1em;
     padding-right: 1em;

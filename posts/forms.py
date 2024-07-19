@@ -26,8 +26,8 @@ class CreatePostForm(forms.ModelForm):
         ))
 
     content = forms.CharField(
-        widget=forms.Textarea(
-            attrs={'placeholder': 'Enter content', 'class': 'form-control', 'v-model': 'content'}
+        widget=forms.HiddenInput(
+            attrs={'v-model': 'content'}
         ))
 
     visibility = forms.BooleanField(

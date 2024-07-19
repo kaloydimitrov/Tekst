@@ -15,8 +15,8 @@ class CreateSpaceForm(forms.ModelForm):
         ))
 
     description = forms.CharField(
-        widget=forms.Textarea(
-            attrs={'placeholder': 'Enter description', 'class': 'form-control'}
+        widget=forms.HiddenInput(
+            attrs={'v-model': 'descriptionInput'}
         ))
 
     image = forms.ImageField(

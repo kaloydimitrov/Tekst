@@ -1,5 +1,5 @@
 <div id="app" class="mt-4">
-    <div :class="['mb-5', 'posts-filter-container', 'align-items-start', 'd-flex', 'justify-content-between', { 'half-opacity': loading }]">
+    <div :class="['mb-5', 'posts-filter-container', 'align-items-start', 'd-flex', 'justify-content-between', { 'half-opacity': loading || !posts.length }]">
         <div class="posts-filter-buttons-container d-flex gap-2 flex-wrap">
             {% if not in_space_details %}
             <span @click="switchPostsFilter('trending')" :class="['badge', 'badge-pill', filter === 'trending' ? 'bg-primary' : 'bg-light', filter !== 'trending' && 'text-dark']">Trending</span>
@@ -31,7 +31,7 @@
             </p>
         </div>
         <div class="card-body">
-            <p class="card-text">[[ post.content ]]</p>
+            <div class="ql-zone" v-html="post.content"></div>
         </div>
         <div class="card-body text-muted">
             <span v-for="tag in post.tags" class="badge me-2 bg-primary">
@@ -113,4 +113,5 @@
     <div class="loading-container d-flex justify-content-center align-items-center">
         <div v-if="loading" class="spinner-border" role="status"></div>
     </div>
+    <p v-if="!posts.length && !loading" class="text-muted">There aren't any posts here!</p>
 </div>
