@@ -1,8 +1,8 @@
 const toolbarOptions = [
     [{ 'header': [1, 2, 3, false] }],
-    ['bold', 'italic', 'underline'],
-    ['blockquote', 'code-block'],
+    ['bold', 'italic', 'underline', 'strike'],
     [{ 'align': [] }],
+    [{ 'color': [] }],
     ['clean'],
 ];
 

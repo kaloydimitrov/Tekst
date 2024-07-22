@@ -83,7 +83,7 @@
                         </button>
                     </p>
                     <div class="collapse" id="collapseExample">
-                        <input type="text" class="form-control" placeholder="Search for other tags" v-model="searchInput">
+                        <input type="text" class="form-control mt-2" placeholder="Search for other tags" v-model="searchInput">
                         <div v-if="this.searchInput" class="loading-container">
                             <div v-if="tagsLoading" class="spinner-border" role="status"></div>
                         </div>
@@ -244,9 +244,7 @@
     });
 </script>
 <style>
-    .form-content>.form-control {
-        height: 150px;
-    }
+    {% include 'includes/css/quill.css' %}
 
     .form-group .btn {
         margin-top: 18px;
@@ -305,6 +303,9 @@
         object-fit: cover;
     }
 
-    {% include 'includes/css/quill.css' %}
+    .ql-zone h1 { font-size: 1rem } .ql-zone h2 { font-size: 0.83rem } .ql-zone h3 { font-size: 0.7rem }
+    .ql-zone p, .ql-zone ul, .ql-zone ol {
+        font-size: 0.6rem;
+    }
 </style>
 {% endblock %}
