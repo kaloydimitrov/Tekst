@@ -53,7 +53,10 @@
 
                 <div class="card-body" @click="navigateToSpace(space.id)">
                     <h5 class="card-title">[[ space.name ]]</h5>
-                    <div class="ql-zone" v-html="truncatedDescription"></div>
+                    <div class="ql-zone maxh-230 minh-50 overflow-hidden position-relative">
+                        <div v-html="space.description"></div>
+                        <div class="space-gradient"></div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <a :href="generateURL()" class="btn btn-primary btn-sm position-relative">
@@ -204,16 +207,6 @@
                 }
             }
         },
-        computed: {
-            truncatedDescription() {
-                const truncateValue = 120;
-
-                if (this.space.description && this.space.description.length > truncateValue) {
-                    return this.space.description.substring(0, truncateValue) + '...';
-                }
-                return this.space.description;
-            }
-        },
         mounted() {
             const checkbox = document.getElementById('flexSwitchCheckDefault');
             checkbox.addEventListener('change', (event) => {
@@ -245,37 +238,12 @@
                 this.fetchSearchResult(this.searchInput);
             }
 
-            const toolbarOptions = [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'align': [] }],
-                ['clean']
-            ];
-
-            const quill = new Quill('#editor', {
-                theme: 'snow',
-                placeholder: 'Enter Content',
-                modules: {
-                    toolbar: toolbarOptions
-                }
-            });
-
-            quill.on('text-change', () => {
-                this.content = quill.root.innerHTML;
-            });
+            const place = 'post';
+            {% include 'includes/js/quill-setup.js' %}
         }
     });
 </script>
 <style>
-    .opacity-0 {
-        opacity: 0;
-    }
-
-    .half-opacity {
-        opacity: 0.5;
-    }
-
     .form-content>.form-control {
         height: 150px;
     }
@@ -337,26 +305,6 @@
         object-fit: cover;
     }
 
-    {# Quill #}
-    .form-control.ql-container.ql-snow {
-        padding-top: 7px;
-    }
-
-    .ql-container.ql-snow {
-        border: 0;
-        padding: 0;
-        height: 200px;
-    }
-
-    .ql-editor {
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        min-height: calc(2.25rem + 2px);
-    }
-
-    .ql-editor.ql-blank::before {
-        font-style: normal;
-        color: #212529;
-    }
+    {% include 'includes/css/quill.css' %}
 </style>
 {% endblock %}

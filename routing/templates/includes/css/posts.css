@@ -1,22 +1,3 @@
-.loading-container {
-    height: 55px;
-}
-
-.half-opacity {
-    opacity: 0.5;
-}
-
-.cursor-pointer {
-    cursor: pointer;
-    user-select: none;
-}
-
-.no-wrap {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 /* POST FILTERS */
 .posts-filter-buttons-container span {
     cursor: pointer;

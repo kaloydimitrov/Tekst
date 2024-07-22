@@ -2,6 +2,48 @@
     box-sizing: border-box;
 }
 
+/* USEFUL */
+.space-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 10%, rgba(0,0,0,0) 100%);
+}
+
+.maxh-230 {
+    max-height: 230px;
+}
+
+.minh-50 {
+    min-height: 50px;
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.loading-container {
+    height: 55px;
+}
+
+.half-opacity {
+    opacity: 0.5;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+    user-select: none;
+}
+
+.no-wrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* QUILL */
 .ql-zone h1, h2, h3, p {
     margin: 0;
     padding: 0;
@@ -19,6 +61,7 @@
     text-align: justify;
 }
 
+/* MAIN */
 .main-nav {
     padding-left: 1em;
     padding-right: 1em;

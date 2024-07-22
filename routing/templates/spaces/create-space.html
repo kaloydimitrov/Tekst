@@ -26,7 +26,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" height="21px" viewBox="0 -960 960 960" width="21px" fill="#000000"><path d="M440-320v-326L336-542l-56-58 200-200 200 200-56 58-104-104v326h-80ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
             <span>Upload Image</span>
         </label>
-        <div class="image-preview-container">
+        <div class="image-preview-container opacity-0">
             <img id="image-preview" src="{% static 'images/default-banner.png' %}" alt="Image Preview">
         </div>
 
@@ -106,25 +106,12 @@
                 }
             });
 
-            const toolbarOptions = [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'align': [] }],
-                ['clean']
-            ];
+            const place = 'space';
+            {% include 'includes/js/quill-setup.js' %}
 
-            const quill = new Quill('#editor', {
-                theme: 'snow',
-                placeholder: 'Enter Description',
-                modules: {
-                    toolbar: toolbarOptions
-                }
-            });
-
-            quill.on('text-change', () => {
-                this.descriptionInput = quill.root.innerHTML;
-            });
+            setTimeout(() => {
+                document.querySelector('.image-preview-container').classList.add('opacity-100');
+            }, 250);
         }
     });
 </script>
@@ -165,6 +152,7 @@
         border-radius: .25rem;
         margin-bottom: 16px;
         overflow: hidden;
+        transition: opacity 0.5s;
     }
 
     .image-preview-container img {
@@ -173,26 +161,6 @@
         object-fit: cover;
     }
 
-    {# Quill #}
-    .form-control.ql-container.ql-snow {
-        padding-top: 7px;
-    }
-
-    .ql-container.ql-snow {
-        border: 0;
-        padding: 0;
-        height: 200px;
-    }
-
-    .ql-editor {
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        min-height: calc(2.25rem + 2px);
-    }
-
-    .ql-editor.ql-blank::before {
-        font-style: normal;
-        color: #212529;
-    }
+    {% include 'includes/css/quill.css' %}
 </style>
 {% endblock %}
