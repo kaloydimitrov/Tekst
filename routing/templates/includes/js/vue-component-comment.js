@@ -48,6 +48,7 @@ Vue.component('comment', {
         },
         editComment(comment) {
             const contentValue = this.$refs['editCommentField' + comment.id][0].value;
+            if (!contentValue) { return; }
 
             axios
             .put(`/api/comment/${comment.id}/update/`, {
@@ -63,6 +64,16 @@ Vue.component('comment', {
             .catch((error) => {
                 console.error(error);
             });
+        },
+        handleEditCommentField(event, comment) {
+            const saveButton = this.$refs['saveCommentButton' + comment.id][0];
+            if (comment.content !== event.target.value) {
+                saveButton.classList.replace('half-opacity', 'opacity-100');
+            } else  {
+                saveButton.classList.replace('opacity-100', 'half-opacity');
+            }
+
+            this.adjustTextAreaHeight(event);
         },
         deleteComment(comment) {
             axios
@@ -136,18 +147,19 @@ Vue.component('comment', {
                 </div>
                 <p v-if="!comment.edit_mode" class="card-text comment">[[ comment.content ]]</p>
                 <div v-else>
-                    <textarea class="form-control comment-textarea" :ref="'editCommentField' + comment.id" @input="adjustTextAreaHeight">[[ comment.content ]]</textarea>
+                    <textarea class="form-control comment-textarea" :ref="'editCommentField' + comment.id" @input="handleEditCommentField($event, comment)">[[ comment.content ]]</textarea>
                     <div class="mt-2 mb-2 gap-1 d-flex">
                         <button class="btn btn-outline-secondary btn-sm" @click="comment.edit_mode = false">Cancel</button>
-                        <button :class="['btn', 'btn-outline-primary', 'btn-sm', { 'half-opacity': true }]" @click="editComment(comment)">Save</button>
+                        <button class="btn btn-outline-primary btn-sm half-opacity" :ref="'saveCommentButton' + comment.id" @click="editComment(comment)">Save</button>
                     </div>
                 </div>
-                <div class="d-flex align-items-center likes-reply-container">
+                <div class="likes-reply-container mb-1">
                     <span @click="likeDislikeComment(comment)" class="d-flex align-items-center justify-content-center like-button">
                         <svg v-if="comment.is_liked" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0b5ed7"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
                         <svg v-else xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#5f6368"><path d="M720-120H280v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h258q32 0 56 24t24 56v80q0 7-2 15t-4 15L794-168q-9 20-30 34t-44 14Zm-360-80h360l120-280v-80H480l54-220-174 174v406Zm0-406v406-406Zm-80-34v80H160v360h120v80H80v-520h200Z"/></svg>
                     </span>
                     <span id="likes" v-if="comment.likes_count > 0" class="text-muted">[[ comment.likes_count ]]</span>
+                    <div class="vr mx-1"></div>
                     <small><a class="link-secondary reply-link" @click="showCommentForm(comment.id)">Reply</a></small>
                 </div>
                 <button v-if="comment.replies.length" :class="['answer-button', 'text-muted', 'small', 'd-flex', 'align-items-center', {'half-opacity': comment.show_replies}]" @click="toggleReplies(comment)">
