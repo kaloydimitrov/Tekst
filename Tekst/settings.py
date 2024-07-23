@@ -55,13 +55,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'authentication.apps.AuthConfig',
     'rest_framework',
     'bootstrap5',
     'routing',
     'api',
     'posts',
     'spaces',
-    'authentication',
+    'cities_light',
 ]
 
 MIDDLEWARE = [
@@ -187,6 +188,12 @@ MEDIA_ROOT = BASE_DIR / 'routing/media/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Cities Light (populates database with Cities and Countries)
+# https://pypi.org/project/django-cities-light/
+
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['bg', 'en']
 
 
 # SMTP Configuration

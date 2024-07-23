@@ -9,6 +9,7 @@
 name - **tekst_db**
 <br />`python manage.py makemigrations`
 <br />`python manage.py migrate`
+<br />`python manage.py cities_light`
 
 # Create .env file
 EMAIL_HOST_USER=<br />
