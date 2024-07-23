@@ -38,8 +38,10 @@
         </div>
         <div class="card-body text-muted">
             <span v-for="tag in post.tags" class="badge me-2 bg-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z" /></svg>
-                [[ tag.name ]]
+                <div class="d-flex align-items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z" /></svg>
+                    <span>[[ tag.name ]]</span>
+                </div>
             </span>
         </div>
         {% if not in_space_details %}

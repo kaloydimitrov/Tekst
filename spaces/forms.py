@@ -1,6 +1,15 @@
+import bleach
+from bleach.css_sanitizer import CSSSanitizer
+import html
 from django import forms
 from .models import Space, Tag
 from django.core.exceptions import ValidationError
+
+ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS = ['p', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'b', 'i', 'u', 's', 'strong',
+                                                'em', 'br', 'span']
+ALLOWED_ATTRIBUTES = {'*': ['class', 'style'], }
+ALLOWED_STYLES = ['color']
+css_sanitizer = CSSSanitizer(allowed_css_properties=ALLOWED_STYLES)
 
 
 class CreateSpaceForm(forms.ModelForm):
@@ -28,6 +37,17 @@ class CreateSpaceForm(forms.ModelForm):
     class Meta:
         model = Space
         fields = ['name', 'description', 'image']
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        unescaped_description = html.unescape(description)
+        sanitized_description = bleach.clean(unescaped_description, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES,
+                                             strip=True, css_sanitizer=css_sanitizer)
+
+        if sanitized_description != unescaped_description:
+            raise ValidationError('Your field contains invalid HTML.')
+
+        return description
 
     def clean(self):
         cleaned_data = super().clean()

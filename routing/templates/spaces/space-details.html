@@ -3,7 +3,6 @@
 {% block title %}{{ space.name }} space{% endblock %}
 
 {% block main %}
-    {% include 'includes/message.html' %}
     <div class="card" id="card-app">
         <div class="card-header d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center justify-content-center flex-grow-1 overflow-hidden">
@@ -41,6 +40,7 @@
     </a>
 
     {% include 'includes/posts.html' %}
+    {% include 'includes/message.html' %}
 {% endblock %}
 
 {% block rest %}

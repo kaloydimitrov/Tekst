@@ -1,7 +1,16 @@
+import bleach
+from bleach.css_sanitizer import CSSSanitizer
+import html
 from django.core.exceptions import ValidationError
 from django import forms
 from .models import Post
 from spaces.models import Space, Tag
+
+ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS = ['p', 'h1', 'h2', 'h3', 'ul', 'ol', 'li', 'b', 'i', 'u', 's', 'strong',
+                                                'em', 'br', 'span']
+ALLOWED_ATTRIBUTES = {'*': ['class', 'style'], }
+ALLOWED_STYLES = ['color']
+css_sanitizer = CSSSanitizer(allowed_css_properties=ALLOWED_STYLES)
 
 
 class CreatePostForm(forms.ModelForm):
@@ -41,6 +50,17 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['name', 'content', 'visibility', 'space']
+
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+        unescaped_content = html.unescape(content)
+        sanitized_content = bleach.clean(unescaped_content, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES,
+                                         strip=True, css_sanitizer=css_sanitizer)
+
+        if sanitized_content != unescaped_content:
+            raise ValidationError('Your field contains invalid HTML.')
+
+        return content
 
     def save(self, commit=True):
         instance = super(CreatePostForm, self).save(commit=False)
