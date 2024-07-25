@@ -12,8 +12,8 @@ class Profile(models.Model):
         ('male', 'Male'),
         ('female', 'Female'),
     ], blank=True, null=True)
-    country = models.ForeignKey('cities_light.Country', on_delete=models.SET_NULL, default='Bulgaria', blank=True, null=True)
-    city = models.ForeignKey('cities_light.City', on_delete=models.SET_NULL, blank=True, null=True)
+    # country =
+    # city =
     facebook_url = models.URLField(blank=True, null=True)
     x_handle = models.CharField(max_length=30, blank=True, null=True)
     instagram_handle = models.CharField(max_length=30, blank=True, null=True)

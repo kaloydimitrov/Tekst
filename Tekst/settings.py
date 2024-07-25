@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'api',
     'posts',
     'spaces',
-    'cities_light',
 ]
 
 MIDDLEWARE = [
@@ -162,7 +161,7 @@ AUTHENTICATION_BACKENDS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'bg'
 
 TIME_ZONE = 'Europe/Sofia'
 
@@ -179,6 +178,7 @@ STATIC_ROOT = BASE_DIR / 'routing/static'
 
 
 # Media files (for Images only)
+# https://docs.djangoproject.com/en/5.0/topics/files/
 
 MEDIA_URL = '/routing/media/'
 MEDIA_ROOT = BASE_DIR / 'routing/media/'
@@ -190,13 +190,8 @@ MEDIA_ROOT = BASE_DIR / 'routing/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Cities Light (populates database with Cities and Countries)
-# https://pypi.org/project/django-cities-light/
-
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ['bg', 'en']
-
-
 # SMTP Configuration
+# https://docs.djangoproject.com/en/5.0/topics/email/
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
