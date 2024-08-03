@@ -67,7 +67,7 @@ class PostSerializer(serializers.ModelSerializer):
         space = getattr(obj, 'space', None)
         if space is not None:
             return {
-                'id': space.id,
+                'slug': space.slug,
                 'name': space.name,
                 'verified': space.verified
             }

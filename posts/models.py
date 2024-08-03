@@ -4,6 +4,7 @@ from .validators import validate_len
 from django.apps import apps
 from django.utils.text import slugify
 import random
+import uuid
 
 
 class Post(models.Model):
@@ -23,6 +24,10 @@ class Post(models.Model):
             if Post.objects.filter(slug=slug).exists():
                 slug += f'-{random.randint(1111, 9999)}'
             self.slug = slug
+
+        if not self.visibility:
+            self.token = uuid.uuid4()
+
         super().save(*args, **kwargs)
 
     @property

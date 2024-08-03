@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    {% for post in posts %}
+        <h1>{{ post.name }}</h1>
+        {% if not post.visibility %}
+        <h5>{% url 'post_details' post.slug %}?token={{ post.token }}</h5>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

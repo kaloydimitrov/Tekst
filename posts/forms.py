@@ -1,4 +1,3 @@
-import uuid
 import bleach
 from bleach.css_sanitizer import CSSSanitizer
 import html
@@ -62,13 +61,6 @@ class CreatePostForm(forms.ModelForm):
             raise ValidationError('Your field contains invalid HTML.')
 
         return content
-
-    def clean(self):
-        cleaned_data = super().clean()
-        visibility = cleaned_data.get('visibility')
-
-        if not visibility:
-            cleaned_data['token'] = uuid.uuid4
 
     def save(self, commit=True):
         instance = super(CreatePostForm, self).save(commit=False)

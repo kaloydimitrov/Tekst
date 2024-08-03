@@ -3,7 +3,6 @@
 {% block title %}{{ post.name }}{% endblock %}
 
 {% block main %}
-    <div>
     <div class="card mb-4 box-shadow py-2 sticky-header" id="header-app" style="border-top-left-radius: 0; border-top-right-radius: 0;">
         <div class="d-flex gap-2 align-items-center justify-content-center">
             <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#5f6368"><path d="M220-150v-597.69Q220-778 241-799q21-21 51.31-21H520v60H292.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46V-242l200-86 200 86v-278h60v370L480-261.54 220-150Zm60-610h240-240Zm400 160v-80h-80v-60h80v-80h60v80h80v60h-80v80h-60Z"/></svg>
@@ -47,7 +46,6 @@
 
     <div class="mt-5 box-shadow" id="app">
         <comment v-if="comments" :comments="comments" id="comments"></comment>
-    </div>
     </div>
 {% endblock %}
 

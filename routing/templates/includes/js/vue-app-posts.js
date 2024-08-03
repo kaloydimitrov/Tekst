@@ -19,8 +19,8 @@ const postsApp = new Vue({
     methods: {
         {% include 'includes/js/vue-method-convert-iso-8601.js' %}
         {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
-        navigateToSpace(spaceId) {
-            window.location.href = `/space/${spaceId}/`;
+        navigateToSpace(slug) {
+            window.location.href = `/space/${slug}/`;
         },
         navigateToPost(slug) {
             window.location.href = `/post/${slug}/`;

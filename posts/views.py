@@ -6,6 +6,7 @@ from .models import Post
 from .forms import CreatePostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import PermissionDenied
 
 
 class PostCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
@@ -35,7 +36,15 @@ class PostDetailView(DetailView):
 
     def get_object(self, queryset=None):
         slug = self.kwargs.get('slug')
-        return get_object_or_404(Post, slug=slug)
+        token = self.request.GET.get('token')
+
+        post = get_object_or_404(Post, slug=slug)
+
+        if not post.visibility:
+            if not str(post.token) == token:
+                raise PermissionDenied('Няма token или е невалиден.')
+
+        return post
 
     def get_context_data(self, **kwargs):
         context = super(PostDetailView, self).get_context_data()

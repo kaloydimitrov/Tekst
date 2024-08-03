@@ -72,7 +72,7 @@ class SpacePostsView(generics.ListAPIView):
 
     def get_queryset(self):
         space_pk = self.kwargs['pk']
-        queryset = Post.objects.filter(space__pk=space_pk)
+        queryset = Post.objects.filter(space__pk=space_pk, visibility=True)
 
         filter_param = self.request.GET.get('filter')
 
@@ -209,17 +209,19 @@ class PostListView(generics.ListAPIView):
         filter_param = self.request.GET.get('filter')
         date_param = self.request.GET.get('date')
 
+        queryset = Post.objects.filter(visibility=True)
+
         if filter_param == 'newest':
-            queryset = Post.objects.order_by('-created_at')
+            queryset = queryset.order_by('-created_at')
         elif filter_param == 'oldest':
-            queryset = Post.objects.order_by('created_at')
+            queryset = queryset.order_by('created_at')
         elif filter_param == 'comments':
-            queryset = Post.objects.annotate(comment_count=Count('comments')).order_by('-comment_count')
+            queryset = queryset.annotate(comment_count=Count('comments')).order_by('-comment_count')
         else:
             weight_comments = 0.6
             weight_reactions = 0.4
 
-            queryset = Post.objects.annotate(
+            queryset = queryset.annotate(
                 num_comments=Count('comments'),
                 num_reactions=Count('reactions')
             ).annotate(

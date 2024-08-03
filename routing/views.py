@@ -1,4 +1,5 @@
 from django.views.generic.base import TemplateView
+from posts.models import Post
 
 
 class Home(TemplateView):
@@ -8,6 +9,11 @@ class Home(TemplateView):
 class UserInfo(TemplateView):
     template_name = 'user/info.html'
 
+
+class UserPosts(TemplateView):
+    template_name = 'user/posts.html'
+
     def get_context_data(self, **kwargs):
-        context = super(UserInfo, self).get_context_data(**kwargs)
-        context['user'] = self.request.user
+        context = super(UserPosts, self).get_context_data(**kwargs)
+        context['posts'] = Post.objects.filter(user=self.request.user)
+        return context
