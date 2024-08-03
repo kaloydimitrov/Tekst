@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from posts.models import Post
 from .validators import validate_description_len, validate_name_len
+from django.utils.text import slugify
+import random
 
 
 class Space(models.Model):
@@ -12,6 +14,15 @@ class Space(models.Model):
     verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = slugify(self.name)
+            if Space.objects.filter(slug=slug).exists():
+                slug += f'-{random.randint(1111, 9999)}'
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     @property
     def followers_count(self):

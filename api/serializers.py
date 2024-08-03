@@ -22,7 +22,7 @@ class SpaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Space
-        fields = ['id', 'name', 'description', 'image', 'user', 'followers_count', 'verified', 'created_at', 'updated_at', 'tags']
+        fields = ['id', 'name', 'description', 'image', 'user', 'followers_count', 'verified', 'created_at', 'updated_at', 'tags', 'slug']
 
 
 class UserSpaceFollowSerializer(serializers.ModelSerializer):
@@ -39,7 +39,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'reactions', 'reactions_count', 'comments_count', 'rating', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'reactions', 'reactions_count', 'comments_count', 'rating', 'created_at', 'updated_at', 'slug']
 
     def get_reactions(self, obj):
         request = self.context.get('request')

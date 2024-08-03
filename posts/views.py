@@ -1,5 +1,7 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
+from spaces.models import Tag
 from .models import Post
 from .forms import CreatePostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,3 +27,18 @@ class PostCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
 
     def get_success_url(self):
         return reverse_lazy('home')
+
+
+class PostDetailView(DetailView):
+    template_name = 'posts/post-details.html'
+    model = Post
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('slug')
+        return get_object_or_404(Post, slug=slug)
+
+    def get_context_data(self, **kwargs):
+        context = super(PostDetailView, self).get_context_data()
+        post = self.get_object()
+        context['tags'] = Tag.objects.filter(post=post)
+        return context

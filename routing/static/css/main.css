@@ -43,6 +43,10 @@
     text-overflow: ellipsis;
 }
 
+.box-shadow {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
 /* QUILL */
 .ql-zone h1, h2, h3, p {
     margin: 0;
@@ -79,11 +83,6 @@
 
 .container.main {
     padding-bottom: 30px;
-}
-
-.authenticated-container {
-    display: flex;
-    gap: 5px;
 }
 
 .main-header {

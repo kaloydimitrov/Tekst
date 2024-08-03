@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView
 from .forms import CreateSpaceForm
@@ -57,6 +58,10 @@ class SpaceListView(ListView, LoginRequiredMixin):
 class SpaceDetailView(DetailView, LoginRequiredMixin):
     template_name = 'spaces/space-details.html'
     model = Space
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('slug')
+        return get_object_or_404(Space, slug=slug)
 
     def get_context_data(self, *args, **kwargs):
         context = super(SpaceDetailView, self).get_context_data()

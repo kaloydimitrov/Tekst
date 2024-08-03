@@ -22,6 +22,9 @@ const postsApp = new Vue({
         navigateToSpace(spaceId) {
             window.location.href = `/space/${spaceId}/`;
         },
+        navigateToPost(slug) {
+            window.location.href = `/post/${slug}/`;
+        },
         getMorePosts() {
             this.loading = true
 

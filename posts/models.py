@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from .validators import validate_len
 from django.apps import apps
+from django.utils.text import slugify
+import random
 
 
 class Post(models.Model):
@@ -12,6 +14,16 @@ class Post(models.Model):
     visibility = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    token = models.UUIDField(editable=False, unique=True, blank=True, null=True)
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = slugify(self.name)
+            if Post.objects.filter(slug=slug).exists():
+                slug += f'-{random.randint(1111, 9999)}'
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     @property
     def comments_count(self):
