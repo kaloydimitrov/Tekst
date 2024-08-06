@@ -11,26 +11,19 @@ add groups, permissions, roles
 
 hover on username - popup with info
 
-text decorations - post content, space description
-
-Filter
-Top spaces
-add filters for posts
-
 Report, block spaces
 Report, block user
 
-Extend user:
-Required Email
-Bio
+TODO:
+comment redirect in user comments page (similar to youtube but with query param) (goes to post details #comments)
+comment sort in post details
+working reactions in post details
+save post feature in post details
+share feature in post details (look how is done in facebook)
 
-User settings:
-username, email
-bio, change bio
-Change password
-Blocked spaces
-Blocked users
-* option to unblock them
+site search functionality (search icon in input)
+avoid tags with same name (should be unique) (always show from which space the tag is)
+TODO END
 
 My posts:
 Delete post
@@ -45,45 +38,3 @@ My comments:
 Delete comment
 Edit comment
 view in post button
-
-
-
-
-
-
-posts (if in space details or in feed):
-isOwner(userId):
-	return string(userId) === string({{ request.user.pk }})
-
-if isOwner make viewPost button visible
-
-viewPost(postId):
-	windows.href.url = `{% url 'user_posts' %}#post-${postId}`
-
-user/posts.html
-<div id="post-1">
-</div>
-<div id="post-2">
-</div>
-<div id="post-3">
-</div>
-<div id="post-4">
-</div>
-
-*same with comments and spaces except that with comments delete and edit should also be able to do in the post
-
-
-
-
-
-
-user_spaces:
-if button view blocked spaces clicked -
-{% url 'user_settings' %}#blocked-spaces
-
-user/settings.html
-<div id="change-password">
-</div>
-...
-<div id="blocked-spaces">
-</div>

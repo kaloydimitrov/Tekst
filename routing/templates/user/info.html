@@ -3,67 +3,77 @@
 {% block title %}{{ user.username }}'s info{% endblock %}
 
 {% block main %}
-    <h1>Social media</h1>
-    <label for="instagram-handle">Instagram</label>
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">@</span>
+    <div class="card mb-5">
+    <div class="card-body">
+        <h3 class="card-title">Social media</h3>
+
+        <label for="instagram-handle">Instagram</label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" id="instagram-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
+                   {% if user.profile.instagram_handle %}disabled{% endif %} value="{{ user.profile.instagram_handle|default_if_none:'' }}">
         </div>
-        <input type="text" id="instagram-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
-               {% if user.profile.instagram_handle %}disabled{% endif %} value="{{ user.profile.instagram_handle|default_if_none:'' }}">
+
+        <label for="tiktok-handle">TikTok</label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" id="tiktok-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
+            {% if user.profile.tiktok_handle %}disabled{% endif %} value="{{ user.profile.tiktok_handle|default_if_none:'' }}">
+        </div>
+
+        <label for="instagram-handle">X</label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+            </div>
+            <input type="text" id="instagram-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
+            {% if user.profile.x_handle %}disabled{% endif %} value="{{ user.profile.x_handle|default_if_none:'' }}">
+        </div>
+
+        <label for="facebook-url">Facebook</label>
+        <input type="text" id="facebook-url" class="form-control" placeholder="Link"
+        {% if user.profile.facebook_url %}disabled{% endif %} value="{{ user.profile.facebook_url|default_if_none:'' }}">
+    </div>
     </div>
 
-    <label for="tiktok-handle">TikTok</label>
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">@</span>
-        </div>
-        <input type="text" id="tiktok-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
-        {% if user.profile.tiktok_handle %}disabled{% endif %} value="{{ user.profile.tiktok_handle|default_if_none:'' }}">
+    <div class="card mb-5">
+    <div class="card-body">
+        <h3 class="card-title">General</h3>
+
+        <label for="bio">Bio</label>
+        <textarea class="form-control" {% if user.profile.bio %}disabled{% endif %}>{{ user.profile.bio|default_if_none:'' }}</textarea>
+
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" class="form-control" {% if user.first_name %}value="{{ user.first_name }}" disabled{% endif %}>
+
+        <label for="last_name">Last Name</label>
+        <input type="text" id="last_name" class="form-control" {% if user.last_name %}value="{{ user.last_name }}" disabled{% endif %}>
+
+        <label for="birth_date">Birthdate</label>
+        <input type="date" id="birth_date" class="form-control" {% if user.profile.birth_date %}value="{{ user.profile.birth_date|date:'Y-m-d' }}" disabled{% endif %}>
+
+        <label for="gender">Gender</label>
+        <select class="form-control" name="gender" id="gender" {% if user.profile.gender %}disabled{% endif %}>
+            {% if not user.profile.gender %}<option value="none">Select gender</option>{% endif %}
+            <option value="male" {% if user.profile.gender == 'male' %}selected{% endif %}>Male</option>
+            <option value="female" {% if user.profile.gender == 'female' %}selected{% endif %}>Female</option>
+            {% if user.profile.gender %}<option value="none">None</option>{% endif %}
+        </select>
+
+        <label for="country">Country</label>
+        <input type="text" id="country" class="form-control" {% if user.profile.country %}value="{{ user.profile.country }}" disabled{% endif %}>
+
+        <label for="city">City</label>
+        <input type="text" id="city" class="form-control" {% if user.profile.city %}value="{{ user.profile.city }}" disabled{% endif %}>
+    </div>
     </div>
 
-    <label for="instagram-handle">X</label>
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">@</span>
-        </div>
-        <input type="text" id="instagram-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
-        {% if user.profile.x_handle %}disabled{% endif %} value="{{ user.profile.x_handle|default_if_none:'' }}">
-    </div>
-
-    <label for="facebook-url">Facebook</label>
-    <input type="text" id="facebook-url" class="form-control" placeholder="Link"
-    {% if user.profile.facebook_url %}disabled{% endif %} value="{{ user.profile.facebook_url|default_if_none:'' }}">
-
-    <h1>General</h1>
-    <label for="bio">Bio</label>
-    <textarea class="form-control" {% if user.profile.bio %}disabled{% endif %}>{{ user.profile.bio }}</textarea>
-
-    <label for="first_name">First Name</label>
-    <input type="text" id="first_name" class="form-control" {% if user.first_name %}value="{{ user.first_name }}" disabled{% endif %}>
-
-    <label for="last_name">Last Name</label>
-    <input type="text" id="last_name" class="form-control" {% if user.last_name %}value="{{ user.last_name }}" disabled{% endif %}>
-
-    <label for="birth_date">Birthdate</label>
-    <input type="date" id="birth_date" class="form-control" {% if user.profile.birth_date %}value="{{ user.profile.birth_date|date:'Y-m-d' }}" disabled{% endif %}>
-
-    <label for="gender">Gender</label>
-    <select class="form-control" name="gender" id="gender" {% if user.profile.gender %}disabled{% endif %}>
-        {% if not user.profile.gender %}<option value="none">Select gender</option>{% endif %}
-        <option value="male" {% if user.profile.gender == 'male' %}selected{% endif %}>Male</option>
-        <option value="female" {% if user.profile.gender == 'female' %}selected{% endif %}>Female</option>
-        {% if user.profile.gender %}<option value="none">None</option>{% endif %}
-    </select>
-
-    <label for="country">Country</label>
-    <input type="text" id="country" class="form-control" {% if user.profile.country %}value="{{ user.profile.country }}" disabled{% endif %}>
-
-    <label for="city">City</label>
-    <input type="text" id="city" class="form-control" {% if user.profile.city %}value="{{ user.profile.city }}" disabled{% endif %}>
-
-    <div class="alert alert-danger" role="alert">
-        <h1>Danger</h1>
+    <div class="alert alert-danger" role="alert" id="danger-section">
+        <h3 class="mb-3">Danger</h3>
         <label for="username">Username</label>
         <input type="text" id="username" class="form-control" value="{{ user.username }}" disabled>
 
@@ -73,7 +83,7 @@
         <label for="password">Password</label>
         <input type="text" id="password" class="form-control" value="**********" disabled>
 
-        <h5>Change password</h5>
+        <h5 class="mt-5">Change password</h5>
         <label for="current_password">Current Password</label>
         <input type="password" id="current_password" class="form-control">
 
@@ -83,7 +93,7 @@
         <label for="confirm_password">Confirm Password</label>
         <input type="password" id="confirm_password" class="form-control">
 
-        <button class="btn btn-danger">Delete Account</button>
+        <button class="btn btn-danger mt-3">Delete Account</button>
     </div>
 {% endblock %}
 

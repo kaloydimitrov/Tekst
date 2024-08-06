@@ -5,6 +5,7 @@ from django.apps import apps
 from django.utils.text import slugify
 import random
 import uuid
+from unidecode import unidecode
 
 
 class Post(models.Model):
@@ -20,7 +21,7 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = slugify(self.name)
+            slug = slugify(unidecode(self.name))
             if Post.objects.filter(slug=slug).exists():
                 slug += f'-{random.randint(1111, 9999)}'
             self.slug = slug

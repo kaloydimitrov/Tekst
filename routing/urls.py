@@ -4,7 +4,7 @@ from routing.views import Home, UserInfo, UserPosts
 urlpatterns = [
     path('', Home.as_view(), name='home'),
     path('user/', include([
-        path('info/', UserInfo.as_view(), name='user_settings'),
+        path('info/', UserInfo.as_view(), name='user_info'),
         path('posts/', UserPosts.as_view(), name='user_posts'),
         # user_spaces
         # user_comments

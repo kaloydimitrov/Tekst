@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 from spaces.models import Tag
-from .models import Post
+from .models import Post, ReactionType
 from .forms import CreatePostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -50,4 +50,8 @@ class PostDetailView(DetailView):
         context = super(PostDetailView, self).get_context_data()
         post = self.get_object()
         context['tags'] = Tag.objects.filter(post=post)
+        context['in_post_details'] = True
+        context['reaction_types'] = ReactionType.objects.all()
+        context['post_reaction_types'] = [r.reaction_type for r in post.reactions.all()]
+
         return context

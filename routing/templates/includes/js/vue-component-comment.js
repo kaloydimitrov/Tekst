@@ -79,8 +79,12 @@ Vue.component('comment', {
             axios
             .delete(`/api/comment/${comment.id}/delete/`)
             .then(() => {
+                {% if in_post_details %}
+                this.deleteCommentRecursive(this.comments, comment.id);
+                {% else %}
                 let post = postsApp.posts.find(p => p.id === comment.post);
                 this.deleteCommentRecursive(post.comments, comment.id);
+                {% endif %}
                 messageApp.triggerNotification('Comment deleted');
             })
             .catch((error) => {
@@ -129,7 +133,7 @@ Vue.component('comment', {
             <div class="comment card-body" v-for="comment in comments" :key="comment.id" v-if="!comment.deleted">
                 <div class="d-flex justify-content-between">
                     <small class="text-muted d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#6c757d"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#6c757d"><path d="M480-492.31q-57.75 0-98.87-41.12Q340-574.56 340-632.31q0-57.75 41.13-98.87 41.12-41.13 98.87-41.13 57.75 0 98.87 41.13Q620-690.06 620-632.31q0 57.75-41.13 98.88-41.12 41.12-98.87 41.12ZM180-187.69v-88.93q0-29.38 15.96-54.42 15.96-25.04 42.66-38.5 59.3-29.07 119.65-43.61 60.35-14.54 121.73-14.54t121.73 14.54q60.35 14.54 119.65 43.61 26.7 13.46 42.66 38.5Q780-306 780-276.62v88.93H180Zm60-60h480v-28.93q0-12.15-7.04-22.5-7.04-10.34-19.11-16.88-51.7-25.46-105.42-38.58Q534.7-367.69 480-367.69q-54.7 0-108.43 13.11-53.72 13.12-105.42 38.58-12.07 6.54-19.11 16.88-7.04 10.35-7.04 22.5v28.93Zm240-304.62q33 0 56.5-23.5t23.5-56.5q0-33-23.5-56.5t-56.5-23.5q-33 0-56.5 23.5t-23.5 56.5q0 33 23.5 56.5t56.5 23.5Zm0-80Zm0 384.62Z"/></svg>
                         &nbsp;[[ comment.user.username ]] - [[ convertIso8601Format(comment.created_at) ]]
                     </small>
                     <div class="dropdown">
@@ -160,7 +164,7 @@ Vue.component('comment', {
                     </span>
                     <span id="likes" v-if="comment.likes_count > 0" class="text-muted">[[ comment.likes_count ]]</span>
                     <div class="vr mx-1"></div>
-                    <small><a class="link-secondary reply-link" @click="showCommentForm(comment.id)">Reply</a></small>
+                    <small><a class="link-secondary reply-link" @click="showCommentForm(comment.id)">Отговори</a></small>
                 </div>
                 <button v-if="comment.replies.length" :class="['answer-button', 'text-muted', 'small', 'd-flex', 'align-items-center', {'half-opacity': comment.show_replies}]" @click="toggleReplies(comment)">
                     <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#6c757d">
@@ -173,7 +177,7 @@ Vue.component('comment', {
                 </button>
                 <div class="input-container" :id="'inputContainer' + comment.id">
                     <div class="d-flex flex-column">
-                        <textarea class="form-control comment-textarea" placeholder="Add reply..." @input="adjustTextAreaHeight"></textarea>
+                        <textarea class="form-control comment-textarea" placeholder="Добави отговор" @input="adjustTextAreaHeight"></textarea>
                         <div class="mt-2 gap-1 d-flex">
                             <button class="btn btn-outline-secondary btn-sm" @click="hideCommentForm(comment.id)">Cancel</button>
                             <button class="btn btn-outline-primary btn-sm" @click="createNestedComment(comment, $event)">Publish</button>
