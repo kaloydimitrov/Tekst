@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block main %}
+    {% for comment in comments %}
+        <h1>Коментар от {{ comment.post.name }}</h1>
+        <h3>{{ comment.content }}</h3>
+        <a href="{% url 'post_details' comment.post.slug %}?comment_link={{ comment.pk }}">Comment link</a>
+    {% endfor %}
+{% endblock %}

@@ -100,6 +100,12 @@ class TagListView(generics.ListAPIView):
 # --------------------------------------
 # COMMENTS
 # --------------------------------------
+class CommentGetView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
 class CreateCommentView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer

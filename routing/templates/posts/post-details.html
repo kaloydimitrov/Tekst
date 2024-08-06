@@ -3,7 +3,8 @@
 {% block title %}{{ post.name }}{% endblock %}
 
 {% block main %}
-    <div class="card mb-4 box-shadow py-2 sticky-header" id="header-app" style="border-top-left-radius: 0; border-top-right-radius: 0;">
+    <div id="app">
+    <div class="card mb-4 box-shadow py-2 sticky-header" style="border-top-left-radius: 0; border-top-right-radius: 0;">
         <div class="d-flex gap-2 align-items-center justify-content-center">
             <div data-reaction-name="Запази" class="reaction-icon"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#5f6368"><path d="M220-150v-597.69Q220-778 241-799q21-21 51.31-21H520v60H292.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46V-242l200-86 200 86v-278h60v370L480-261.54 220-150Zm60-610h240-240Zm400 160v-80h-80v-60h80v-80h60v80h80v60h-80v80h-60Z"/></svg></div>
             <div data-reaction-name="Сподели" class="reaction-icon"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#5f6368"><path d="M672.22-100q-44.91 0-76.26-31.41-31.34-31.41-31.34-76.28 0-6 4.15-29.16L284.31-404.31q-14.46 15-34.36 23.5t-42.64 8.5q-44.71 0-76.01-31.54Q100-435.39 100-480q0-44.61 31.3-76.15 31.3-31.54 76.01-31.54 22.74 0 42.64 8.5 19.9 8.5 34.36 23.5l284.46-167.08q-2.38-7.38-3.27-14.46-.88-7.08-.88-15.08 0-44.87 31.43-76.28Q627.49-860 672.4-860t76.25 31.44Q780-797.13 780-752.22q0 44.91-31.41 76.26-31.41 31.34-76.28 31.34-22.85 0-42.5-8.69Q610.15-662 595.69-677L311.23-509.54q2.38 7.39 3.27 14.46.88 7.08.88 15.08t-.88 15.08q-.89 7.07-3.27 14.46L595.69-283q14.46-15 34.12-23.69 19.65-8.69 42.5-8.69 44.87 0 76.28 31.43Q780-252.51 780-207.6t-31.44 76.25Q717.13-100 672.22-100Zm.09-60q20.27 0 33.98-13.71Q720-187.42 720-207.69q0-20.27-13.71-33.98-13.71-13.72-33.98-13.72-20.27 0-33.98 13.72-13.72 13.71-13.72 33.98 0 20.27 13.72 33.98Q652.04-160 672.31-160Zm-465-272.31q20.43 0 34.25-13.71 13.83-13.71 13.83-33.98 0-20.27-13.83-33.98-13.82-13.71-34.25-13.71-20.11 0-33.71 13.71Q160-500.27 160-480q0 20.27 13.6 33.98 13.6 13.71 33.71 13.71Zm465-272.3q20.27 0 33.98-13.72Q720-732.04 720-752.31q0-20.27-13.71-33.98Q692.58-800 672.31-800q-20.27 0-33.98 13.71-13.72 13.71-13.72 33.98 0 20.27 13.72 33.98 13.71 13.72 33.98 13.72Zm0 496.92ZM207.69-480Zm464.62-272.31Z"/></svg></div>
@@ -12,15 +13,15 @@
         </div>
     </div>
     <div class="card d-flex flex-column px-4 pb-3 box-shadow position-relative">
-        <div class="post-info-container d-flex gap-2">
+        <div class="d-flex gap-2" style="position: absolute; top: 10px; right: 20px;">
             <div class="d-flex gap-1 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#5f6368"><path d="M142.15-258.08 100-300.23l274.08-276.08 160 160 224.54-221.77H640v-60h220v220h-60v-117.84L534.08-330l-160-160-231.93 231.92Z"/></svg>
-                <span>{{ post.rating }} рейтинг</span>
+                <span>{{ post.rating|floatformat:2 }} рейтинг</span>
             </div>
             <span>&middot;</span>
             <div class="d-flex gap-1 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#5f6368"><path d="M250-410h460v-60H250v60Zm0-120h460v-60H250v60Zm0-120h460v-60H250v60Zm610 531.54L718.46-260H172.31Q142-260 121-281q-21-21-21-51.31v-455.38Q100-818 121-839q21-21 51.31-21h615.38Q818-860 839-839q21 21 21 51.31v669.23ZM172.31-320H744l56 55.39v-523.08q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H172.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v455.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85ZM160-320v-480 480Z"/></svg>
-                <span>{{ post.comments_count }} коментара</span>
+                <span>{{ post.comments_count }} коментар/а</span>
             </div>
             <span>&middot;</span>
             <div class="d-flex gap-1 align-items-center">
@@ -55,7 +56,7 @@
         <hr class="hr">
         <div class="d-flex gap-2" id="reactions">
             {% for reaction_type in reaction_types %}
-            <div data-reaction-name="{{ reaction_type.name }}" class="reaction-icon">
+            <div data-reaction-name="{{ reaction_type.name }}" class="reaction-icon" id="reaction_type_{{ reaction_type.pk }}" @click="changeReaction({{ reaction_type.pk }})" data-is-reacted="{% if reaction_type in post_reaction_types %}true{% else %}false{% endif %}">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="{% if reaction_type in post_reaction_types %}#0d6efd{% else %}#5f6368{% endif %}">
                     <path d="{{ reaction_type.icon }}"></path>
                 </svg>
@@ -66,16 +67,32 @@
 
     <div class="ql-zone card mt-5 p-4 box-shadow">{{ post.content|safe }}</div>
 
-    <div class="mt-5 box-shadow details-comments-container" id="app">
+    <div class="mt-5 box-shadow details-comments-container">
         <div :class="['d-flex', 'gap-2', 'align-items-center', 'py-3', 'px-2', { 'half-opacity': loadingCreateComment }]">
             <svg xmlns="http://www.w3.org/2000/svg" height="35px" viewBox="0 -960 960 960" width="35px" fill="#5f6368"><path d="M480-504.62q-49.5 0-84.75-35.25T360-624.62q0-49.5 35.25-84.75T480-744.62q49.5 0 84.75 35.25T600-624.62q0 49.5-35.25 84.75T480-504.62ZM200-215.38v-65.85q0-24.77 14.42-46.35 14.43-21.57 38.81-33.5 56.62-27.15 113.31-40.73 56.69-13.57 113.46-13.57 56.77 0 113.46 13.57 56.69 13.58 113.31 40.73 24.38 11.93 38.81 33.5Q760-306 760-281.23v65.85H200Zm40-40h480v-25.85q0-13.31-8.58-25-8.57-11.69-23.73-19.77-49.38-23.92-101.83-36.65-52.45-12.73-105.86-12.73t-105.86 12.73Q321.69-349.92 272.31-326q-15.16 8.08-23.73 19.77-8.58 11.69-8.58 25v25.85Zm240-289.24q33 0 56.5-23.5t23.5-56.5q0-33-23.5-56.5t-56.5-23.5q-33 0-56.5 23.5t-23.5 56.5q0 33 23.5 56.5t56.5 23.5Zm0-80Zm0 369.24Z"/></svg>
             <textarea v-model="commentInput" class="form-control comment-textarea" placeholder="Добави коментар като {{ user.username }}" @input="adjustTextAreaHeight"></textarea>
             <button class="btn btn-primary" @click="createComment">Изпрати</button>
         </div>
+        <div class="dropdown mx-2 mb-2">
+            <div class="d-flex gap-1 align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <p class="fs-5 text-bold">
+                    <span v-if="commentOrder == ''">Най-нови</span>
+                    <span v-if="commentOrder == 'oldest'">Най-стари</span>
+                    <span v-if="commentOrder == 'top'">Топ</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-371.69 267.69-584 296-612.31l184 184 184-184L692.31-584 480-371.69Z"/></svg>
+            </div>
+            <ul class="dropdown-menu">
+                <li :class="['dropdown-item', 'cursor-pointer', { 'dropdown-active': commentOrder == '' }]" @click="switchCommentsOrder('')">Най-нови</li>
+                <li :class="['dropdown-item', 'cursor-pointer', { 'dropdown-active': commentOrder == 'oldest' }]" @click="switchCommentsOrder('oldest')">Най-стари</li>
+                <li :class="['dropdown-item', 'cursor-pointer', { 'dropdown-active': commentOrder == 'top' }]" @click="switchCommentsOrder('top')">Топ</li>
+            </ul>
+        </div>
         <comment v-if="comments" :comments="comments" id="comments"></comment>
         <div class="d-flex justify-content-center">
             <div v-if="loading" class="spinner-border" role="status"></div>
         </div>
+    </div>
     </div>
 
     {% include 'includes/message.html' %}
@@ -89,10 +106,19 @@
     {% include 'includes/js/vue-app-message.js' %}
     {% include 'includes/js/vue-component-comment.js' %}
 
-    new Vue({
-        el: '#header-app',
+    const postDetailsApp = new Vue({
+        el: '#app',
         delimiters: ['[[', ']]'],
+        data: {
+            commentInput: null,
+            comments: [],
+            commentOrder: '',
+            loading: false,
+            loadingCreateComment: false,
+            nextCommentPage: '{% url 'get_post_comments' post.pk %}?page=1&order=',
+        },
         methods: {
+            {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
             navigateToReactions() {
                 const reactionsSection = document.getElementById('reactions');
 
@@ -116,22 +142,19 @@
                     top: offsetPosition,
                     behavior: 'smooth'
                 });
-            }
-        }
-    });
-
-    new Vue({
-        el: '#app',
-        delimiters: ['[[', ']]'],
-        data: {
-            commentInput: null,
-            comments: [],
-            loading: false,
-            loadingCreateComment: false,
-            nextCommentPage: '{% url 'get_post_comments' post.pk %}?page=1&order=',
-        },
-        methods: {
-            {% include 'includes/js/vue-method-adjust-textarea-height.js' %}
+            },
+            linkComment() {
+                axios
+                .get('{% if comment_link %}{% url 'get_comment' comment_link.pk %}{% endif %}')
+                .then(response => {
+                    const comment = response.data;
+                    comment.is_linked = true;
+                    this.comments.unshift(comment)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+            },
             listComments() {
                 this.loading = true;
 
@@ -169,16 +192,20 @@
                     console.error(error);
                 });
             },
-            changeReaction(reactionId, postId, isReacted) {
-                if (reaction.is_reacted) {
+            changeReaction(reactionId) {
+                const reactionType = document.getElementById(`reaction_type_${reactionId}`);
+                const dataIsReacted = reactionType.getAttribute('data-is-reacted') === 'true';
+
+                if (dataIsReacted) {
                     axios.delete(`{% url 'delete_reaction' %}`, {
                         data: {
-                            post: post.id,
-                            reaction_type: reaction.id,
+                            post: {{ post.pk }},
+                            reaction_type: reactionId,
                         }
                     })
                     .then(() => {
-                        reaction.is_reacted = false;
+                        document.querySelector(`#reaction_type_${reactionId} svg`).style.fill = '#5f6368';
+                        reactionType.setAttribute('data-is-reacted', 'false')
                         messageApp.triggerNotification('Reaction removed');
                     })
                     .catch((error) => {
@@ -187,18 +214,40 @@
                 } else {
                     axios
                     .post(`{% url 'create_reaction' %}`, {
-                        post: post.id,
-                        reaction_type: reaction.id,
+                        post: {{ post.pk }},
+                        reaction_type: reactionId,
                     })
                     .then(() => {
-                        post.reactions.forEach((reaction) => reaction.is_reacted = false);
-                        reaction.is_reacted = true;
+                        const reaction_types = document.querySelectorAll('#reactions .reaction-icon');
+                        reaction_types.forEach((reaction) => {
+                            reaction.setAttribute('data-is-reacted', 'false');
+                            reaction.querySelector('svg').style.fill = '#5f6368';
+                        });
+                        document.querySelector(`#reaction_type_${reactionId} svg`).style.fill = '#0d6efd';
+                        reactionType.setAttribute('data-is-reacted', 'true')
                         messageApp.triggerNotification('Reacted successfully');
                     })
                     .catch((error) => {
                         console.error(error.response.data);
                     });
                 }
+            },
+            switchCommentsOrder(order) {
+                if (order === this.commentOrder) {
+                    return;
+                }
+
+                if (order === '') {
+                    this.commentOrder = '';
+                } else if (order === 'oldest') {
+                    this.commentOrder = 'oldest';
+                } else if (order === 'top') {
+                    this.commentOrder = 'top';
+                }
+
+                this.nextCommentPage = `/api/comment/{{ post.pk }}/?page=1&order=${this.commentOrder}`;
+                this.comments = [];
+                this.listComments();
             },
             handleScroll() {
                 if (this.nextCommentPage && !this.loading && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
@@ -207,11 +256,19 @@
             },
         },
         mounted() {
+            document.body.style.overflow = 'scroll';
+            document.body.style.overflowX = 'hidden';
+
             this.listComments();
             window.addEventListener('scroll', this.handleScroll);
 
-            document.body.style.overflow = 'scroll';
-            document.body.style.overflowX = 'hidden';
+            {% if comment_link %}
+            this.linkComment();
+
+            setTimeout(() => {
+                this.navigateToComments();
+            }, 250);
+            {% endif %}
         }
     })
 </script>
@@ -238,10 +295,22 @@
         top: 100%;
     }
 
-    .post-info-container {
-        position: absolute;
-        top: 10px;
-        right: 20px;
+    .dropdown-active {
+        color: #0d6efd;
+    }
+
+    .dropdown-active:hover::before {
+        color: black;
+    }
+
+    .dropdown-active:active::before {
+        color: white;
+    }
+
+    .dropdown-active::before {
+        content: "•";
+        margin-right: 5px;
+        color: #0d6efd;
     }
 </style>
 {% endblock %}

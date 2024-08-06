@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 from spaces.models import Tag
-from .models import Post, ReactionType
+from .models import Post, ReactionType, Comment
 from .forms import CreatePostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -53,5 +53,9 @@ class PostDetailView(DetailView):
         context['in_post_details'] = True
         context['reaction_types'] = ReactionType.objects.all()
         context['post_reaction_types'] = [r.reaction_type for r in post.reactions.all()]
+
+        comment_link = self.request.GET.get('comment_link')
+        if comment_link:
+            context['comment_link'] = Comment.objects.get(id=comment_link)
 
         return context

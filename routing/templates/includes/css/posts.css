@@ -110,6 +110,20 @@
 }
 
 /* COMMENT COMPONENT */
+#bootstrap-override .linked-comment {
+    margin-bottom: 20px;
+    border-left: 1px solid lightgray;
+}
+
+.linked-comment-alert {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    padding: 0 5px;
+    border-radius: 0.25rem;
+    background-color: rgba(211, 211, 211, 0.3);
+}
+
 .comments-container .card {
     border: 0;
 }

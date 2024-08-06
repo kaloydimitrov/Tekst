@@ -15,11 +15,10 @@ Report, block spaces
 Report, block user
 
 TODO:
-comment redirect in user comments page (similar to youtube but with query param) (goes to post details #comments)
-comment sort in post details
-working reactions in post details
+fix comments in post details (avoid going up)
 save post feature in post details
 share feature in post details (look how is done in facebook)
+notifications (redis)
 
 site search functionality (search icon in input)
 avoid tags with same name (should be unique) (always show from which space the tag is)

@@ -1,5 +1,5 @@
 from django.views.generic.base import TemplateView
-from posts.models import Post
+from posts.models import Post, Comment
 
 
 class Home(TemplateView):
@@ -16,4 +16,13 @@ class UserPosts(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(UserPosts, self).get_context_data(**kwargs)
         context['posts'] = Post.objects.filter(user=self.request.user)
+        return context
+
+
+class UserComments(TemplateView):
+    template_name = 'user/comments.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserComments, self).get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(user=self.request.user, parent_comment__isnull=True)
         return context
