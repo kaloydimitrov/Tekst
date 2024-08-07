@@ -134,6 +134,8 @@ Vue.component('comment', {
                 <div v-if="comment.is_linked" class="linked-comment-alert">
                     <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#000000"><path d="M432.31-298.46H281.54q-75.34 0-128.44-53.1Q100-404.65 100-479.98q0-75.33 53.1-128.44 53.1-53.12 128.44-53.12h150.77v60H281.54q-50.39 0-85.96 35.58Q160-530.38 160-480q0 50.38 35.58 85.96 35.57 35.58 85.96 35.58h150.77v60ZM330-450v-60h300v60H330Zm197.69 151.54v-60h150.77q50.39 0 85.96-35.58Q800-429.62 800-480q0-50.38-35.58-85.96-35.57-35.58-85.96-35.58H527.69v-60h150.77q75.34 0 128.44 53.1Q860-555.35 860-480.02q0 75.33-53.1 128.44-53.1 53.12-128.44 53.12H527.69Z"/></svg>
                     <span>Връзка с коментар</span>
+                    <span v-if="comment.parent_comment">&middot;</span>
+                    <a v-if="comment.parent_comment" :href="'{% url 'post_details' post.slug %}?comment_link=' + comment.parent_comment">Това е отговор на този коментар</a>
                 </div>
                 <div class="d-flex justify-content-between">
                     <small class="text-muted d-flex align-items-center">

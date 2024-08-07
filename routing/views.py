@@ -25,4 +25,5 @@ class UserComments(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(UserComments, self).get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(user=self.request.user, parent_comment__isnull=True)
+        context['replies'] = Comment.objects.filter(user=self.request.user, parent_comment__isnull=False)
         return context
