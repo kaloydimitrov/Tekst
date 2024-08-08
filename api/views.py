@@ -3,15 +3,17 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
-from posts.models import Post, Comment, CommentLikes, Reaction
+from posts.models import Post, Comment, CommentLikes, Reaction, SavedPosts
 from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer,
-                          CommentLikeSerializer, ReactionSerializer)
+                          CommentLikeSerializer, ReactionSerializer, SavedPostsSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
 from django.db.models import Count, F, FloatField, ExpressionWrapper
 from django.utils.timezone import make_aware
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from spaces.models import UserSpaceFollow
 from .permissions import IsOwner
 
@@ -252,3 +254,24 @@ class PostListView(generics.ListAPIView):
                 queryset = queryset.filter(created_at__date=from_datetime_object)
 
         return queryset
+
+
+class PostSaveView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SavedPostsSerializer
+
+    def perform_create(self, serializer):
+        post_pk = self.request.data.get('post')
+        post = get_object_or_404(Post, pk=post_pk)
+        try:
+            serializer.save(user=self.request.user, post=post)
+        except IntegrityError:
+            raise ValidationError("Този пост вече е запазен.")
+
+
+class PostSavedRemoveView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SavedPostsSerializer
+
+    def get_object(self):
+        return SavedPosts.objects.get(user=self.request.user, post_id=self.kwargs['pk'])

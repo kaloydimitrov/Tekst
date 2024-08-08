@@ -50,6 +50,7 @@ class PostDetailView(DetailView):
         context = super(PostDetailView, self).get_context_data()
         post = self.get_object()
         context['tags'] = Tag.objects.filter(post=post)
+        context['post_saved'] = self.request.user.saved_posts.filter(post=post).exists()
         context['in_post_details'] = True
         context['reaction_types'] = ReactionType.objects.all()
         context['post_reaction_types'] = [r.reaction_type for r in post.reactions.all()]

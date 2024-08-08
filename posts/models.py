@@ -55,6 +55,19 @@ class Post(models.Model):
         return self.name
 
 
+class SavedPosts(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_posts')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'post'], name='unique_user_post')
+        ]
+
+    def __str__(self):
+        return f'{self.user.username} saved post - {self.post.name}'
+
+
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from spaces.models import Space, Tag, UserSpaceFollow
-from posts.models import Post, Comment, CommentLikes, Reaction, ReactionType
+from posts.models import Post, Comment, CommentLikes, Reaction, ReactionType, SavedPosts
 from django.contrib.auth.models import User
 
 
@@ -73,6 +73,12 @@ class PostSerializer(serializers.ModelSerializer):
             }
         else:
             return None
+
+
+class SavedPostsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavedPosts
+        fields = ['user', 'post']
 
 
 class CommentSerializer(serializers.ModelSerializer):
