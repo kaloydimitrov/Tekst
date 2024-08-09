@@ -53,7 +53,7 @@ class PostDetailView(DetailView):
         context['post_saved'] = self.request.user.saved_posts.filter(post=post).exists()
         context['in_post_details'] = True
         context['reaction_types'] = ReactionType.objects.all()
-        context['post_reaction_types'] = [r.reaction_type for r in post.reactions.all()]
+        context['post_reaction_types'] = [r.reaction_type for r in post.reactions.filter(user=self.request.user)]
 
         comment_link = self.request.GET.get('comment_link')
         if comment_link:

@@ -15,13 +15,16 @@ Report, block spaces
 Report, block user
 
 TODO:
-fix comments in post details (avoid going up)
-save post feature in post details
 share feature in post details (look how is done in facebook)
 notifications (redis)
 
 site search functionality (search icon in input)
-avoid tags with same name (should be unique) (always show from which space the tag is)
+avoid tags with same name (should be unique) (show from which space the tag in search tags)
+
+add views post
+profile page
+-follow
+-posts sorted by space
 TODO END
 
 My posts:
