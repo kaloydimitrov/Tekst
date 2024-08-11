@@ -32,7 +32,9 @@ class CreatePostForm(forms.ModelForm):
     name = forms.CharField(
         widget=forms.TextInput(
             attrs={'placeholder': 'Enter Name', 'class': 'form-control', 'v-model': 'name'}
-        ))
+        ),
+        required=False
+    )
 
     content = forms.CharField(
         widget=forms.HiddenInput(

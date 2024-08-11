@@ -14,9 +14,9 @@ const quill = new Quill('#editor', {
 });
 
 if (place === 'space') {
-    quill.root.dataset.placeholder = 'Enter Description';
+    quill.root.dataset.placeholder = 'Въведи описание';
 } else if (place === 'post') {
-    quill.root.dataset.placeholder = 'Enter Content';
+    quill.root.dataset.placeholder = 'Основен текст';
 }
 
 quill.on('text-change', () => {

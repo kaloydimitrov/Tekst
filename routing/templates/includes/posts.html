@@ -16,8 +16,8 @@
         {% endif %}
     </div>
     <div v-for="post in this.posts" class="post-container card mb-3" :id="'postCard' + post.id">
-        <div class="card-body">
-            <h5 class="card-title" @click="navigateToPost(post.slug)">[[ post.name ]]</h5>
+        <div class="card-body cursor-pointer" @click="navigateToPost(post.slug)">
+            <h5 class="card-title" v-if="post.name">[[ post.name ]]</h5>
             <p class="card-text text-muted d-flex justify-content-between user-date-container">
                 <span class="d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#6c757d"><path d="M480-492.31q-57.75 0-98.87-41.12Q340-574.56 340-632.31q0-57.75 41.13-98.87 41.12-41.13 98.87-41.13 57.75 0 98.87 41.13Q620-690.06 620-632.31q0 57.75-41.13 98.88-41.12 41.12-98.87 41.12ZM180-187.69v-88.93q0-29.38 15.96-54.42 15.96-25.04 42.66-38.5 59.3-29.07 119.65-43.61 60.35-14.54 121.73-14.54t121.73 14.54q60.35 14.54 119.65 43.61 26.7 13.46 42.66 38.5Q780-306 780-276.62v88.93H180Zm60-60h480v-28.93q0-12.15-7.04-22.5-7.04-10.34-19.11-16.88-51.7-25.46-105.42-38.58Q534.7-367.69 480-367.69q-54.7 0-108.43 13.11-53.72 13.12-105.42 38.58-12.07 6.54-19.11 16.88-7.04 10.35-7.04 22.5v28.93Zm240-304.62q33 0 56.5-23.5t23.5-56.5q0-33-23.5-56.5t-56.5-23.5q-33 0-56.5 23.5t-23.5 56.5q0 33 23.5 56.5t56.5 23.5Zm0-80Zm0 384.62Z"/></svg>
@@ -30,7 +30,11 @@
                 </span>
             </p>
         </div>
-        <div class="card-body">
+        <div class="card-body cursor-pointer" @click="navigateToPost(post.slug)">
+            <div v-if="post.images_count" class="d-flex gap-1 align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" height="27px" viewBox="0 -960 960 960" width="27px" fill="#000000"><path d="M366.15-412.31h347.7L603.54-558.46l-98.16 123.08-63.53-75.39-75.7 98.46ZM324.62-280q-27.62 0-46.12-18.5Q260-317 260-344.62v-430.76q0-27.62 18.5-46.12Q297-840 324.62-840h430.76q27.62 0 46.12 18.5Q820-803 820-775.38v430.76q0 27.62-18.5 46.12Q783-280 755.38-280H324.62Zm0-40h430.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-430.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H324.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v430.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69Zm-120 160q-27.62 0-46.12-18.5Q140-197 140-224.61v-470.77h40v470.77q0 9.23 7.69 16.92 7.69 7.69 16.93 7.69h470.76v40H204.62ZM300-800v480-480Z"/></svg>
+                <span>[[ post.images_count ]] <span v-if="post.images_count === 1">снимка</span><span v-else>снимки</span></span>
+            </div>
             <div class="ql-zone maxh-230 minh-50 overflow-hidden position-relative">
                 <div v-html="post.content"></div>
                 <div class="space-gradient"></div>

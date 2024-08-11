@@ -4,10 +4,18 @@ from posts.models import Post, Comment, CommentLikes, Reaction, ReactionType, Sa
 from django.contrib.auth.models import User
 
 
+class TagsSpaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Space
+        fields = ['id', 'slug', 'name']
+
+
 class TagSerializer(serializers.ModelSerializer):
+    space = TagsSpaceSerializer(read_only=True)
+
     class Meta:
         model = Tag
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'space']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,7 +30,8 @@ class SpaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Space
-        fields = ['id', 'name', 'description', 'image', 'user', 'followers_count', 'verified', 'created_at', 'updated_at', 'tags', 'slug']
+        fields = ['id', 'name', 'description', 'image', 'user', 'followers_count', 'verified', 'created_at',
+                  'updated_at', 'tags', 'slug']
 
 
 class UserSpaceFollowSerializer(serializers.ModelSerializer):
@@ -39,7 +48,8 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'reactions', 'reactions_count', 'comments_count', 'rating', 'created_at', 'updated_at', 'slug']
+        fields = ['id', 'user', 'space', 'tags', 'name', 'content', 'visibility', 'reactions', 'reactions_count',
+                  'comments_count', 'images_count', 'rating', 'created_at', 'updated_at', 'slug']
 
     def get_reactions(self, obj):
         request = self.context.get('request')
@@ -89,7 +99,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'post', 'content', 'parent_comment', 'likes_count', 'is_liked', 'replies', 'show_replies', 'tagged_users', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'post', 'content', 'parent_comment', 'likes_count', 'is_liked', 'replies',
+                  'show_replies', 'tagged_users', 'created_at', 'updated_at']
 
     def get_is_liked(self, obj):
         request = self.context.get('request')

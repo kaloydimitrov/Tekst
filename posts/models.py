@@ -11,7 +11,7 @@ from unidecode import unidecode
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     space = models.ForeignKey('spaces.Space', on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(max_length=100, validators=[validate_len])
+    name = models.CharField(max_length=100, blank=True, null=True)
     content = models.TextField(validators=[validate_len])
     visibility = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,6 +38,10 @@ class Post(models.Model):
     @property
     def reactions_count(self):
         return Reaction.objects.filter(post=self).count()
+
+    @property
+    def images_count(self):
+        return PostImages.objects.filter(post=self).count()
 
     @property
     def rating(self):

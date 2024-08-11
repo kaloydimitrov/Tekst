@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 from spaces.models import Tag
-from .models import Post, ReactionType, Comment
+from .models import Post, ReactionType, Comment, PostImages
 from .forms import CreatePostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -17,7 +17,14 @@ class PostCreateView(SuccessMessageMixin, CreateView, LoginRequiredMixin):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        images = self.request.FILES.getlist('imagesInput')
+
+        for image in images:
+            PostImages.objects.create(post=self.object, image=image)
+
+        return response
 
     def get_context_data(self, *args, **kwargs):
         context = super(PostCreateView, self).get_context_data(*args, **kwargs)

@@ -12,10 +12,6 @@
         flex-direction: column;
     }
 
-    .tags-space-container .card-footer.row {
-        flex-direction: column;
-    }
-
     .spaces-filter-container .btn {
         font-size: 0.8rem;
         padding: 7px 10px;
