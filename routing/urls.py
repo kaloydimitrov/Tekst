@@ -1,5 +1,5 @@
 from django.urls import path, include
-from routing.views import Home, UserInfo, UserPosts, UserComments
+from routing.views import Home, UserInfo, UserPosts, UserComments, UserSpaces
 
 urlpatterns = [
     path('', Home.as_view(), name='home'),
@@ -7,7 +7,6 @@ urlpatterns = [
         path('info/', UserInfo.as_view(), name='user_info'),
         path('posts/', UserPosts.as_view(), name='user_posts'),
         path('comments/', UserComments.as_view(), name='user_comments'),
-        # user_spaces
-        # user_comments
+        path('spaces/', UserSpaces.as_view(), name='user_spaces')
     ]))
 ]

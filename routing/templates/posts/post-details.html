@@ -2,6 +2,14 @@
 
 {% block title %}{{ post.name }}{% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.min.css" integrity="sha512-LFWtdAXHQuwUGH9cImO9blA3a3GfQNkpF2uRlhaOpSbDevNyK1rmAjs13mtpjvWyi+flP7zYWboqY+8Mkd42xA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe-lightbox.esm.min.js" integrity="sha512-S9RkWnGja84tXKFxTN7iLVP3pUCsnfqnF+0ZK2CSOhmCqa6lxoutHUoizBVnqCIsH8HW7e/3u9HEOOwlR01TLA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/photoswipe.esm.min.js" integrity="sha512-AyqbkQ0CCFXttmj38AAryPYIKEOdL6lApyzLje2dyvMwLoHv7PPXIeKS86gF4V85Gv+ZsCiOSP0yHaCXcemmaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe-lightbox.umd.min.js" integrity="sha512-D16CBrIrVF48W0Ou0ca3D65JFo/HaEAjTugBXeWS/JH+1KNu54ZOtHPccxJ7PQ44rTItUT6DSI6xNL+U34SuuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.4/umd/photoswipe.umd.min.js" integrity="sha512-BXwwGU7zCXVgpT2jpXnTbioT9q1Byf7NEXVxovTZPlNvelL2I/4LjOaoiB2a19L+g5za8RbkoJFH4fMPQcjFFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
 {% block main %}
     <div id="app">
     <div class="card mb-4 box-shadow py-2 sticky-header" style="border-top-left-radius: 0; border-top-right-radius: 0;">
@@ -21,12 +29,12 @@
             <span>&middot;</span>
             <div class="d-flex gap-1 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#000000"><path d="M266-426h268v-28H266v28Zm0-120h428v-28H266v28Zm0-120h428v-28H266v28ZM132-180v-588q0-26 17-43t43-17h576q26 0 43 17t17 43v416q0 26-17 43t-43 17H244L132-180Zm100-140h536q12 0 22-10t10-22v-416q0-12-10-22t-22-10H192q-12 0-22 10t-10 22v520l72-72Zm-72 0v-480 480Z"/></svg>
-                <span>{{ post.comments_count }} коментар/а</span>
+                <span>{{ post.comments_count }} коментара</span>
             </div>
             <span>&middot;</span>
             <div class="d-flex gap-1 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#000000"><path d="M374-322h208q8 0 13.5-3t8.5-11l64-148q3-8 4.5-15t1.5-13v-14q0-6-3-9t-9-3H448l22.15-109.92Q472-656 469-663t-8-12l-1-1-108 116q-3 3.43-4.5 7.71Q346-548 346-542v192q0 11.55 8.23 19.77Q362.45-322 374-322Zm106.17 190q-72.17 0-135.73-27.39-63.56-27.39-110.57-74.35-47.02-46.96-74.44-110.43Q132-407.65 132-479.83q0-72.17 27.39-135.73 27.39-63.56 74.35-110.57 46.96-47.02 110.43-74.44Q407.65-828 479.83-828q72.17 0 135.73 27.39 63.56 27.39 110.57 74.35 47.02 46.96 74.44 110.43Q828-552.35 828-480.17q0 72.17-27.39 135.73-27.39 63.56-74.35 110.57-46.96 47.02-110.43 74.44Q552.35-132 480.17-132Zm-.17-28q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
-                <span>{{ post.reactions_count }} реакции/я</span>
+                <span>{{ post.reactions_count }} реакции</span>
             </div>
         </div>
         {% if post.name %}<h1 class="mt-5 mb-5">{{ post.name }}</h1>{% else %}<div class="mt-3"></div>{% endif %}
@@ -40,11 +48,11 @@
                 <span>{{ post.created_at }}</span>
             </div>
         </div>
-        {% if post.space %}<p class="text-muted">Posted in <a href="{% url 'space_details' post.space.slug %}" class="link-secondary">{{ post.space.name }}</a> space</p>{% endif %}
+        {% if post.space %}<p class="text-muted">Публикувано в <a href="{% url 'space_details' post.space.slug %}" class="link-secondary">{{ post.space.name }}</a></p>{% endif %}
         {% if tags %}
-        <div class="text-muted mt-4">
+        <div class="text-muted mt-4 d-flex flex-wrap gap-1">
             {% for tag in tags %}
-            <span class="badge me-1 bg-primary">
+            <span class="badge bg-primary d-flex align-items-center">
                 <div class="d-flex align-items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" height="17px" viewBox="0 -960 960 960" width="17px" fill="#FFFFFF"><path d="M840-480 666-234q-11 16-28.5 25t-37.5 9H200q-33 0-56.5-23.5T120-280v-400q0-33 23.5-56.5T200-760h400q20 0 37.5 9t28.5 25l174 246Zm-98 0L600-680H200v400h400l142-200Zm-542 0v200-400 200Z" /></svg>
                     <span>{{ tag.name }}</span>
@@ -65,7 +73,17 @@
         </div>
     </div>
 
-    <div class="ql-zone card mt-5 p-4 box-shadow">{{ post.content|safe }}</div>
+    {% if post_images %}
+    <div :class="['gallery', 'mt-5', 'card-images-container', 'justify-content-center', {'opacity-0': true}]">
+        {% for post_image in post_images %}
+        <a href="{{ post_image.image.url }}" data-pswp-width="{{ post_image.image.width }}" data-pswp-height="{{ post_image.image.height }}" class="gallery-item card-image cursor-pointer">
+            <img src="{{ post_image.image.url }}" alt="photo-image-{{ post_image.pk }}">
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="ql-zone card mt-4 p-4 box-shadow">{{ post.content|safe }}</div>
 
     <div class="mt-5 box-shadow details-comments-container">
         <div :class="['d-flex', 'gap-2', 'align-items-center', 'py-3', 'px-2', { 'half-opacity': loadingCreateComment }]">
@@ -292,6 +310,13 @@
             this.listComments();
             window.addEventListener('scroll', this.handleScroll);
 
+            const lightbox = new PhotoSwipeLightbox({
+                gallery: '.gallery',
+                children: 'a',
+                pswpModule: PhotoSwipe,
+            });
+            lightbox.init();
+
             {% if comment_link %}
             this.linkComment();
 
@@ -299,17 +324,26 @@
                 this.navigateToComments();
             }, 500);
             {% endif %}
+
+            setTimeout(() => {
+                document.querySelector('.card-images-container').classList.add('opacity-100');
+            }, 50);
         }
     })
 </script>
 <style>
     {% include 'includes/css/posts.css' %}
     {% include 'includes/css/message.css' %}
+    {% include 'includes/css/image-cards.css' %}
 
     .sticky-header {
         position: sticky;
         top: 0;
         z-index: 2
+    }
+
+    .card-images-container {
+        transition: opacity 0.2s;
     }
 
     .details-comments-container {

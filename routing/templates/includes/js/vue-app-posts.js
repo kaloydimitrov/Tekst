@@ -5,6 +5,7 @@ const postsApp = new Vue({
         {% if not in_space_details %}vuejsDatepicker{% endif %}
     },
     data: {
+        bg: vdp_translation_bg.js,
         is_authenticated: {% if request.user.is_authenticated %}true{% else %}false{% endif %},
         loading: false,
         next: `${postsURL}?page=1`,

@@ -61,6 +61,7 @@ class PostDetailView(DetailView):
         context['in_post_details'] = True
         context['reaction_types'] = ReactionType.objects.all()
         context['post_reaction_types'] = [r.reaction_type for r in post.reactions.filter(user=self.request.user)]
+        context['post_images'] = PostImages.objects.filter(post=post)
 
         comment_link = self.request.GET.get('comment_link')
         if comment_link:

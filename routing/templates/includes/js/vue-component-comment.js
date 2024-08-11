@@ -147,8 +147,8 @@ Vue.component('comment', {
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></svg>
                         </div>
                         <ul v-if="comment.user.id === {{ request.user.pk }}" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li class="dropdown-item cursor-pointer" @click="switchEditComment(comment)">Edit</li>
-                            <li class="dropdown-item cursor-pointer" @click="deleteComment(comment)">Delete</li>
+                            <li class="dropdown-item cursor-pointer" @click="switchEditComment(comment)">Редактирай</li>
+                            <li class="dropdown-item cursor-pointer" @click="deleteComment(comment)">Изтрий</li>
                         </ul>
                         <ul v-else class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li class="dropdown-item">Report</li>
@@ -159,8 +159,8 @@ Vue.component('comment', {
                 <div v-else>
                     <textarea class="form-control comment-textarea" :ref="'editCommentField' + comment.id" @input="handleEditCommentField($event, comment)">[[ comment.content ]]</textarea>
                     <div class="mt-2 mb-2 gap-1 d-flex">
-                        <button class="btn btn-outline-secondary btn-sm" @click="comment.edit_mode = false">Cancel</button>
-                        <button class="btn btn-outline-primary btn-sm half-opacity" :ref="'saveCommentButton' + comment.id" @click="editComment(comment)">Save</button>
+                        <button class="btn btn-outline-secondary btn-sm" @click="comment.edit_mode = false">Откажи</button>
+                        <button class="btn btn-outline-primary btn-sm half-opacity" :ref="'saveCommentButton' + comment.id" @click="editComment(comment)">Запази</button>
                     </div>
                 </div>
                 <div class="likes-reply-container mb-1">
@@ -178,15 +178,15 @@ Vue.component('comment', {
                         <path v-else d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/>
                     </svg>
                     &nbsp;[[ comment.replies.length ]]&nbsp;
-                    <span v-if="comment.replies.length === 1">answer</span>
-                    <span v-else>answers</span>
+                    <span v-if="comment.replies.length === 1">отговор</span>
+                    <span v-else>отговора</span>
                 </button>
                 <div class="input-container" :id="'inputContainer' + comment.id">
                     <div class="d-flex flex-column">
                         <textarea class="form-control comment-textarea" placeholder="Добави отговор" @input="adjustTextAreaHeight"></textarea>
                         <div class="mt-2 gap-1 d-flex">
-                            <button class="btn btn-outline-secondary btn-sm" @click="hideCommentForm(comment.id)">Cancel</button>
-                            <button class="btn btn-outline-primary btn-sm" @click="createNestedComment(comment, $event)">Publish</button>
+                            <button class="btn btn-outline-secondary btn-sm" @click="hideCommentForm(comment.id)">Откажи</button>
+                            <button class="btn btn-outline-primary btn-sm" @click="createNestedComment(comment, $event)">Публикувай</button>
                         </div>
                     </div>
                 </div>

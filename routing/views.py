@@ -1,5 +1,6 @@
 from django.views.generic.base import TemplateView
 from posts.models import Post, Comment
+from spaces.models import Space
 
 
 class Home(TemplateView):
@@ -26,4 +27,13 @@ class UserComments(TemplateView):
         context = super(UserComments, self).get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(user=self.request.user, parent_comment__isnull=True)
         context['replies'] = Comment.objects.filter(user=self.request.user, parent_comment__isnull=False)
+        return context
+
+
+class UserSpaces(TemplateView):
+    template_name = 'user/spaces.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserSpaces, self).get_context_data(**kwargs)
+        context['spaces'] = Space.objects.filter(user=self.request.user)
         return context
