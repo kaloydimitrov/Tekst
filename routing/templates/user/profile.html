@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h3>12 последователя</h3>
+    <h3>414 следва</h3>
+    {% if is_owner %}
+        <a href="{% url 'user_edit' %}">Редактирай</a>
+        <h5>Направи профил скрит</h5>
+    {% else %}
+        <button type="button" class="btn btn-outline-primary">Следвай</button>
+        <button type="button" class="btn btn-outline-primary">Отпоследвай</button>
+    {% endif %}
+    <div class="card p-4">
+        <h1>{{ user.username }}</h1>
+        <p>{{ user.email }}</p>
+        <p>{{ user.first_name }} {{ user.last_name }}</p>
+        <div class="d-flex gap-1">
+            {% if user.profile.facebook_url %}<a href="{{ user.profile.facebook_url }}">Facebook</a>{% endif %}
+            {% if user.profile.x_handle %}<a href="{{ user.profile.x_handle }}">X</a>{% endif %}
+            {% if user.profile.instagram_handle %}<a href="{{ user.profile.instagram_handle }}">Instagram</a>{% endif %}
+            {% if user.profile.tiktok_handle %}<a href="{{ user.profile.tiktok_handle }}">TikTok</a>{% endif %}
+        </div>
+        <p>{{ user.profile.bio|default_if_none:'' }}</p>
+        <p>{{ user.profile.country|default_if_none:'' }}</p>
+        <p>{{ user.profile.city|default_if_none:'' }}</p>
+    </div>
+    <div class="card p-4" id="posts">
+        <h1>Публикации на {{ user.username }} ({{ posts.count }})</h1>
+        {% for post in posts %}
+            <p>от тема: {{ post.space.name }}</p>
+            <h1>{{ post.name }}</h1>
+            {% if not post.visibility %}
+                <h5>{% url 'post_details' post.slug %}?token={{ post.token }}</h5>
+            {% else %}
+                <a href="{% url 'post_details' post.slug %}">Post link</a>
+            {% endif %}
+        {% endfor %}
+        <h1 id="saved_posts">Запазени ({{ saved_posts.count }})</h1>
+        {% for saved_post in saved_posts %}
+            <p>от тема: {{ saved_post.post.space.name }}</p>
+            <h1>{{ saved_post.post.name }}</h1>
+            {% if not saved_post.post.visibility %}
+                <h5>{% url 'post_details' saved_post.post.slug %}?token={{ saved_post.post.token }}</h5>
+            {% else %}
+                <a href="{% url 'post_details' saved_post.post.slug %}">Post link</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="card p-4" id="comments">
+        <h1>Коментари на {{ user.username }} ({{ comments.count }})</h1>
+        {% for comment in comments %}
+            <h1>Коментар от {{ comment.post.name }}</h1>
+            <h3>{{ comment.content }}</h3>
+            <a href="{% url 'post_details' comment.post.slug %}?comment_link={{ comment.pk }}">Comment link</a>
+        {% endfor %}
+        <h1 id="replies">Отговори на {{ user.username }} ({{ replies.count }})</h1>
+        {% for reply in replies %}
+            <h1>Отговор от {{ reply.post.name }}</h1>
+            <h3>{{ reply.content }}</h3>
+            <a href="{% url 'post_details' reply.post.slug %}?comment_link={{ reply.pk }}">Reply link</a>
+        {% endfor %}
+        <h1 id="liked_comments">Харесани ({{ liked_comments.count }})</h1>
+        {% for comment_like in liked_comments %}
+            <h1>От {{ comment_like.comment.post.name }}</h1>
+            <h3>{{ comment_like.comment.content }}</h3>
+            <a href="{% url 'post_details' comment_like.comment.post.slug %}?comment_link={{ comment_like.comment.pk }}">Comment link</a>
+        {% endfor %}
+    </div>
+    <div class="card p-4" id="spaces">
+        <h1>Теми на {{ user.username }} ({{ spaces.count }})</h1>
+        {% for space in spaces %}
+            <h1>{{ space.name }}</h1>
+        {% endfor %}
+        <h1 id="followed_spaces">Последвани ({{ followed_spaces.count }})</h1>
+        {% for followed_space in followed_spaces %}
+            <h1>{{ followed_space.space.name }}</h1>
+        {% endfor %}
+    </div>
+{% endblock %}

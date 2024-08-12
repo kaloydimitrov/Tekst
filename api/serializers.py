@@ -19,9 +19,14 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    slug = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = ['id', 'slug', 'username']
+
+    def get_slug(self, obj):
+        return obj.profile.slug
 
 
 class SpaceSerializer(serializers.ModelSerializer):

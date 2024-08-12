@@ -1,12 +1,10 @@
 from django.urls import path, include
-from routing.views import Home, UserInfo, UserPosts, UserComments, UserSpaces
+from routing.views import Home, UserProfile, UserInfoEdit
 
 urlpatterns = [
     path('', Home.as_view(), name='home'),
     path('user/', include([
-        path('info/', UserInfo.as_view(), name='user_info'),
-        path('posts/', UserPosts.as_view(), name='user_posts'),
-        path('comments/', UserComments.as_view(), name='user_comments'),
-        path('spaces/', UserSpaces.as_view(), name='user_spaces')
+        path('edit/', UserInfoEdit.as_view(), name='user_edit'),
+        path('profile/<slug:slug>/', UserProfile.as_view(), name='user_profile')
     ]))
 ]
