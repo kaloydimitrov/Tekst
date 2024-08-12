@@ -3,7 +3,7 @@ from django.urls import include
 from .views import (SpaceDetailView, SpaceListView, TagListView, FollowSpaceView, UnfollowSpaceView, SpacePostsView,
                     CreateCommentView, CommentListView, LikeCommentView, DislikeCommentView, CreateReactionView,
                     DeleteReactionView, DeleteCommentView, UpdateCommentView, PostListView, CommentGetView,
-                    PostSaveView, PostSavedRemoveView)
+                    PostSaveView, PostSavedRemoveView, FollowUserView, UnfollowUserView)
 
 urlpatterns = [
     path('space/', include([
@@ -33,5 +33,9 @@ urlpatterns = [
         path('save/', PostSaveView.as_view(), name='save_post'),
         path('<int:pk>/remove-saved/', PostSavedRemoveView.as_view(), name='remove_saved_post'),
         path('all/', PostListView.as_view(), name='get_all_posts'),
+    ])),
+    path('user/', include([
+        path('follow/', FollowUserView.as_view(), name='follow_user'),
+        path('unfollow/', UnfollowUserView.as_view(), name='unfollow_user'),
     ]))
 ]

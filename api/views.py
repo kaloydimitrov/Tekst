@@ -4,8 +4,9 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
 from posts.models import Post, Comment, CommentLikes, Reaction, SavedPosts
+from authentication.models import UserFollows
 from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer,
-                          CommentLikeSerializer, ReactionSerializer, SavedPostsSerializer)
+                          CommentLikeSerializer, ReactionSerializer, SavedPostsSerializer, UserFollowsSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
@@ -16,6 +17,9 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from spaces.models import UserSpaceFollow
 from .permissions import IsOwner
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 # --------------------------------------
@@ -275,3 +279,24 @@ class PostSavedRemoveView(generics.DestroyAPIView):
 
     def get_object(self):
         return SavedPosts.objects.get(user=self.request.user, post_id=self.kwargs['pk'])
+
+
+# --------------------------------------
+# POSTS
+# --------------------------------------
+class FollowUserView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserFollowsSerializer
+
+
+class UnfollowUserView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserFollowsSerializer
+
+    def get_object(self):
+        follower = self.request.user
+
+        following_user_id = self.request.data.get('following')
+        following_user = get_object_or_404(User, pk=following_user_id)
+
+        return get_object_or_404(UserFollows, follower=follower, following=following_user)

@@ -16,7 +16,7 @@ const quill = new Quill('#editor', {
 if (place === 'space') {
     quill.root.dataset.placeholder = 'Въведи описание';
 } else if (place === 'post') {
-    quill.root.dataset.placeholder = 'Основен текст';
+    quill.root.dataset.placeholder = 'Основен текст*';
 }
 
 quill.on('text-change', () => {

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
 from posts.models import Post, Comment
-from authentication.models import Profile
+from authentication.models import Profile, UserFollows
 from spaces.models import Space
 
 
@@ -27,10 +27,19 @@ class UserProfile(TemplateView):
 
         context['user'] = user
 
-        context['is_owner'] = (user == self.request.user)
+        context['is_owner'] = (self.request.user == user)
 
-        context['posts'] = Post.objects.filter(user=user).order_by('-created_at')
-        context['saved_posts'] = user.saved_posts.all()
+        if UserFollows.objects.filter(follower=self.request.user, following=user).exists():
+            context['followed'] = True
+        else:
+            context['followed'] = False
+
+        if self.request.user == user:
+            context['posts'] = Post.objects.filter(user=user).order_by('-created_at')
+            context['saved_posts'] = user.saved_posts.all()
+        else:
+            context['posts'] = Post.objects.filter(user=user, visibility=True).order_by('-created_at')
+            context['saved_posts'] = user.saved_posts.filter(post__visibility=True)
 
         context['comments'] = Comment.objects.filter(user=user, parent_comment__isnull=True).order_by('-created_at')
         context['replies'] = Comment.objects.filter(user=user, parent_comment__isnull=False).order_by('-created_at')
@@ -39,3 +48,9 @@ class UserProfile(TemplateView):
         context['spaces'] = Space.objects.filter(user=user).order_by('-created_at')
         context['followed_spaces'] = user.followed_spaces.all()
         return context
+
+# UserFollowers
+# context['followers_list'] = user.followers.all()
+
+# UserFollowings
+# context['followings_list'] = user.followings.all()

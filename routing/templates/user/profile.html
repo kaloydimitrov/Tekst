@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 {% block main %}
+    <div id="app">
     <h3>12 последователя</h3>
     <h3>414 следва</h3>
+
     {% if is_owner %}
         <a href="{% url 'user_edit' %}">Редактирай</a>
         <h5>Направи профил скрит</h5>
     {% else %}
-        <button type="button" class="btn btn-outline-primary">Следвай</button>
-        <button type="button" class="btn btn-outline-primary">Отпоследвай</button>
+        <button type="button" class="btn btn-outline-primary" @click="followUnfollowUser"><span v-if="followed">Отследвай</span><span v-else>Следвай</span></button>
     {% endif %}
     <div class="card p-4">
         <h1>{{ user.username }}</h1>
@@ -76,4 +77,57 @@
             <h1>{{ followed_space.space.name }}</h1>
         {% endfor %}
     </div>
+    </div>
+    {% include 'includes/message.html' %}
+{% endblock %}
+{% block rest %}
+<script>
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+
+    {% include 'includes/js/vue-app-message.js' %}
+
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        data: {
+            followed: {% if followed %}true{% else %}false{% endif %},
+        },
+        methods: {
+            followUnfollowUser() {
+                if (this.followed) {
+                    axios
+                    .delete("{% url 'unfollow_user' %}", {
+                        data: {
+                            following: {{ user.pk }}
+                        }
+                    })
+                    .then(() => {
+                        this.followed = false;
+                        messageApp.triggerNotification('Отследва {{ user.username }}');
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+                } else {
+                    axios
+                    .post("{% url 'follow_user' %}", {
+                        follower: {{ request.user.pk }},
+                        following: {{ user.pk }}
+                    })
+                    .then(response => {
+                        this.followed = true;
+                        messageApp.triggerNotification('Последва {{ user.username }}');
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+                }
+            }
+        }
+    });
+</script>
+<style>
+    {% include 'includes/css/message.css' %}
+</style>
 {% endblock %}
