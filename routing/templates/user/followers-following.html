@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }} Последователи и Последвани{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="d-flex justify-content-center">
+                <p><b>{{ user.username }}</b> го следват <b>{{ followers_list.count }}</b> потребителя</p>
+            </div>
+            {% for obj in followers_list %}
+                <h5>{{ obj.follower.username }}</h5>
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-1 d-flex justify-content-center align-items-center">
+            <div class="vr"></div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="d-flex justify-content-center">
+                <p><b>{{ user.username }}</b> следва <b>{{ followings_list.count }}</b> потребителя</p>
+            </div>
+            {% for obj in followings_list %}
+                <h5>{{ obj.following.username }}</h5>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

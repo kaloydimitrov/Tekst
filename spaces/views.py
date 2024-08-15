@@ -50,8 +50,11 @@ class SpaceListView(ListView, LoginRequiredMixin):
         context = super(SpaceListView, self).get_context_data(*args, **kwargs)
         context['name'] = self.request.GET.get('name')
         context['content'] = self.request.GET.get('content')
-        followed_spaces = UserSpaceFollow.objects.filter(user=self.request.user).values_list('space_id', flat=True)
-        context['followed_spaces'] = followed_spaces
+
+        if self.request.user.is_authenticated:
+            followed_spaces = UserSpaceFollow.objects.filter(user=self.request.user).values_list('space_id', flat=True)
+            context['followed_spaces'] = followed_spaces
+
         return context
 
 

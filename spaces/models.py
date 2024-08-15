@@ -3,6 +3,7 @@ from django.db import models
 from posts.models import Post
 from .validators import validate_description_len, validate_name_len
 from django.utils.text import slugify
+from unidecode import unidecode
 import random
 
 
@@ -18,7 +19,7 @@ class Space(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = slugify(self.name)
+            slug = slugify(unidecode(self.name))
             if Space.objects.filter(slug=slug).exists():
                 slug += f'-{random.randint(1111, 9999)}'
             self.slug = slug

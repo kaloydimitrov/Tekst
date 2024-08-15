@@ -4,9 +4,11 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from spaces.models import Space, Tag
 from posts.models import Post, Comment, CommentLikes, Reaction, SavedPosts
+from authentication.models import Profile
 from authentication.models import UserFollows
 from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer,
-                          CommentLikeSerializer, ReactionSerializer, SavedPostsSerializer, UserFollowsSerializer)
+                          CommentLikeSerializer, ReactionSerializer, SavedPostsSerializer, UserFollowsSerializer,
+                          ProfileSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
@@ -282,7 +284,7 @@ class PostSavedRemoveView(generics.DestroyAPIView):
 
 
 # --------------------------------------
-# POSTS
+# USER & PROFILE
 # --------------------------------------
 class FollowUserView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -300,3 +302,19 @@ class UnfollowUserView(generics.DestroyAPIView):
         following_user = get_object_or_404(User, pk=following_user_id)
 
         return get_object_or_404(UserFollows, follower=follower, following=following_user)
+
+
+class ProfileVisibilityUpdateView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    lookup_field = 'pk'
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)

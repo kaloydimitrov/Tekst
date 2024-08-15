@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from spaces.models import Space, Tag, UserSpaceFollow
 from posts.models import Post, Comment, CommentLikes, Reaction, ReactionType, SavedPosts
-from authentication.models import UserFollows
+from authentication.models import UserFollows, Profile
 from django.contrib.auth.models import User
 
 
@@ -50,6 +50,11 @@ class UserSpaceFollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserSpaceFollow
         fields = ['id', 'user', 'space', 'created_at']
+
+    def validate(self, data):
+        if data['following'] == data['follower']:
+            raise serializers.ValidationError("Потребител не може да се последва.")
+        return data
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -138,3 +143,9 @@ class ReactionSerializer(serializers.ModelSerializer):
         model = Reaction
         fields = ['user', 'post', 'reaction_type']
         read_only_fields = ['user']
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 'visibility']

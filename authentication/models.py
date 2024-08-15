@@ -7,6 +7,15 @@ User = get_user_model()
 
 
 class Profile(models.Model):
+    ONLY_ME = 'M'
+    FOLLOWERS = 'F'
+    PUBLIC = 'P'
+    DISPLAY_CHOICES = (
+        (ONLY_ME, "Само аз"),
+        (FOLLOWERS, "Само последователи"),
+        (PUBLIC, "Публично"),
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     bio = models.TextField(max_length=500, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
@@ -20,6 +29,7 @@ class Profile(models.Model):
     x_handle = models.CharField(max_length=30, blank=True, null=True)
     instagram_handle = models.CharField(max_length=30, blank=True, null=True)
     tiktok_handle = models.CharField(max_length=24, blank=True, null=True)
+    visibility = models.CharField(max_length=1, choices=DISPLAY_CHOICES, default=PUBLIC)
     slug = models.SlugField(unique=True, max_length=255, blank=True)
 
     def save(self, *args, **kwargs):

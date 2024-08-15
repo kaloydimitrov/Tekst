@@ -3,7 +3,7 @@ from django.urls import include
 from .views import (SpaceDetailView, SpaceListView, TagListView, FollowSpaceView, UnfollowSpaceView, SpacePostsView,
                     CreateCommentView, CommentListView, LikeCommentView, DislikeCommentView, CreateReactionView,
                     DeleteReactionView, DeleteCommentView, UpdateCommentView, PostListView, CommentGetView,
-                    PostSaveView, PostSavedRemoveView, FollowUserView, UnfollowUserView)
+                    PostSaveView, PostSavedRemoveView, FollowUserView, UnfollowUserView, ProfileVisibilityUpdateView)
 
 urlpatterns = [
     path('space/', include([
@@ -37,5 +37,8 @@ urlpatterns = [
     path('user/', include([
         path('follow/', FollowUserView.as_view(), name='follow_user'),
         path('unfollow/', UnfollowUserView.as_view(), name='unfollow_user'),
+    ])),
+    path('profile/', include([
+        path('<int:pk>/visibility/', ProfileVisibilityUpdateView.as_view(), name='update_profile_visibility'),
     ]))
 ]

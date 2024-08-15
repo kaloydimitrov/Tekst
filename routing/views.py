@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.generic.base import TemplateView
 from posts.models import Post, Comment
 from authentication.models import Profile, UserFollows
@@ -19,13 +19,32 @@ class UserProfile(TemplateView):
     def get_object(self, queryset=None):
         slug = self.kwargs.get('slug')
         profile = get_object_or_404(Profile, slug=slug)
-        return profile.user
+        user = profile.user
+        message = None
+
+        if profile.visibility == 'M' and profile.user != self.request.user:
+            message = 'Профилът е скрит (само собственикът може да го види).'
+        elif profile.visibility == 'F' and (not UserFollows.objects.filter(follower=self.request.user, following=profile.user).exists()) and profile.user != self.request.user:
+            message = 'Само последователите и собственика могат да видят профила.'
+
+        if message:
+            return [user, message]
+
+        return user
 
     def get_context_data(self, **kwargs):
         context = super(UserProfile, self).get_context_data(**kwargs)
-        user = self.get_object()
+        object_data = self.get_object()
+        denied = False
 
-        context['user'] = user
+        if isinstance(object_data, list):
+            denied = True
+            user = object_data[0]
+            context['user'] = user
+            context['denied_message'] = object_data[1]
+        else:
+            user = object_data
+            context['user'] = user
 
         context['is_owner'] = (self.request.user == user)
 
@@ -33,6 +52,12 @@ class UserProfile(TemplateView):
             context['followed'] = True
         else:
             context['followed'] = False
+
+        context['followers_count'] = user.followers.count()
+        context['following_count'] = user.following.count()
+
+        if denied:
+            return context
 
         if self.request.user == user:
             context['posts'] = Post.objects.filter(user=user).order_by('-created_at')
@@ -47,10 +72,26 @@ class UserProfile(TemplateView):
 
         context['spaces'] = Space.objects.filter(user=user).order_by('-created_at')
         context['followed_spaces'] = user.followed_spaces.all()
+
+        context['display_choices'] = Profile.DISPLAY_CHOICES
         return context
 
-# UserFollowers
-# context['followers_list'] = user.followers.all()
 
-# UserFollowings
-# context['followings_list'] = user.followings.all()
+class UserFollowersAndFollowing(TemplateView):
+    template_name = 'user/followers-following.html'
+
+    def get_object(self):
+        slug = self.kwargs.get('slug')
+        profile = get_object_or_404(Profile, slug=slug)
+
+        return profile.user
+
+    def get_context_data(self, **kwargs):
+        context = super(UserFollowersAndFollowing, self).get_context_data(**kwargs)
+        user = self.get_object()
+
+        context['user'] = user
+        context['followers_list'] = user.followers.all()
+        context['followings_list'] = user.following.all()
+
+        return context

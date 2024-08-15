@@ -1,0 +1,17 @@
+.dropdown-active {
+    color: #0d6efd;
+}
+
+.dropdown-active:hover::before {
+    color: black;
+}
+
+.dropdown-active:active::before {
+    color: white;
+}
+
+.dropdown-active::before {
+    content: "•";
+    margin-right: 5px;
+    color: #0d6efd;
+}

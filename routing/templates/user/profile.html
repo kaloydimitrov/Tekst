@@ -1,82 +1,114 @@
 {% extends 'base.html' %}
 
+{% block title %}{{ user.username }} Профил{% endblock %}
+
 {% block main %}
     <div id="app">
-    <h3>12 последователя</h3>
-    <h3>414 следва</h3>
+        {% if not is_owner %}
+            <button type="button" class="btn btn-outline-primary" @click="followUnfollowUser"><span v-if="followed">Отследвай</span><span v-else>Следвай</span></button>
+        {% endif %}
+    
+        <a href="{% url 'user_ffs' user.profile.slug %}">
+            <h2>Последователи (го следват): [[ followers ]]</h2>
+            <h2>Последвани (следва): [[ following ]]</h2>
+        </a>
 
-    {% if is_owner %}
-        <a href="{% url 'user_edit' %}">Редактирай</a>
-        <h5>Направи профил скрит</h5>
-    {% else %}
-        <button type="button" class="btn btn-outline-primary" @click="followUnfollowUser"><span v-if="followed">Отследвай</span><span v-else>Следвай</span></button>
-    {% endif %}
-    <div class="card p-4">
-        <h1>{{ user.username }}</h1>
-        <p>{{ user.email }}</p>
-        <p>{{ user.first_name }} {{ user.last_name }}</p>
-        <div class="d-flex gap-1">
-            {% if user.profile.facebook_url %}<a href="{{ user.profile.facebook_url }}">Facebook</a>{% endif %}
-            {% if user.profile.x_handle %}<a href="{{ user.profile.x_handle }}">X</a>{% endif %}
-            {% if user.profile.instagram_handle %}<a href="{{ user.profile.instagram_handle }}">Instagram</a>{% endif %}
-            {% if user.profile.tiktok_handle %}<a href="{{ user.profile.tiktok_handle }}">TikTok</a>{% endif %}
-        </div>
-        <p>{{ user.profile.bio|default_if_none:'' }}</p>
-        <p>{{ user.profile.country|default_if_none:'' }}</p>
-        <p>{{ user.profile.city|default_if_none:'' }}</p>
-    </div>
-    <div class="card p-4" id="posts">
-        <h1>Публикации на {{ user.username }} ({{ posts.count }})</h1>
-        {% for post in posts %}
-            <p>от тема: {{ post.space.name }}</p>
-            <h1>{{ post.name }}</h1>
-            {% if not post.visibility %}
-                <h5>{% url 'post_details' post.slug %}?token={{ post.token }}</h5>
-            {% else %}
-                <a href="{% url 'post_details' post.slug %}">Post link</a>
+        {% if denied_message %}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M252.31-100q-29.92 0-51.12-21.19Q180-142.39 180-172.31v-375.38q0-29.92 21.19-51.12Q222.39-620 252.31-620H300v-80q0-74.92 52.54-127.46Q405.08-880 480-880q74.92 0 127.46 52.54Q660-774.92 660-700v80h47.69q29.92 0 51.12 21.19Q780-577.61 780-547.69v375.38q0 29.92-21.19 51.12Q737.61-100 707.69-100H252.31Zm0-60h455.38q5.39 0 8.85-3.46t3.46-8.85v-375.38q0-5.39-3.46-8.85t-8.85-3.46H252.31q-5.39 0-8.85 3.46t-3.46 8.85v375.38q0 5.39 3.46 8.85t8.85 3.46ZM480-290q29.15 0 49.58-20.42Q550-330.85 550-360t-20.42-49.58Q509.15-430 480-430t-49.58 20.42Q410-389.15 410-360t20.42 49.58Q450.85-290 480-290ZM360-620h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
+            <h1>{{ user.username }}</h1>
+            <h3>{{ denied_message }}</h3>
+        {% else %}
+            {% if is_owner %}
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'user_edit' %}" class="d-flex gap-1 align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#5f6368"><path d="M200-200h43.92l427.93-427.92-43.93-43.93L200-243.92V-200Zm-40 40v-100.77l527.23-527.77q6.15-5.48 13.57-8.47 7.43-2.99 15.49-2.99t15.62 2.54q7.55 2.54 13.94 9.15l42.69 42.93q6.61 6.38 9.04 14 2.42 7.63 2.42 15.25 0 8.13-2.74 15.56-2.74 7.42-8.72 13.57L260.77-160H160Zm600.77-556.31-44.46-44.46 44.46 44.46ZM649.5-649.5l-21.58-22.35 43.93 43.93-22.35-21.58Z"/></svg>
+                    <span>Редактирай</span>
+                </a>
+                <div class="dropdown mx-2">
+                    <div class="d-flex gap-1 align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <p class="fs-5 text-bold d-flex align-items-end gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480.18-353.85q60.97 0 103.47-42.68t42.5-103.65q0-60.97-42.68-103.47t-103.65-42.5q-60.97 0-103.47 42.68t-42.5 103.65q0 60.97 42.68 103.47t103.65 42.5ZM480-392q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm.11 152q-129.96 0-236.88-70.73Q136.31-381.46 83.08-500q53.23-118.54 160.04-189.27T479.89-760q129.96 0 236.88 70.73Q823.69-618.54 876.92-500q-53.23 118.54-160.04 189.27T480.11-240ZM480-500Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                            <strong>Видимост</strong>
+                            <span>[[ visibilityName ]]</span>
+                        </p>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-371.69 267.69-584 296-612.31l184 184 184-184L692.31-584 480-371.69Z"/></svg>
+                    </div>
+                    <ul class="dropdown-menu">
+                        {% for value, display in display_choices %}
+                        <li :class="['dropdown-item', 'cursor-pointer', {'dropdown-active': visibility == '{{ value }}'}]" @click="changeVisibility(visibility, '{{ value }}')">{{ display }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
             {% endif %}
-        {% endfor %}
-        <h1 id="saved_posts">Запазени ({{ saved_posts.count }})</h1>
-        {% for saved_post in saved_posts %}
-            <p>от тема: {{ saved_post.post.space.name }}</p>
-            <h1>{{ saved_post.post.name }}</h1>
-            {% if not saved_post.post.visibility %}
-                <h5>{% url 'post_details' saved_post.post.slug %}?token={{ saved_post.post.token }}</h5>
-            {% else %}
-                <a href="{% url 'post_details' saved_post.post.slug %}">Post link</a>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="card p-4" id="comments">
-        <h1>Коментари на {{ user.username }} ({{ comments.count }})</h1>
-        {% for comment in comments %}
-            <h1>Коментар от {{ comment.post.name }}</h1>
-            <h3>{{ comment.content }}</h3>
-            <a href="{% url 'post_details' comment.post.slug %}?comment_link={{ comment.pk }}">Comment link</a>
-        {% endfor %}
-        <h1 id="replies">Отговори на {{ user.username }} ({{ replies.count }})</h1>
-        {% for reply in replies %}
-            <h1>Отговор от {{ reply.post.name }}</h1>
-            <h3>{{ reply.content }}</h3>
-            <a href="{% url 'post_details' reply.post.slug %}?comment_link={{ reply.pk }}">Reply link</a>
-        {% endfor %}
-        <h1 id="liked_comments">Харесани ({{ liked_comments.count }})</h1>
-        {% for comment_like in liked_comments %}
-            <h1>От {{ comment_like.comment.post.name }}</h1>
-            <h3>{{ comment_like.comment.content }}</h3>
-            <a href="{% url 'post_details' comment_like.comment.post.slug %}?comment_link={{ comment_like.comment.pk }}">Comment link</a>
-        {% endfor %}
-    </div>
-    <div class="card p-4" id="spaces">
-        <h1>Теми на {{ user.username }} ({{ spaces.count }})</h1>
-        {% for space in spaces %}
-            <h1>{{ space.name }}</h1>
-        {% endfor %}
-        <h1 id="followed_spaces">Последвани ({{ followed_spaces.count }})</h1>
-        {% for followed_space in followed_spaces %}
-            <h1>{{ followed_space.space.name }}</h1>
-        {% endfor %}
-    </div>
+
+            <div class="card p-4">
+                <h1>{{ user.username }}</h1>
+                <p>{{ user.email }}</p>
+                <p>{{ user.first_name }} {{ user.last_name }}</p>
+                <div class="d-flex gap-1">
+                    {% if user.profile.facebook_url %}<a href="{{ user.profile.facebook_url }}">Facebook</a>{% endif %}
+                    {% if user.profile.x_handle %}<a href="{{ user.profile.x_handle }}">X</a>{% endif %}
+                    {% if user.profile.instagram_handle %}<a href="{{ user.profile.instagram_handle }}">Instagram</a>{% endif %}
+                    {% if user.profile.tiktok_handle %}<a href="{{ user.profile.tiktok_handle }}">TikTok</a>{% endif %}
+                </div>
+                <p>{{ user.profile.bio|default_if_none:'' }}</p>
+                <p>{{ user.profile.country|default_if_none:'' }}</p>
+                <p>{{ user.profile.city|default_if_none:'' }}</p>
+            </div>
+            <div class="card p-4" id="posts">
+                <h1>Публикации на {{ user.username }} ({{ posts.count }})</h1>
+                {% for post in posts %}
+                    <p>от тема: {{ post.space.name }}</p>
+                    <h1>{{ post.name }}</h1>
+                    {% if not post.visibility %}
+                        <h5>{% url 'post_details' post.slug %}?token={{ post.token }}</h5>
+                    {% else %}
+                        <a href="{% url 'post_details' post.slug %}">Post link</a>
+                    {% endif %}
+                {% endfor %}
+                <h1 id="saved_posts">Запазени ({{ saved_posts.count }})</h1>
+                {% for saved_post in saved_posts %}
+                    <p>от тема: {{ saved_post.post.space.name }}</p>
+                    <h1>{{ saved_post.post.name }}</h1>
+                    {% if not saved_post.post.visibility %}
+                        <h5>{% url 'post_details' saved_post.post.slug %}?token={{ saved_post.post.token }}</h5>
+                    {% else %}
+                        <a href="{% url 'post_details' saved_post.post.slug %}">Post link</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="card p-4" id="comments">
+                <h1>Коментари на {{ user.username }} ({{ comments.count }})</h1>
+                {% for comment in comments %}
+                    <h1>Коментар от {{ comment.post.name }}</h1>
+                    <h3>{{ comment.content }}</h3>
+                    <a href="{% url 'post_details' comment.post.slug %}?comment_link={{ comment.pk }}">Comment link</a>
+                {% endfor %}
+                <h1 id="replies">Отговори на {{ user.username }} ({{ replies.count }})</h1>
+                {% for reply in replies %}
+                    <h1>Отговор от {{ reply.post.name }}</h1>
+                    <h3>{{ reply.content }}</h3>
+                    <a href="{% url 'post_details' reply.post.slug %}?comment_link={{ reply.pk }}">Reply link</a>
+                {% endfor %}
+                <h1 id="liked_comments">Харесани ({{ liked_comments.count }})</h1>
+                {% for comment_like in liked_comments %}
+                    <h1>От {{ comment_like.comment.post.name }}</h1>
+                    <h3>{{ comment_like.comment.content }}</h3>
+                    <a href="{% url 'post_details' comment_like.comment.post.slug %}?comment_link={{ comment_like.comment.pk }}">Comment link</a>
+                {% endfor %}
+            </div>
+            <div class="card p-4" id="spaces">
+                <h1>Теми на {{ user.username }} ({{ spaces.count }})</h1>
+                {% for space in spaces %}
+                    <h1>{{ space.name }}</h1>
+                {% endfor %}
+                <h1 id="followed_spaces">Последвани ({{ followed_spaces.count }})</h1>
+                {% for followed_space in followed_spaces %}
+                    <h1>{{ followed_space.space.name }}</h1>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
     {% include 'includes/message.html' %}
 {% endblock %}
@@ -91,9 +123,40 @@
         delimiters: ['[[', ']]'],
         el: '#app',
         data: {
+            visibility: '{{ user.profile.visibility }}',
+            visibilityName: '{{ user.profile.get_visibility_display }}',
+            followers: {{ followers_count }},
+            following: {{ following_count }},
             followed: {% if followed %}true{% else %}false{% endif %},
         },
         methods: {
+            changeVisibilityName(newVisibility) {
+                const valueDisplay = {
+                    {% for value, display in display_choices %}
+                    {{ value }}: "{{ display }}",
+                    {% endfor %}
+                };
+
+                this.visibilityName = valueDisplay[`${newVisibility}`]
+            },
+            changeVisibility(oldVisibility, newVisibility) {
+                if (oldVisibility === newVisibility) {
+                    return;
+                }
+
+                axios
+                .put("{% url 'update_profile_visibility' user.profile.pk %}", {
+                    visibility: newVisibility
+                })
+                .then(response => {
+                    this.visibility = newVisibility;
+                    this.changeVisibilityName(newVisibility);
+                    messageApp.triggerNotification('Видимостта сменена успешно');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            },
             followUnfollowUser() {
                 if (this.followed) {
                     axios
@@ -104,6 +167,7 @@
                     })
                     .then(() => {
                         this.followed = false;
+                        this.followers -= 1;
                         messageApp.triggerNotification('Отследва {{ user.username }}');
                     })
                     .catch(error => {
@@ -117,11 +181,18 @@
                     })
                     .then(response => {
                         this.followed = true;
+                        this.followers += 1;
                         messageApp.triggerNotification('Последва {{ user.username }}');
                     })
                     .catch(error => {
                         console.error(error);
                     });
+                }
+
+                if ('{{ user.profile.visibility }}' === 'F') {
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
                 }
             }
         }
@@ -129,5 +200,6 @@
 </script>
 <style>
     {% include 'includes/css/message.css' %}
+    {% include 'includes/css/dropdown-active.css' %}
 </style>
 {% endblock %}

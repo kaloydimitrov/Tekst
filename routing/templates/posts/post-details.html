@@ -335,6 +335,7 @@
     {% include 'includes/css/posts.css' %}
     {% include 'includes/css/message.css' %}
     {% include 'includes/css/image-cards.css' %}
+    {% include 'includes/css/dropdown-active.css' %}
 
     .sticky-header {
         position: sticky;
@@ -357,24 +358,6 @@
     .sticky-header .reaction-icon::after {
         bottom: auto;
         top: 100%;
-    }
-
-    .dropdown-active {
-        color: #0d6efd;
-    }
-
-    .dropdown-active:hover::before {
-        color: black;
-    }
-
-    .dropdown-active:active::before {
-        color: white;
-    }
-
-    .dropdown-active::before {
-        content: "•";
-        margin-right: 5px;
-        color: #0d6efd;
     }
 
     #reactions .reaction-icon svg {
