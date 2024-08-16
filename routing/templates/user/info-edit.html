@@ -114,7 +114,7 @@
             firstName: '{{ user.first_name }}',
             lastName: '{{ user.last_name }}',
             birthDate: '{{ user.profile.birth_date|date:"Y-m-d" }}',
-            gender: '{{ user.profile.gender }}',
+            gender: '{{ user.profile.gender|default_if_none:'' }}',
             country: '{{ user.profile.country|default_if_none:'' }}',
             city: '{{ user.profile.city|default_if_none:'' }}'
         },

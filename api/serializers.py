@@ -161,4 +161,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', '']
+        fields = ['id', 'instagram_handle', 'tiktok_handle', 'x_handle', 'facebook_url', 'bio', 'birth_date', 'gender', 'country', 'city']

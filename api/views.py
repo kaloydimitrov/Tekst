@@ -326,7 +326,7 @@ class ProfileVisibilityUpdateView(generics.UpdateAPIView):
 # EDIT PROFILE
 # --------------------------------------
 @api_view(['PUT'])
-@permission_classes([IsAuthenticated, IsOwner])
+@permission_classes([IsAuthenticated])
 def update_profile_view(request):
     try:
         user = request.user
@@ -343,7 +343,7 @@ def update_profile_view(request):
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        profile, created = Profile.objects.get_or_create(user=user)
+        profile = get_object_or_404(Profile, user=user)
 
         profile_data = {
             'instagram_handle': data.get('instagramHandle', ''),
@@ -351,11 +351,15 @@ def update_profile_view(request):
             'x_handle': data.get('xHandle', ''),
             'facebook_url': data.get('facebookUrl', ''),
             'bio': data.get('bio', ''),
-            'birth_date': data.get('birthDate', None),
             'gender': data.get('gender', ''),
             'country': data.get('country', ''),
             'city': data.get('city', '')
         }
+        birthdate = data.get('birthDate', '')
+        if birthdate:
+            profile_data['birth_date'] = birthdate
+        else:
+            profile_data['birth_date'] = None
         profile_serializer = ProfileUpdateSerializer(profile, data=profile_data, partial=True)
 
         if profile_serializer.is_valid():
