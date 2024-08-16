@@ -1,4 +1,6 @@
 from datetime import datetime
+import json
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
@@ -8,7 +10,7 @@ from authentication.models import Profile
 from authentication.models import UserFollows
 from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer,
                           CommentLikeSerializer, ReactionSerializer, SavedPostsSerializer, UserFollowsSerializer,
-                          ProfileSerializer)
+                          ProfileSerializer, UserUpdateSerializer, ProfileUpdateSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
@@ -318,3 +320,52 @@ class ProfileVisibilityUpdateView(generics.UpdateAPIView):
         self.perform_update(serializer)
 
         return Response(serializer.data)
+
+
+# --------------------------------------
+# EDIT PROFILE
+# --------------------------------------
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated, IsOwner])
+def update_profile_view(request):
+    try:
+        user = request.user
+        data = json.loads(request.body)
+
+        user_data = {
+            'first_name': data.get('firstName', ''),
+            'last_name': data.get('lastName', '')
+        }
+        user_serializer = UserUpdateSerializer(user, data=user_data, partial=True)
+
+        if user_serializer.is_valid():
+            user_serializer.save()
+        else:
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        profile, created = Profile.objects.get_or_create(user=user)
+
+        profile_data = {
+            'instagram_handle': data.get('instagramHandle', ''),
+            'tiktok_handle': data.get('TikTokHandle', ''),
+            'x_handle': data.get('xHandle', ''),
+            'facebook_url': data.get('facebookUrl', ''),
+            'bio': data.get('bio', ''),
+            'birth_date': data.get('birthDate', None),
+            'gender': data.get('gender', ''),
+            'country': data.get('country', ''),
+            'city': data.get('city', '')
+        }
+        profile_serializer = ProfileUpdateSerializer(profile, data=profile_data, partial=True)
+
+        if profile_serializer.is_valid():
+            profile_serializer.save()
+        else:
+            return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'status': 'success', 'message': 'Профилът актуализиран успешно'}, status=status.HTTP_200_OK)
+
+    except json.JSONDecodeError:
+        return Response({'status': 'error', 'message': 'Invalid JSON data'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'status': 'error', 'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

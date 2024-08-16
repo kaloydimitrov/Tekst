@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ user.username }}'s info{% endblock %}
+{% block title %}{{ user.username }} Редактирай профил{% endblock %}
 
 {% block main %}
+    <div id="app">
     <div class="card mb-5">
     <div class="card-body">
-        <h3 class="card-title">Social media</h3>
+        <h3 class="card-title">Социални мрежи</h3>
 
         <label for="instagram-handle">Instagram</label>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
             </div>
-            <input type="text" id="instagram-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
-                   {% if user.profile.instagram_handle %}disabled{% endif %} value="{{ user.profile.instagram_handle|default_if_none:'' }}">
+            <input v-model="instagramHandle" type="text" id="instagram-handle" class="form-control" placeholder="Потребителско име" aria-label="Username" aria-describedby="basic-addon1">
         </div>
 
         <label for="tiktok-handle">TikTok</label>
@@ -21,85 +21,130 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
             </div>
-            <input type="text" id="tiktok-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
-            {% if user.profile.tiktok_handle %}disabled{% endif %} value="{{ user.profile.tiktok_handle|default_if_none:'' }}">
+            <input v-model="TikTokHandle" type="text" id="tiktok-handle" class="form-control" placeholder="Потребителско име" aria-label="Username" aria-describedby="basic-addon1">
         </div>
 
-        <label for="instagram-handle">X</label>
+        <label for="x-handle">X</label>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
             </div>
-            <input type="text" id="instagram-handle" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
-            {% if user.profile.x_handle %}disabled{% endif %} value="{{ user.profile.x_handle|default_if_none:'' }}">
+            <input v-model="xHandle" type="text" id="x-handle" class="form-control" placeholder="Потребителско име" aria-label="Username" aria-describedby="basic-addon1">
         </div>
 
         <label for="facebook-url">Facebook</label>
-        <input type="text" id="facebook-url" class="form-control" placeholder="Link"
-        {% if user.profile.facebook_url %}disabled{% endif %} value="{{ user.profile.facebook_url|default_if_none:'' }}">
+        <input v-model="facebookUrl" type="text" id="facebook-url" class="form-control" placeholder="Линк">
     </div>
     </div>
 
-    <div class="card mb-5">
+    <div class="card mb-3">
     <div class="card-body">
-        <h3 class="card-title">General</h3>
+        <h3 class="card-title">Основна информация</h3>
 
-        <label for="bio">Bio</label>
-        <textarea class="form-control" {% if user.profile.bio %}disabled{% endif %}>{{ user.profile.bio|default_if_none:'' }}</textarea>
+        <label for="bio">Био</label>
+        <textarea v-model="bio" class="form-control"></textarea>
 
-        <label for="first_name">First Name</label>
-        <input type="text" id="first_name" class="form-control" {% if user.first_name %}value="{{ user.first_name }}" disabled{% endif %}>
+        <label for="first_name">Име</label>
+        <input v-model="firstName" type="text" id="first_name" class="form-control">
 
-        <label for="last_name">Last Name</label>
-        <input type="text" id="last_name" class="form-control" {% if user.last_name %}value="{{ user.last_name }}" disabled{% endif %}>
+        <label for="last_name">Фамилия</label>
+        <input v-model="lastName" type="text" id="last_name" class="form-control">
 
-        <label for="birth_date">Birthdate</label>
-        <input type="date" id="birth_date" class="form-control" {% if user.profile.birth_date %}value="{{ user.profile.birth_date|date:'Y-m-d' }}" disabled{% endif %}>
+        <label for="birth_date">Рожденна дата</label>
+        <input v-model="birthDate" type="date" id="birth_date" class="form-control">
 
-        <label for="gender">Gender</label>
-        <select class="form-control" name="gender" id="gender" {% if user.profile.gender %}disabled{% endif %}>
-            {% if not user.profile.gender %}<option value="none">Select gender</option>{% endif %}
-            <option value="male" {% if user.profile.gender == 'male' %}selected{% endif %}>Male</option>
-            <option value="female" {% if user.profile.gender == 'female' %}selected{% endif %}>Female</option>
-            {% if user.profile.gender %}<option value="none">None</option>{% endif %}
+        <label for="gender">Пол</label>
+        <select v-model="gender" class="form-control" name="gender" id="gender">
+            <option value="">Не избирам нищо</option>
+            <option value="male">Мъж</option>
+            <option value="female">Жена</option>
         </select>
 
-        <label for="country">Country</label>
-        <input type="text" id="country" class="form-control" {% if user.profile.country %}value="{{ user.profile.country }}" disabled{% endif %}>
+        <label for="country">Държава</label>
+        <input v-model="country" type="text" id="country" class="form-control">
 
-        <label for="city">City</label>
-        <input type="text" id="city" class="form-control" {% if user.profile.city %}value="{{ user.profile.city }}" disabled{% endif %}>
+        <label for="city">Град</label>
+        <input v-model="city" type="text" id="city" class="form-control">
     </div>
     </div>
+
+    <button class="btn btn-primary mb-5" @click="updateUserProfile">Запази</button>
 
     <div class="alert alert-danger" role="alert" id="danger-section">
-        <h3 class="mb-3">Danger</h3>
-        <label for="username">Username</label>
+        <h3 class="mb-3">Крайна информация</h3>
+        <label for="username">Потребителско име</label>
         <input type="text" id="username" class="form-control" value="{{ user.username }}" disabled>
 
-        <label for="email">Email Address</label>
+        <label for="email">Имейл адрес</label>
         <input type="text" id="email" class="form-control" value="{{ user.email }}" disabled>
 
-        <label for="password">Password</label>
+        <label for="password">Парола</label>
         <input type="text" id="password" class="form-control" value="**********" disabled>
 
-        <h5 class="mt-5">Change password</h5>
-        <label for="current_password">Current Password</label>
+        <h5 class="mt-5">Смяна на парола</h5>
+        <label for="current_password">Текуща парола</label>
         <input type="password" id="current_password" class="form-control">
 
-        <label for="new_password">New Password</label>
+        <label for="new_password">Нова парола</label>
         <input type="password" id="new_password" class="form-control">
 
-        <label for="confirm_password">Confirm Password</label>
+        <label for="confirm_password">Повтори паролата</label>
         <input type="password" id="confirm_password" class="form-control">
 
-        <button class="btn btn-danger mt-3">Delete Account</button>
+        <button class="btn btn-danger mt-3">Изтрий акаунт</button>
+    </div>
     </div>
 {% endblock %}
 
 {% block rest %}
 <script>
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        data: {
+            instagramHandle: '{{ user.profile.instagram_handle|default_if_none:'' }}',
+            TikTokHandle: '{{ user.profile.tiktok_handle|default_if_none:'' }}',
+            xHandle: '{{ user.profile.x_handle|default_if_none:'' }}',
+            facebookUrl: '{{ user.profile.facebook_url|default_if_none:'' }}',
+
+            bio: '{{ user.profile.bio }}',
+            firstName: '{{ user.first_name }}',
+            lastName: '{{ user.last_name }}',
+            birthDate: '{{ user.profile.birth_date|date:"Y-m-d" }}',
+            gender: '{{ user.profile.gender }}',
+            country: '{{ user.profile.country|default_if_none:'' }}',
+            city: '{{ user.profile.city|default_if_none:'' }}'
+        },
+        methods: {
+            updateUserProfile() {
+                const data = {
+                    instagramHandle: this.instagramHandle,
+                    TikTokHandle: this.TikTokHandle,
+                    xHandle: this.xHandle,
+                    facebookUrl: this.facebookUrl,
+                    bio: this.bio,
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    birthDate: this.birthDate,
+                    gender: this.gender,
+                    country: this.country,
+                    city: this.city
+                };
+
+                axios
+                .put('{% url 'update_profile' %}', data)
+                .then(response => {
+                    console.log('Profile updated successfully', response);
+                })
+                .catch(error => {
+                    console.error('There was an error updating the profile!', error);
+                });
+            }
+        }
+    });
 </script>
 <style>
     .input-group-text {

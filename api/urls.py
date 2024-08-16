@@ -3,7 +3,8 @@ from django.urls import include
 from .views import (SpaceDetailView, SpaceListView, TagListView, FollowSpaceView, UnfollowSpaceView, SpacePostsView,
                     CreateCommentView, CommentListView, LikeCommentView, DislikeCommentView, CreateReactionView,
                     DeleteReactionView, DeleteCommentView, UpdateCommentView, PostListView, CommentGetView,
-                    PostSaveView, PostSavedRemoveView, FollowUserView, UnfollowUserView, ProfileVisibilityUpdateView)
+                    PostSaveView, PostSavedRemoveView, FollowUserView, UnfollowUserView, ProfileVisibilityUpdateView,
+                    update_profile_view)
 
 urlpatterns = [
     path('space/', include([
@@ -40,5 +41,6 @@ urlpatterns = [
     ])),
     path('profile/', include([
         path('<int:pk>/visibility/', ProfileVisibilityUpdateView.as_view(), name='update_profile_visibility'),
+        path('update/', update_profile_view, name='update_profile')
     ]))
 ]

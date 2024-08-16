@@ -2,7 +2,9 @@ from rest_framework import serializers
 from spaces.models import Space, Tag, UserSpaceFollow
 from posts.models import Post, Comment, CommentLikes, Reaction, ReactionType, SavedPosts
 from authentication.models import UserFollows, Profile
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class TagsSpaceSerializer(serializers.ModelSerializer):
@@ -28,6 +30,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_slug(self, obj):
         return obj.profile.slug
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name']
 
 
 class UserFollowsSerializer(serializers.ModelSerializer):
@@ -149,3 +156,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id', 'visibility']
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', '']
