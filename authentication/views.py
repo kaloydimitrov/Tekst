@@ -1,5 +1,5 @@
 from Tekst.settings import EMAIL_HOST_USER
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
@@ -16,6 +16,8 @@ from django.views.generic.edit import CreateView
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render, redirect
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserLoginForm
 
 User = get_user_model()
@@ -135,3 +137,24 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
         messages.success(self.request, self.success_message)
 
         return super(PasswordResetView, self).form_valid(form)
+
+
+class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
+    success_url = reverse_lazy('user_edit')
+    template_name = 'user/info-edit.html'
+    success_message = 'Паролата ти бе променена!'
+
+
+@login_required
+def delete_own_account(request):
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        user = authenticate(username=request.user.username, password=password)
+
+        if user is not None:
+            request.user.delete()
+            messages.success(request, "Акаунтът ти беше изтрит успешно.")
+            return redirect('home')
+        else:
+            messages.error(request, "Невалидна парола.")
+    return render(request, 'user/delete.html')

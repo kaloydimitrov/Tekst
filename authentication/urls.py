@@ -1,4 +1,5 @@
-from .views import SignUpView, SignInView, SignOutView, account_activation_sent, activate, ResetPasswordView
+from .views import (SignUpView, SignInView, SignOutView, account_activation_sent, activate, ResetPasswordView,
+                    ChangePasswordView, delete_own_account)
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetCompleteView
 from django.urls import path
 
@@ -15,4 +16,6 @@ urlpatterns = [
     path('password-reset-complete/',
          PasswordResetCompleteView.as_view(template_name='authentication/password-reset-complete.html'),
          name='password_reset_complete'),
+    path('change-password/', ChangePasswordView.as_view(), name='change_password'),
+    path('delete-account/', delete_own_account, name='delete_account')
 ]

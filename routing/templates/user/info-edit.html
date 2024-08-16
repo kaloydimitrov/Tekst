@@ -82,16 +82,24 @@
         <input type="text" id="password" class="form-control" value="**********" disabled>
 
         <h5 class="mt-5">Смяна на парола</h5>
-        <label for="current_password">Текуща парола</label>
-        <input type="password" id="current_password" class="form-control">
+        <form action="{% url 'change_password' %}" method="POST">
+            {% csrf_token %}
+            {% include 'includes/errors.html' %}
 
-        <label for="new_password">Нова парола</label>
-        <input type="password" id="new_password" class="form-control">
+            <label for="current_password">Текуща парола</label>
+            <input type="password" id="current_password" class="form-control" name="old_password" required>
 
-        <label for="confirm_password">Повтори паролата</label>
-        <input type="password" id="confirm_password" class="form-control">
+            <label for="new_password">Нова парола</label>
+            <input type="password" id="new_password" class="form-control" name="new_password1" required>
 
-        <button class="btn btn-danger mt-3">Изтрий акаунт</button>
+            <label for="confirm_password">Повтори паролата</label>
+            <input type="password" id="confirm_password" class="form-control" name="new_password2" required>
+
+            <button type="submit" class="btn btn-primary">Смени</button>
+            <a href="{% url 'password_reset' %}">Забравена парола?</a>
+        </form>
+
+        <a href="{% url 'delete_account' %}" class="btn btn-danger mt-3">Изтрий акаунт</a>
     </div>
     </div>
 {% endblock %}
@@ -143,6 +151,11 @@
                     console.error('There was an error updating the profile!', error);
                 });
             }
+        },
+        mounted() {
+            {% if form.errors %}
+            document.getElementById('danger-section').scrollIntoView();
+            {% endif %}
         }
     });
 </script>
