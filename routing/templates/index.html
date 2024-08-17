@@ -28,7 +28,6 @@
 
     .vdp-datepicker__calendar {
         margin-top: 10px;
-        background-color: #f1f1f1;
         border-radius: 0.25rem;
         padding: 20px;
     }
@@ -48,10 +47,21 @@
     .vdp-datepicker__calendar .next, .vdp-datepicker__calendar .prev {
         opacity: 0.4;
         transition: scale 0.2s;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 0.35rem;
     }
 
     .vdp-datepicker__calendar .next:hover, .vdp-datepicker__calendar .prev:hover {
-        scale: 1.2;
+        scale: 1.1;
+    }
+
+    .vdp-datepicker__calendar .day__month_btn {
+        transition: scale 0.2s;
+    }
+
+    #bootstrap-override .vdp-datepicker__calendar .day__month_btn:hover {
+        scale: 1.1;
+        background-color: transparent;
     }
 </style>
 {% endblock %}
