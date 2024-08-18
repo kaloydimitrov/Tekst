@@ -44,6 +44,7 @@
 
             <div class="card p-4">
                 <h1>{{ user.username }}</h1>
+                <small>Присъединен на {{ user.date_joined|date:"j F Y" }}</small>
                 <p>{{ user.email }}</p>
                 <p>{{ user.first_name }} {{ user.last_name }}</p>
                 <div class="d-flex gap-1">

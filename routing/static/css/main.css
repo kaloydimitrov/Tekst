@@ -131,18 +131,8 @@
     cursor: pointer;
 }
 
-.sidebar {
+#bootstrap-override .sidebar {
     height: 100vh;
-    background-color: #f8f9fa;
-}
-
-.sidebar a {
-    color: #000;
-    text-decoration: none;
-    padding: 10px 20px;
-    display: block;
-}
-
-.sidebar a:hover {
-    background-color: #e9ecef;
+    border: 1px solid lightgray;
+    border-radius: 0.25rem;
 }

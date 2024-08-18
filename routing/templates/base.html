@@ -25,9 +25,8 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     {# Load Bootstrap 5 #}
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     {# Google Icons #}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -126,39 +125,58 @@
 
     <div class="container main">
         <div class="row">
-            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
                 <div class="sidebar-sticky pt-3">
-                    <h5 class="sidebar-heading">Проверени теми</h5>
-                    <ul>
+                    <a href="{% url 'create_space' %}" class="btn btn-outline-dark w-100 mb-4">Създай тема</a>
+                    <h5 class="sidebar-heading mb-0">Проверени теми</h5>
+                    <ul class="list-group list-group-flush">
                     {% for space in verified_spaces %}
-                        <li>{{ space.name }} | {{ space.posts_count }} публикации | {{ space.followers_count }} последователи</li>
+                        <li onclick="window.location.href='{% url 'space_details' space.slug %}'" class="d-flex gap-2 align-items-center list-group-item list-group-item-action cursor-pointer">
+                            <div style="width: 20px; height: 20px; flex-shrink: 0;">
+                                <img style="width: 100%; height: 100%; object-fit: cover; display: block;" src="{% if space.image %}{{ space.image.url }}{% else %}{% static 'images/default-banner.png' %}{% endif %}" alt="space-img">
+                            </div>
+                            <p class="overflow-hidden">{{ space.name }}</p>
+                        </li>
                     {% endfor %}
                     </ul>
                     <a href="{% url 'list_spaces' %}?verified=true">Виж още</a>
 
-                    <h5 class="sidebar-heading">Топ теми</h5>
-                    <ul>
+                    <h5 class="sidebar-heading mb-0 mt-3">Топ теми</h5>
+                    <ul class="list-group list-group-flush">
                     {% for space in top_spaces %}
-                        <li>{{ space.name }} | {{ space.posts_count }} публикации | {{ space.followers_count }} последователи</li>
+                        <li onclick="window.location.href='{% url 'space_details' space.slug %}'" class="d-flex gap-2 align-items-center list-group-item list-group-item-action cursor-pointer">
+                            <div style="width: 20px; height: 20px; flex-shrink: 0;">
+                                <img style="width: 100%; height: 100%; object-fit: cover; display: block;" src="{% if space.image %}{{ space.image.url }}{% else %}{% static 'images/default-banner.png' %}{% endif %}" alt="space-img">
+                            </div>
+                            <p class="overflow-hidden">{{ space.name }}</p>
+                        </li>
                     {% endfor %}
                     </ul>
                     <a href="{% url 'list_spaces' %}?order=top">Виж още</a>
 
                     {% if request.user.is_authenticated %}
-                    <h5 class="sidebar-heading">Какво следвам</h5>
+                    <h5 class="sidebar-heading mb-0 mt-3">Какво следвам</h5>
                     <h6 class="sidebar-heading">Хора</h6>
                     {% if not followed_users %}Не следвам хора{% endif %}
-                    <ul>
+                    <ul class="list-group list-group-flush">
                     {% for followed_user in followed_users %}
-                        <li>{{ followed_user.following.username }}</li>
+                        <li onclick="window.location.href='{% url 'user_profile' followed_user.following.profile.slug %}'" class="d-flex gap-1 align-items-center list-group-item list-group-item-action cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#000000"><path d="M480-504.62q-49.5 0-84.75-35.25T360-624.62q0-49.5 35.25-84.75T480-744.62q49.5 0 84.75 35.25T600-624.62q0 49.5-35.25 84.75T480-504.62ZM200-215.38v-65.85q0-24.77 14.42-46.35 14.43-21.57 38.81-33.5 56.62-27.15 113.31-40.73 56.69-13.57 113.46-13.57 56.77 0 113.46 13.57 56.69 13.58 113.31 40.73 24.38 11.93 38.81 33.5Q760-306 760-281.23v65.85H200Zm40-40h480v-25.85q0-13.31-8.58-25-8.57-11.69-23.73-19.77-49.38-23.92-101.83-36.65-52.45-12.73-105.86-12.73t-105.86 12.73Q321.69-349.92 272.31-326q-15.16 8.08-23.73 19.77-8.58 11.69-8.58 25v25.85Zm240-289.24q33 0 56.5-23.5t23.5-56.5q0-33-23.5-56.5t-56.5-23.5q-33 0-56.5 23.5t-23.5 56.5q0 33 23.5 56.5t56.5 23.5Zm0-80Zm0 369.24Z"/></svg>
+                            <span>{{ followed_user.following.username }}</span>
+                        </li>
                     {% endfor %}
                     </ul>
 
                     <h6 class="sidebar-heading">Теми</h6>
                     {% if not sb_followed_spaces %}Не следвам теми{% endif %}
-                    <ul>
+                    <ul class="list-group list-group-flush">
                     {% for followed_space in sb_followed_spaces %}
-                        <li>{{ followed_space.space.name }}</li>
+                        <li onclick="window.location.href='{% url 'space_details' followed_space.space.slug %}'" class="d-flex gap-2 align-items-center list-group-item list-group-item-action cursor-pointer">
+                            <div style="width: 20px; height: 20px; flex-shrink: 0;">
+                                <img style="width: 100%; height: 100%; object-fit: cover; display: block;" src="{% if followed_space.space.image %}{{ followed_space.space.image.url }}{% else %}{% static 'images/default-banner.png' %}{% endif %}" alt="space-img">
+                            </div>
+                            <p class="overflow-hidden">{{ followed_space.space.name }}</p>
+                        </li>
                     {% endfor %}
                     </ul>
                     {% endif %}

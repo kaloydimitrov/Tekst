@@ -13,7 +13,7 @@ def get_verified_spaces():
 
 @register.simple_tag
 def get_top_spaces():
-    return Space.objects.annotate(num_followers=Count('followers')).order_by('-num_followers')
+    return Space.objects.annotate(num_followers=Count('followers')).order_by('-num_followers')[:5]
 
 
 @register.simple_tag
