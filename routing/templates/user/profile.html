@@ -67,6 +67,7 @@
                     {% else %}
                         <a href="{% url 'post_details' post.slug %}">Post link</a>
                     {% endif %}
+                    <button class="btn btn-danger" @click="deletePost({{ post.pk }})">Изтрий</button>
                 {% endfor %}
                 <h1 id="saved_posts">Запазени ({{ saved_posts.count }})</h1>
                 {% for saved_post in saved_posts %}
@@ -86,13 +87,13 @@
                     <h3>{{ comment.content }}</h3>
                     <a href="{% url 'post_details' comment.post.slug %}?comment_link={{ comment.pk }}">Comment link</a>
                 {% endfor %}
-                <h1 id="replies">Отговори на {{ user.username }} ({{ replies.count }})</h1>
+                <h3 id="replies">Отговори на {{ user.username }} ({{ replies.count }})</h3>
                 {% for reply in replies %}
                     <h1>Отговор от {{ reply.post.name }}</h1>
                     <h3>{{ reply.content }}</h3>
                     <a href="{% url 'post_details' reply.post.slug %}?comment_link={{ reply.pk }}">Reply link</a>
                 {% endfor %}
-                <h1 id="liked_comments">Харесани ({{ liked_comments.count }})</h1>
+                <h3 id="liked_comments">Харесани ({{ liked_comments.count }})</h3>
                 {% for comment_like in liked_comments %}
                     <h1>От {{ comment_like.comment.post.name }}</h1>
                     <h3>{{ comment_like.comment.content }}</h3>
@@ -103,6 +104,7 @@
                 <h1>Теми на {{ user.username }} ({{ spaces.count }})</h1>
                 {% for space in spaces %}
                     <h1>{{ space.name }}</h1>
+                    <button class="btn btn-danger" @click="deleteSpace({{ space.pk }})">Изтрий</button>
                 {% endfor %}
                 <h1 id="followed_spaces">Последвани ({{ followed_spaces.count }})</h1>
                 {% for followed_space in followed_spaces %}
@@ -195,6 +197,26 @@
                         location.reload();
                     }, 1000);
                 }
+            },
+            deletePost(postId) {
+                axios
+                .delete(`/api/post/${postId}/delete/`)
+                .then(() => {
+                    messageApp.triggerNotification('Изтри публикацията усшешно.');
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+            },
+            deleteSpace(spaceId) {
+                axios
+                .delete(`/api/space/${spaceId}/delete/`)
+                .then(() => {
+                    messageApp.triggerNotification('Изтри темата усшешно.');
+                })
+                .catch(error => {
+                    console.error(error)
+                })
             }
         }
     });

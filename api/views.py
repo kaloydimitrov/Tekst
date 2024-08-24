@@ -96,6 +96,12 @@ class SpacePostsView(generics.ListAPIView):
         return queryset
 
 
+class DeleteSpaceView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    serializer_class = SpaceSerializer
+    queryset = Space.objects.all()
+
+
 # --------------------------------------
 # TAGS
 # --------------------------------------
@@ -283,6 +289,12 @@ class PostSavedRemoveView(generics.DestroyAPIView):
 
     def get_object(self):
         return SavedPosts.objects.get(user=self.request.user, post_id=self.kwargs['pk'])
+
+
+class DeletePostView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated, IsOwner]
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
 
 # --------------------------------------

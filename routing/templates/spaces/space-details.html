@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ space.name }} space{% endblock %}
 
 {% block main %}
     <div class="card" id="card-app">
-        <div class="card-header d-flex align-items-center justify-content-between">
+        <img class="background-img opacity-0" src="{% if space.image %}{{ space.image.url }}{% else %}{% static 'images/default-banner.png' %}{% endif %}" alt="default-banner">
+        <div class="custom-header card-header d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center justify-content-center flex-grow-1 overflow-hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#000000"><path d="M440-183v-274L200-596v274l240 139Zm80 0 240-139v-274L520-457v274Zm-80 92L160-252q-19-11-29.5-29T120-321v-318q0-22 10.5-40t29.5-29l280-161q19-11 40-11t40 11l280 161q19 11 29.5 29t10.5 40v318q0 22-10.5 40T800-252L520-91q-19 11-40 11t-40-11Zm200-528 77-44-237-137-78 45 238 136Zm-160 93 78-45-237-137-78 45 237 137Z"/></svg>
                 <h5 class="mb-0 ms-1">{{ space.name }}</h5>
@@ -13,12 +15,12 @@
             <svg class="ms-auto" xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#000000"><path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/></svg>
             {% endif %}
         </div>
-        <div class="card-header d-flex justify-content-between align-items-center py-2 px-3">
-            <span>{{ space.posts_count }} post/s</span>
-            <span>[[ this.followers ]] followers</span>
-            <button type="button" class="btn btn-sm btn-outline-primary" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if is_following %}unfollow{% else %}follow{% endif %}</button>
+        <div class="custom-header card-header d-flex justify-content-between align-items-center py-2 px-3">
+            <span>{{ space.posts_count }} публикации</span>
+            <span>[[ this.followers ]] последователя</span>
+            <button type="button" class="btn btn-sm btn-outline-primary" @click="followUnfollowSpace({{ space.pk }}, $event)" data-is-followed="{% if is_following %}true{% else %}false{% endif %}">{% if is_following %}отследвай{% else %}следвай{% endif %}</button>
         </div>
-        <div class="card-body">
+        <div class="custom-body card-body">
             <div class="ql-zone pb-4">{{ space.description|safe }}</div>
             {% for tag in tags %}
                 <span class="badge me-1 bg-primary">
@@ -29,10 +31,10 @@
                 </span>
             {% endfor %}
         </div>
-        <div class="card-footer text-center text-muted">
-            Created by <b>{{ space.user.username }}</b> on <b>{{ space.created_at }}</b>
+        <div class="custom-header card-footer text-center">
+            Създадено от <a href="{% url 'user_profile' space.user.profile.slug %}">{{ space.user.username }}</a> на <b>{{ space.created_at }}</b>
             {% if not space.created_at == space.updated_at %}
-                (Last updated on {{ space.updated_at }})
+                (Последно променено на {{ space.updated_at }})
             {% endif %}
         </div>
     </div>
@@ -64,24 +66,27 @@
         methods: {
             followUnfollowSpace(spaceId, event) {
                 const btn = event.target;
+                const followed = btn.getAttribute("data-is-followed") === 'true';
 
-                if (btn.textContent === "follow") {
+                if (!followed) {
                     axios
                     .post(`/api/space/follow/${spaceId}/`)
                     .then((response) => {
-                        btn.textContent = "unfollow";
+                        btn.textContent = "отследвай";
                         this.followers += 1;
+                        btn.setAttribute("data-is-followed", "true")
                         messageApp.triggerNotification(response.data.message);
                     })
                     .catch(error => {
                         console.error(error);
                     });
-                } else if (btn.textContent === "unfollow") {
+                } else {
                     axios
                     .delete(`/api/space/unfollow/${spaceId}/`)
                     .then((response) => {
-                        btn.textContent = "follow";
+                        btn.textContent = "следвай";
                         this.followers -= 1;
+                        btn.setAttribute("data-is-followed", "false")
                         messageApp.triggerNotification(response.data.message);
                     })
                     .catch(error => {
@@ -89,12 +94,41 @@
                     });
                 }
             }
+        },
+        mounted() {
+            setTimeout(() => {
+                document.querySelector('.background-img').classList.add('opacity-100');
+            }, 100);
         }
     });
 </script>
 <style>
     {% include 'includes/css/posts.css' %}
     {% include 'includes/css/message.css' %}
+
+    #card-app {
+        position:relative;
+        overflow: hidden;
+    }
+
+    .background-img {
+        z-index: 1;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        transition: opacity 0.4s;
+    }
+
+    .custom-header {
+        z-index: 2;
+        background-color: rgba(255,255,255,0.9);
+    }
+
+    .custom-body {
+        z-index: 3;
+        background-color: white
+    }
 
     .badge {
         margin-bottom: 8px;

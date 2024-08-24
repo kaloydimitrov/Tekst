@@ -10,5 +10,5 @@ convertIso8601Format(isoTimestamp) {
         second: 'numeric',
     };
 
-    return date.toLocaleString('en-US', options);
+    return date.toLocaleString('BG', options);
 },

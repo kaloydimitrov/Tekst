@@ -53,7 +53,7 @@
                             <svg v-if="space.verified" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m352.46-85.39-71.38-120.3-135.54-29.7 13.23-139.53L66.93-480l91.84-105.08-13.23-139.53 135.54-29.7 71.38-120.3L480-820.46l127.54-54.15 71.38 120.3 135.54 29.7-13.23 139.53L893.07-480l-91.84 105.08 13.23 139.53-135.54 29.7-71.38 120.3L480-139.54 352.46-85.39ZM378-162l102-43.23L583.23-162 640-258l110-25.23L740-396l74-84-74-85.23L750-678l-110-24-58-96-102 43.23L376.77-798 320-702l-110 24 10 112.77L146-480l74 84-10 114 110 24 58 96Zm102-318Zm-42 128.15L650.15-564 608-607.38l-170 170-86-84.77L309.85-480 438-351.85Z"/></svg>
                             <span>[[ space.name ]]</span>
                         </h5>
-                        <small class="text-muted">[[ space.followers_count ]] followers</small>
+                        <small class="text-muted">[[ space.followers_count ]] последователя</small>
                     </div>
                     <div class="my-3 text-muted">
                         <span v-for="tag in space.tags" class="badge me-1 bg-primary">
@@ -100,7 +100,7 @@
                     </div>
                     <div class="card-body d-flex justify-content-between">
                         <small class="text-muted">{{ space.followers_count }} последователя</small>
-                        {% if request.user.is_authenticated %}<button type="button" class="btn btn-sm btn-outline-primary" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if space.pk in followed_spaces %}unfollow{% else %}follow{% endif %}</button>{% endif %}
+                        {% if request.user.is_authenticated %}<button type="button" class="btn btn-sm btn-outline-primary" data-is-followed="{% if space.pk in followed_spaces %}true{% else %}false{% endif %}" @click="followUnfollowSpace({{ space.pk }}, $event)">{% if space.pk in followed_spaces %}отследвай{% else %}следвай{% endif %}</button>{% endif %}
                     </div>
                     <div class="card-body">
                         <a :href="generateCreatePostURL({{ space.pk }})" class="btn btn-primary btn-sm">Публикувай тук</a>
@@ -198,23 +198,26 @@
             },
             followUnfollowSpace(spaceId, event) {
                 const btn = event.target;
+                const followed = btn.getAttribute("data-is-followed") === 'true';
 
-                if (btn.textContent === "follow") {
+                if (!followed) {
                     axios
                     .post(`/api/space/follow/${spaceId}/`)
                     .then(response => {
+                        btn.textContent = "отследвай"
+                        btn.setAttribute('data-is-followed', 'true')
                         messageApp.triggerNotification(response.data.message);
-                        btn.textContent = "unfollow"
                     })
                     .catch(error => {
                         console.error(error);
                     });
-                } else if (btn.textContent === "unfollow") {
+                } else {
                     axios
                     .delete(`/api/space/unfollow/${spaceId}/`)
                     .then(response => {
+                        btn.textContent = "следвай"
+                        btn.setAttribute('data-is-followed', 'false')
                         messageApp.triggerNotification(response.data.message);
-                        btn.textContent = "follow"
                     })
                     .catch(error => {
                         console.error(error);

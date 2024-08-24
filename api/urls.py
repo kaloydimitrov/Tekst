@@ -4,12 +4,13 @@ from .views import (SpaceDetailView, SpaceListView, TagListView, FollowSpaceView
                     CreateCommentView, CommentListView, LikeCommentView, DislikeCommentView, CreateReactionView,
                     DeleteReactionView, DeleteCommentView, UpdateCommentView, PostListView, CommentGetView,
                     PostSaveView, PostSavedRemoveView, FollowUserView, UnfollowUserView, ProfileVisibilityUpdateView,
-                    update_profile_view)
+                    update_profile_view, DeletePostView, DeleteSpaceView)
 
 urlpatterns = [
     path('space/', include([
         path('all/', SpaceListView.as_view(), name='get_all_spaces'),
         path('<int:pk>/', SpaceDetailView.as_view(), name='get_space_details'),
+        path('<int:pk>/delete/', DeleteSpaceView.as_view(), name='delete_space'),
         path('<int:pk>/posts/', SpacePostsView.as_view(), name='get_space_posts'),
         path('follow/<int:pk>/', FollowSpaceView.as_view(), name='follow_space'),
         path('unfollow/<int:pk>/', UnfollowSpaceView.as_view(), name='unfollow_space')
@@ -31,6 +32,7 @@ urlpatterns = [
         path('delete/', DeleteReactionView.as_view(), name="delete_reaction")
     ])),
     path('post/', include([
+        path('<int:pk>/delete/', DeletePostView.as_view(), name='delete_post'),
         path('save/', PostSaveView.as_view(), name='save_post'),
         path('<int:pk>/remove-saved/', PostSavedRemoveView.as_view(), name='remove_saved_post'),
         path('all/', PostListView.as_view(), name='get_all_posts'),

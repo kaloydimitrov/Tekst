@@ -135,7 +135,7 @@
                             <div style="width: 20px; height: 20px; flex-shrink: 0;">
                                 <img style="width: 100%; height: 100%; object-fit: cover; display: block;" src="{% if space.image %}{{ space.image.url }}{% else %}{% static 'images/default-banner.png' %}{% endif %}" alt="space-img">
                             </div>
-                            <p class="overflow-hidden">{{ space.name }}</p>
+                            <p class="no-wrap">{{ space.name }}</p>
                         </li>
                     {% endfor %}
                     </ul>
@@ -148,7 +148,7 @@
                             <div style="width: 20px; height: 20px; flex-shrink: 0;">
                                 <img style="width: 100%; height: 100%; object-fit: cover; display: block;" src="{% if space.image %}{{ space.image.url }}{% else %}{% static 'images/default-banner.png' %}{% endif %}" alt="space-img">
                             </div>
-                            <p class="overflow-hidden">{{ space.name }}</p>
+                            <p class="no-wrap">{{ space.name }}</p>
                         </li>
                     {% endfor %}
                     </ul>
@@ -175,7 +175,7 @@
                             <div style="width: 20px; height: 20px; flex-shrink: 0;">
                                 <img style="width: 100%; height: 100%; object-fit: cover; display: block;" src="{% if followed_space.space.image %}{{ followed_space.space.image.url }}{% else %}{% static 'images/default-banner.png' %}{% endif %}" alt="space-img">
                             </div>
-                            <p class="overflow-hidden">{{ followed_space.space.name }}</p>
+                            <p class="no-wrap">{{ followed_space.space.name }}</p>
                         </li>
                     {% endfor %}
                     </ul>
