@@ -44,7 +44,10 @@
             </a>
 
             <div class="d-flex flex-grow-1 align-items-center">
-                <input type="text" class="site-search-input me-2" placeholder="Търси в сайта (ctrl + p)">
+                <div class="d-flex gap-1 w-100 me-2" id="search-app">
+                    <input type="text" class="site-search-input" placeholder="Търси в сайта (ctrl + p)" v-model="searchInput" @keyup.enter="search">
+                    <button class="btn btn-primary" @click="search">Търси</button>
+                </div>
                 {% if request.user.is_authenticated %}
                 <div class="authenticated-container">
                     <div class="d-flex gap-1">
@@ -222,5 +225,22 @@
                 this.parentElement.style.display = "none";
             });
     }
+
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#search-app',
+        data: {
+            searchInput: null,
+        },
+        methods: {
+            search() {
+                if (!this.searchInput) {
+                    return;
+                }
+
+                window.location.href = `{% url 'search' %}?q=${this.searchInput}`;
+            }
+        },
+    })
 </script>
 </html>

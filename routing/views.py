@@ -1,12 +1,45 @@
 from django.shortcuts import get_object_or_404, render
 from django.views.generic.base import TemplateView
 from posts.models import Post, Comment
+from spaces.models import Space
 from authentication.models import Profile, UserFollows
 from spaces.models import Space
+from django.db.models import Q
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Home(TemplateView):
     template_name = 'index.html'
+
+
+def search(request):
+    q = request.GET.get('q')
+
+    if q:
+        posts = Post.objects.filter(
+            Q(name__icontains=q) | Q(content__icontains=q)
+        )[:30]
+        spaces = Space.objects.filter(
+            Q(name__icontains=q) | Q(description__icontains=q)
+        )[:30]
+        users = User.objects.filter(
+            Q(username__icontains=q)
+        )[:30]
+    else:
+        posts = Post.objects.none()
+        spaces = Space.objects.none()
+        users = User.objects.none()
+
+    context = {
+        'q': q,
+        'posts': posts,
+        'spaces': spaces,
+        'users': users
+    }
+
+    return render(request, 'search.html', context)
 
 
 class UserInfoEdit(TemplateView):

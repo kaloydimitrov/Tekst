@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Търсене: {{ q }}{% endblock %}
+
+{% block main %}
+    <p>Резултати от <strong>{{ q }}</strong></p>
+
+    <h1>Публикации ({{ posts.count }})</h1>
+    {% for post in posts %}
+        <h3>{{ post.name }}</h3>
+        <h5>{{ post.content }}</h5>
+    {% endfor %}
+
+    <h1>Теми ({{ spaces.count }})</h1>
+    {% for space in spaces %}
+        <h3>{{ space.name }}</h3>
+        <h5>{{ space.description }}</h5>
+    {% endfor %}
+
+    <h1>Потребители ({{ users.count }})</h1>
+    {% for user in users %}
+        <h3>{{ user.username }}</h3>
+    {% endfor %}
+{% endblock %}
