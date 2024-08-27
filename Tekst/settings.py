@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'api',
     'posts',
     'spaces',
+    'notifications',
 ]
 
 MIDDLEWARE = [

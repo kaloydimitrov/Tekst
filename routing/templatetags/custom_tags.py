@@ -2,6 +2,7 @@ from django import template
 from spaces.models import Space, UserSpaceFollow
 from authentication.models import UserFollows
 from django.db.models import Count
+from notifications.models import Notification
 
 register = template.Library()
 
@@ -24,3 +25,8 @@ def get_followed_spaces(user):
 @register.simple_tag
 def get_followed_users(user):
     return UserFollows.objects.filter(follower=user)
+
+
+@register.simple_tag
+def get_notifications_count(user):
+    return Notification.objects.filter(user=user, is_read=False).count()
