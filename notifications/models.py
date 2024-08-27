@@ -7,6 +7,11 @@ User = get_user_model()
 class Notification(models.Model):
     NOTIFICATION_TYPE_CHOICES = [
         ('follow', 'Следване'),
+        ('reply', 'Отговор'),
+        ('post_created', 'Публикация създадена'),
+        ('post_deleted', 'Публикация изтрита'),
+        ('space_created', 'Тема създадена'),
+        ('space_deleted', 'Тема изтрита'),
     ]
 
     notification_type = models.CharField(

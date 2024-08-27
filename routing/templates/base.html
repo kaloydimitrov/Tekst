@@ -55,7 +55,7 @@
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle d-flex gap-1 align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#FFFFFF"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
-                            <span>{{ request.user.email }}</span>
+                            <span>{{ request.user.username }}</span>
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'user_profile' request.user.profile.slug %}">Профил</a></li>
@@ -93,9 +93,9 @@
                         </ul>
                     </div>
                     <a href="{% url 'create_post' %}" class="btn btn-primary">Публикувай</a>
-                    <div class="card d-flex align-items-center justify-content-center px-2 cursor-pointer" onclick="window.location.href='{% url 'user_notifications' %}'">
+                    <div class="card d-flex align-items-center justify-content-center px-2 position-relative cursor-pointer" onclick="window.location.href='{% url 'user_notifications' %}'">
                         <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000"><path d="M180-204.62v-59.99h72.31v-298.47q0-80.69 49.81-142.69 49.8-62 127.88-79.31V-810q0-20.83 14.57-35.42Q459.14-860 479.95-860q20.82 0 35.43 14.58Q530-830.83 530-810v24.92q78.08 17.31 127.88 79.31 49.81 62 49.81 142.69v298.47H780v59.99H180Zm300-293.07Zm-.07 405.38q-29.85 0-51.04-21.24-21.2-21.24-21.2-51.07h144.62q0 29.93-21.26 51.12-21.26 21.19-51.12 21.19Zm-167.62-172.3h335.38v-298.47q0-69.46-49.11-118.57-49.12-49.12-118.58-49.12-69.46 0-118.58 49.12-49.11 49.11-49.11 118.57v298.47Z"/></svg>
-                        {% if notifications_count > 0 %}<span>{{ notifications_count }}</span>{% endif %}
+                        {% if notifications_count > 0 %}<span class="position-absolute notification-count">{{ notifications_count }}</span>{% endif %}
                     </div>
                     </div>
                 </div>

@@ -60,6 +60,7 @@
             <div class="card p-4" id="posts">
                 <h1>Публикации на {{ user.username }} ({{ posts.count }})</h1>
                 {% for post in posts %}
+                    <div id="post_{{ post.pk }}">
                     <p>от тема: {{ post.space.name }}</p>
                     <h1>{{ post.name }}</h1>
                     {% if not post.visibility %}
@@ -68,6 +69,7 @@
                         <a href="{% url 'post_details' post.slug %}">Post link</a>
                     {% endif %}
                     <button class="btn btn-danger" @click="deletePost({{ post.pk }})">Изтрий</button>
+                    </div>
                 {% endfor %}
                 <h1 id="saved_posts">Запазени ({{ saved_posts.count }})</h1>
                 {% for saved_post in saved_posts %}
@@ -103,8 +105,10 @@
             <div class="card p-4" id="spaces">
                 <h1>Теми на {{ user.username }} ({{ spaces.count }})</h1>
                 {% for space in spaces %}
+                    <div id="space_{{ space.pk }}">
                     <h1>{{ space.name }}</h1>
                     <button class="btn btn-danger" @click="deleteSpace({{ space.pk }})">Изтрий</button>
+                    </div>
                 {% endfor %}
                 <h1 id="followed_spaces">Последвани ({{ followed_spaces.count }})</h1>
                 {% for followed_space in followed_spaces %}

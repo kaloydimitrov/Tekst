@@ -106,6 +106,19 @@
     border-color: black;
 }
 
+.notification-count {
+    top: 0;
+    right: 0;
+    border-radius: 100%;
+    border: 1px solid lightgray;
+    background-color: white;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #bootstrap-override .responsive-dropdown {
     display: none;
 }
