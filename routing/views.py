@@ -19,7 +19,7 @@ def search(request):
 
     if q:
         posts = Post.objects.filter(
-            Q(name__icontains=q) | Q(content__icontains=q)
+            (Q(name__icontains=q) | Q(content__icontains=q)) & Q(visibility=True)
         )[:30]
         spaces = Space.objects.filter(
             Q(name__icontains=q) | Q(description__icontains=q)

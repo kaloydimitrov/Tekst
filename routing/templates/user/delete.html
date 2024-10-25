@@ -7,11 +7,11 @@
         {% csrf_token %}
         {% include 'includes/errors.html' %}
 
-        <div class="form-group">
+        <div class="form-group mb-2">
             <label for="password">Въведете паролата си, за да потвърдите:</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn btn-danger">Изтрий акаунта ми</button>
+        <button type="submit" class="btn btn-danger mb-2">Изтрий акаунта ми</button>
     </form>
-    <a href="{% url 'user_edit' %}" class="btn btn-secondary">Cancel</a>
+    <a href="{% url 'user_edit' %}" class="btn btn-secondary">Откажи</a>
 {% endblock %}

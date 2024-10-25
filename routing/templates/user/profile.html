@@ -5,18 +5,26 @@
 {% block main %}
     <div id="app">
         {% if not is_owner %}
-            <button type="button" class="btn btn-outline-primary" @click="followUnfollowUser"><span v-if="followed">Отследвай</span><span v-else>Следвай</span></button>
+            <button type="button" class="btn btn-outline-primary mb-2" @click="followUnfollowUser"><span v-if="followed">Отследвай</span><span v-else>Следвай</span></button>
         {% endif %}
-    
-        <a href="{% url 'user_ffs' user.profile.slug %}">
-            <h2>Последователи (го следват): [[ followers ]]</h2>
-            <h2>Последвани (следва): [[ following ]]</h2>
-        </a>
+
+        <div class="card mb-4 cursor-pointer on-hover-border" onclick="window.location.href='{% url 'user_ffs' user.profile.slug %}'">
+            <div class="card-body">
+                <h2 class="fw-light">Последователи (го следват): <b>[[ followers ]]</b></h2>
+                <hr>
+                <h2 class="fw-light">Последвани (следва): <b>[[ following ]]</b></h2>
+            </div>
+        </div>
 
         {% if denied_message %}
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M252.31-100q-29.92 0-51.12-21.19Q180-142.39 180-172.31v-375.38q0-29.92 21.19-51.12Q222.39-620 252.31-620H300v-80q0-74.92 52.54-127.46Q405.08-880 480-880q74.92 0 127.46 52.54Q660-774.92 660-700v80h47.69q29.92 0 51.12 21.19Q780-577.61 780-547.69v375.38q0 29.92-21.19 51.12Q737.61-100 707.69-100H252.31Zm0-60h455.38q5.39 0 8.85-3.46t3.46-8.85v-375.38q0-5.39-3.46-8.85t-8.85-3.46H252.31q-5.39 0-8.85 3.46t-3.46 8.85v375.38q0 5.39 3.46 8.85t8.85 3.46ZM480-290q29.15 0 49.58-20.42Q550-330.85 550-360t-20.42-49.58Q509.15-430 480-430t-49.58 20.42Q410-389.15 410-360t20.42 49.58Q450.85-290 480-290ZM360-620h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
-            <h1>{{ user.username }}</h1>
-            <h3>{{ denied_message }}</h3>
+            <div class="d-flex align-items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" height="34px" viewBox="0 -960 960 960" width="34px" fill="#000000"><path d="M480-504.62q-49.5 0-84.75-35.25T360-624.62q0-49.5 35.25-84.75T480-744.62q49.5 0 84.75 35.25T600-624.62q0 49.5-35.25 84.75T480-504.62ZM200-215.38v-65.85q0-24.77 14.42-46.35 14.43-21.57 38.81-33.5 56.62-27.15 113.31-40.73 56.69-13.57 113.46-13.57 56.77 0 113.46 13.57 56.69 13.58 113.31 40.73 24.38 11.93 38.81 33.5Q760-306 760-281.23v65.85H200Zm40-40h480v-25.85q0-13.31-8.58-25-8.57-11.69-23.73-19.77-49.38-23.92-101.83-36.65-52.45-12.73-105.86-12.73t-105.86 12.73Q321.69-349.92 272.31-326q-15.16 8.08-23.73 19.77-8.58 11.69-8.58 25v25.85Zm240-289.24q33 0 56.5-23.5t23.5-56.5q0-33-23.5-56.5t-56.5-23.5q-33 0-56.5 23.5t-23.5 56.5q0 33 23.5 56.5t56.5 23.5Zm0-80Zm0 369.24Z"/></svg>
+                <h2 class="fw-light">{{ user.username }}</h2>
+            </div>
+            <div class="d-flex flex-column align-items-center justify-content-center card p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#5f6368"><path d="M252.31-100q-29.92 0-51.12-21.19Q180-142.39 180-172.31v-375.38q0-29.92 21.19-51.12Q222.39-620 252.31-620H300v-80q0-74.92 52.54-127.46Q405.08-880 480-880q74.92 0 127.46 52.54Q660-774.92 660-700v80h47.69q29.92 0 51.12 21.19Q780-577.61 780-547.69v375.38q0 29.92-21.19 51.12Q737.61-100 707.69-100H252.31Zm0-60h455.38q5.39 0 8.85-3.46t3.46-8.85v-375.38q0-5.39-3.46-8.85t-8.85-3.46H252.31q-5.39 0-8.85 3.46t-3.46 8.85v375.38q0 5.39 3.46 8.85t8.85 3.46ZM480-290q29.15 0 49.58-20.42Q550-330.85 550-360t-20.42-49.58Q509.15-430 480-430t-49.58 20.42Q410-389.15 410-360t20.42 49.58Q450.85-290 480-290ZM360-620h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>
+                <h3 class="fw-light">{{ denied_message }}</h3>
+            </div>
         {% else %}
             {% if is_owner %}
             <div class="d-flex justify-content-between">
@@ -43,76 +51,166 @@
             {% endif %}
 
             <div class="card p-4">
-                <h1>{{ user.username }}</h1>
+                <h1 class="fw-light">{{ user.username }}</h1>
                 <small>Присъединен на {{ user.date_joined|date:"j F Y" }}</small>
+                <hr>
                 <p>{{ user.email }}</p>
                 <p>{{ user.first_name }} {{ user.last_name }}</p>
                 <div class="d-flex gap-1">
                     {% if user.profile.facebook_url %}<a href="{{ user.profile.facebook_url }}">Facebook</a>{% endif %}
-                    {% if user.profile.x_handle %}<a href="{{ user.profile.x_handle }}">X</a>{% endif %}
-                    {% if user.profile.instagram_handle %}<a href="{{ user.profile.instagram_handle }}">Instagram</a>{% endif %}
-                    {% if user.profile.tiktok_handle %}<a href="{{ user.profile.tiktok_handle }}">TikTok</a>{% endif %}
+                    {% if user.profile.x_handle %}<a href="https://x.com/{{ user.profile.x_handle }}">X</a>{% endif %}
+                    {% if user.profile.instagram_handle %}<a href="https://www.instagram.com/{{ user.profile.instagram_handle }}">Instagram</a>{% endif %}
+                    {% if user.profile.tiktok_handle %}<a href="https://www.tiktok.com/@{{ user.profile.tiktok_handle }}">TikTok</a>{% endif %}
                 </div>
-                <p>{{ user.profile.bio|default_if_none:'' }}</p>
+                {% if not user.profile.bio == 'None' %}<p>{{ user.profile.bio|default_if_none:'' }}</p>{% endif %}
                 <p>{{ user.profile.country|default_if_none:'' }}</p>
                 <p>{{ user.profile.city|default_if_none:'' }}</p>
             </div>
-            <div class="card p-4" id="posts">
-                <h1>Публикации на {{ user.username }} ({{ posts.count }})</h1>
+
+            {# POSTS #}
+            <div class="card p-4 mt-2" id="posts">
+                <h1 class="fw-light">&middot; Публикации на {{ user.username }} ({{ posts.count }})</h1>
                 {% for post in posts %}
-                    <div id="post_{{ post.pk }}">
-                    <p>от тема: {{ post.space.name }}</p>
-                    <h1>{{ post.name }}</h1>
+                <div
                     {% if not post.visibility %}
-                        <h5>{% url 'post_details' post.slug %}?token={{ post.token }}</h5>
+                        class="card mb-1"
                     {% else %}
-                        <a href="{% url 'post_details' post.slug %}">Post link</a>
+                        class="card mb-1 on-hover-border cursor-pointer"
+                        onclick="window.location.href='{% url 'post_details' post.slug %}'"
                     {% endif %}
-                    <button class="btn btn-danger" @click="deletePost({{ post.pk }})">Изтрий</button>
+                >
+                    <div id="post_{{ post.pk }}" class="card-body position-relative">
+                        <h2 class="fw-light">{{ post.name }}</h2>
+                        <small>{{ post.content|striptags|truncatechars:150 }}</small>
+                        {% if post.space %}
+                        <div class="d-flex align-items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0d6efd"><path d="M460-171.46v-297.08L200-619.08v283.23q0 6.16 3.08 11.54 3.07 5.39 9.23 9.23L460-171.46Zm40 0 247.69-143.62q6.16-3.84 9.23-9.23 3.08-5.38 3.08-11.54v-283.23L500-468.54v297.08Zm-52.31 38.92L192.31-279.69q-15.16-8.69-23.73-23.62-8.58-14.92-8.58-32.31v-288.76q0-17.39 8.58-32.31 8.57-14.93 23.73-23.62l255.38-147.15q15.16-8.69 32.31-8.69 17.15 0 32.31 8.69l255.38 147.15q15.16 8.69 23.73 23.62 8.58 14.92 8.58 32.31v288.76q0 17.39-8.58 32.31-8.57 14.93-23.73 23.62L512.31-132.54q-15.16 8.69-32.31 8.69-17.15 0-32.31-8.69ZM628.46-589 737-651.46 492.31-793.08q-6.16-3.84-12.31-3.84t-12.31 3.84l-95.69 55L628.46-589ZM480-502.92l108-62.7-257-148.53-108 62.69 257 148.54Z"/></svg>
+                            <a href="{% url 'space_details' post.space.slug %}">{{ post.space.name }}</a>
+                        </div>
+                        {% endif %}
+                        {% if not post.visibility %}
+                            <div class="input-group mt-2">
+                                <input type="text" class="form-control" value="{{ request.get_host }}{% url 'post_details' post.slug %}?token={{ post.token }}" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="input-group-text cursor-pointer btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" id="basic-addon2">Копирай</button>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px;" @click="deletePost({{ post.pk }})">Изтрий</button>
                     </div>
+                </div>
                 {% endfor %}
-                <h1 id="saved_posts">Запазени ({{ saved_posts.count }})</h1>
+
+                <h3 id="saved_posts" class="fw-light mb-1">Запазени ({{ saved_posts.count }})</h3>
                 {% for saved_post in saved_posts %}
-                    <p>от тема: {{ saved_post.post.space.name }}</p>
-                    <h1>{{ saved_post.post.name }}</h1>
+                <div
                     {% if not saved_post.post.visibility %}
-                        <h5>{% url 'post_details' saved_post.post.slug %}?token={{ saved_post.post.token }}</h5>
+                        class="card mb-1"
                     {% else %}
-                        <a href="{% url 'post_details' saved_post.post.slug %}">Post link</a>
+                        class="card mb-1 on-hover-border cursor-pointer"
+                        onclick="window.location.href='{% url 'post_details' saved_post.post.slug %}'"
                     {% endif %}
-                {% endfor %}
-            </div>
-            <div class="card p-4" id="comments">
-                <h1>Коментари на {{ user.username }} ({{ comments.count }})</h1>
-                {% for comment in comments %}
-                    <h1>Коментар от {{ comment.post.name }}</h1>
-                    <h3>{{ comment.content }}</h3>
-                    <a href="{% url 'post_details' comment.post.slug %}?comment_link={{ comment.pk }}">Comment link</a>
-                {% endfor %}
-                <h3 id="replies">Отговори на {{ user.username }} ({{ replies.count }})</h3>
-                {% for reply in replies %}
-                    <h1>Отговор от {{ reply.post.name }}</h1>
-                    <h3>{{ reply.content }}</h3>
-                    <a href="{% url 'post_details' reply.post.slug %}?comment_link={{ reply.pk }}">Reply link</a>
-                {% endfor %}
-                <h3 id="liked_comments">Харесани ({{ liked_comments.count }})</h3>
-                {% for comment_like in liked_comments %}
-                    <h1>От {{ comment_like.comment.post.name }}</h1>
-                    <h3>{{ comment_like.comment.content }}</h3>
-                    <a href="{% url 'post_details' comment_like.comment.post.slug %}?comment_link={{ comment_like.comment.pk }}">Comment link</a>
-                {% endfor %}
-            </div>
-            <div class="card p-4" id="spaces">
-                <h1>Теми на {{ user.username }} ({{ spaces.count }})</h1>
-                {% for space in spaces %}
-                    <div id="space_{{ space.pk }}">
-                    <h1>{{ space.name }}</h1>
-                    <button class="btn btn-danger" @click="deleteSpace({{ space.pk }})">Изтрий</button>
+                >
+                    <div id="post_{{ saved_post.post.pk }}" class="card-body position-relative">
+                        <h2 class="fw-light">{{ saved_post.post.name }}</h2>
+                        <small>{{ saved_post.post.content|striptags|truncatechars:150 }}</small>
+                        {% if saved_post.post.space %}
+                        <div class="d-flex align-items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#0d6efd">
+                                <path d="M460-171.46v-297.08L200-619.08v283.23q0 6.16 3.08 11.54 3.07 5.39 9.23 9.23L460-171.46Zm40 0 247.69-143.62q6.16-3.84 9.23-9.23 3.08-5.38 3.08-11.54v-283.23L500-468.54v297.08Zm-52.31 38.92L192.31-279.69q-15.16-8.69-23.73-23.62-8.58-14.92-8.58-32.31v-288.76q0-17.39 8.58-32.31 8.57-14.93 23.73-23.62l255.38-147.15q15.16-8.69 32.31-8.69 17.15 0 32.31 8.69l255.38 147.15q15.16 8.69 23.73 23.62 8.58 14.92 8.58 32.31v288.76q0 17.39-8.58 32.31-8.57 14.93-23.73 23.62L512.31-132.54q-15.16 8.69-32.31 8.69-17.15 0-32.31-8.69ZM628.46-589 737-651.46 492.31-793.08q-6.16-3.84-12.31-3.84t-12.31 3.84l-95.69 55L628.46-589ZM480-502.92l108-62.7-257-148.53-108 62.69 257 148.54Z"/>
+                            </svg>
+                            <a href="{% url 'space_details' saved_post.post.space.slug %}">{{ saved_post.post.space.name }}</a>
+                        </div>
+                        {% endif %}
+                        {% if not saved_post.post.visibility %}
+                            <div class="input-group mt-2">
+                                <input type="text" class="form-control" value="{{ request.get_host }}{% url 'post_details' saved_post.post.slug %}?token={{ saved_post.post.token }}" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="input-group-text cursor-pointer btn btn-primary" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" id="basic-addon2">Копирай</button>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px;" @click="deletePost({{ saved_post.post.pk }})">Изтрий</button>
                     </div>
+                </div>
                 {% endfor %}
-                <h1 id="followed_spaces">Последвани ({{ followed_spaces.count }})</h1>
+            </div>
+
+            {# COMMENTS #}
+            <div class="card p-4 mt-2" id="comments">
+                <h1 class="fw-light">&middot; Коментари на {{ user.username }} ({{ comments.count }})</h1>
+                {% for comment in comments %}
+                <div
+                    class="card mb-1 on-hover-border cursor-pointer"
+                    onclick="window.location.href='{% url 'post_details' comment.post.slug %}?comment_link={{ comment.pk }}'"
+                >
+                    <div class="card-body">
+                        <h3 class="fw-light">{{ comment.content }}</h3>
+                        <p>Коментирано в <a href="{% url 'post_details' comment.post.slug %}">{{ comment.post.name }}</a></p>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <h3 id="replies" class="fw-light mb-1">Отговори на {{ user.username }} ({{ replies.count }})</h3>
+                {% for reply in replies %}
+                <div
+                    class="card mb-1 on-hover-border cursor-pointer"
+                    onclick="window.location.href='{% url 'post_details' reply.post.slug %}?comment_link={{ reply.pk }}'"
+                >
+                    <div class="card-body">
+                        <h3 class="fw-light">{{ reply.content }}</h3>
+                        <p>Отговорено в <a href="{% url 'post_details' reply.post.slug %}">{{ reply.post.name }}</a></p>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <h3 id="liked_comments" class="fw-light mb-1">Харесани ({{ liked_comments.count }})</h3>
+                {% for comment_like in liked_comments %}
+                <div
+                    class="card mb-1 on-hover-border cursor-pointer"
+                    onclick="window.location.href='{% url 'post_details' comment_like.comment.post.slug %}?comment_link={{ comment_like.comment.pk }}'"
+                >
+                    <div class="card-body">
+                        <h3 class="fw-light">{{ comment_like.comment.content }}</h3>
+                        <p>Коментар от <a href="{% url 'post_details' comment_like.comment.post.slug %}">{{ comment_like.comment.post.name }}</a></p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {# SPACES #}
+            <div class="card p-4 mt-2" id="spaces">
+                <h1 class="fw-light">&middot; Теми на {{ user.username }} ({{ spaces.count }})</h1>
+                {% for space in spaces %}
+                <div
+                    class="card mb-1 on-hover-border cursor-pointer"
+                    onclick="window.location.href='{% url 'space_details' space.slug %}'"
+                >
+                    <div class="card-body position-relative">
+                        <div class="d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000"><path d="M460-171.46v-297.08L200-619.08v283.23q0 6.16 3.08 11.54 3.07 5.39 9.23 9.23L460-171.46Zm40 0 247.69-143.62q6.16-3.84 9.23-9.23 3.08-5.38 3.08-11.54v-283.23L500-468.54v297.08Zm-52.31 38.92L192.31-279.69q-15.16-8.69-23.73-23.62-8.58-14.92-8.58-32.31v-288.76q0-17.39 8.58-32.31 8.57-14.93 23.73-23.62l255.38-147.15q15.16-8.69 32.31-8.69 17.15 0 32.31 8.69l255.38 147.15q15.16 8.69 23.73 23.62 8.58 14.92 8.58 32.31v288.76q0 17.39-8.58 32.31-8.57 14.93-23.73 23.62L512.31-132.54q-15.16 8.69-32.31 8.69-17.15 0-32.31-8.69ZM628.46-589 737-651.46 492.31-793.08q-6.16-3.84-12.31-3.84t-12.31 3.84l-95.69 55L628.46-589ZM480-502.92l108-62.7-257-148.53-108 62.69 257 148.54Z"/></svg>
+                            <h3 class="fw-light">{{ space.name }}</h3>
+                        </div>
+                        <p>{{ space.description|striptags|truncatechars:150 }}</p>
+                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px; z-index: 100;" @click="deleteSpace({{ space.pk }})">Изтрий</button>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <h3 id="followed_spaces" class="fw-light mb-1">Последвани ({{ followed_spaces.count }})</h3>
                 {% for followed_space in followed_spaces %}
-                    <h1>{{ followed_space.space.name }}</h1>
+                <div
+                    class="card mb-1 on-hover-border cursor-pointer"
+                    onclick="window.location.href='{% url 'space_details' followed_space.space.slug %}'"
+                >
+                    <div class="card-body position-relative">
+                        <div class="d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000"><path d="M460-171.46v-297.08L200-619.08v283.23q0 6.16 3.08 11.54 3.07 5.39 9.23 9.23L460-171.46Zm40 0 247.69-143.62q6.16-3.84 9.23-9.23 3.08-5.38 3.08-11.54v-283.23L500-468.54v297.08Zm-52.31 38.92L192.31-279.69q-15.16-8.69-23.73-23.62-8.58-14.92-8.58-32.31v-288.76q0-17.39 8.58-32.31 8.57-14.93 23.73-23.62l255.38-147.15q15.16-8.69 32.31-8.69 17.15 0 32.31 8.69l255.38 147.15q15.16 8.69 23.73 23.62 8.58 14.92 8.58 32.31v288.76q0 17.39-8.58 32.31-8.57 14.93-23.73 23.62L512.31-132.54q-15.16 8.69-32.31 8.69-17.15 0-32.31-8.69ZM628.46-589 737-651.46 492.31-793.08q-6.16-3.84-12.31-3.84t-12.31 3.84l-95.69 55L628.46-589ZM480-502.92l108-62.7-257-148.53-108 62.69 257 148.54Z"/></svg>
+                            <h3 class="fw-light">{{ followed_space.space.name }}</h3>
+                        </div>
+                        <p>{{ followed_space.space.description|striptags|truncatechars:150 }}</p>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         {% endif %}

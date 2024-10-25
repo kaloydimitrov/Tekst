@@ -47,6 +47,14 @@
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
+.on-hover-border {
+    transition: border-color 0.4s;
+}
+
+.on-hover-border:hover {
+    border-color: black;
+}
+
 /* DROPDOWN MENU */
 .dropdown-menu li {
     position: relative;

@@ -15,6 +15,9 @@ name - **tekst_db**
 EMAIL_HOST_USER=<br />
 EMAIL_HOST_PASSWORD=
 
+# Run project
+`python manage.py runserver`
+
 # PyCharm
 Configure Inspections: `Ctrl` `Alt` `Shift` `H`<br />
 Reformat file: `Ctrl` `Alt` `L`
