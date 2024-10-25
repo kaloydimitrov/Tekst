@@ -26,6 +26,19 @@
     {% include 'includes/css/posts.css' %}
     {% include 'includes/css/message.css' %}
 
+    .form-control:disabled, .form-control[readonly] {
+        background-color: white;
+    }
+
+    .vdp-datepicker__calendar .cell.selected {
+        background: black;
+        color: white;
+    }
+
+    .vdp-datepicker__calendar .cell.selected:hover {
+        background: black;
+    }
+
     .vdp-datepicker__calendar {
         margin-top: 10px;
         border-radius: 0.25rem;
@@ -42,6 +55,7 @@
 
     #bootstrap-override .vdp-datepicker__calendar .cell:active {
         background-color: rgba(0, 0, 0, 0.05);
+        color: black;
     }
 
     .vdp-datepicker__calendar .next, .vdp-datepicker__calendar .prev {

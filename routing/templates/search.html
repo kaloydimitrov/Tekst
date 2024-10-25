@@ -52,25 +52,31 @@
 
         <div v-if="window === 'spaces'">
             {% for space in spaces %}
-                <div
-                    class="card mb-1 on-hover-border cursor-pointer"
-                    onclick="window.location.href='{% url 'space_details' space.slug %}'"
-                >
-                    <div class="card-body position-relative">
-                        <div class="d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000"><path d="M460-171.46v-297.08L200-619.08v283.23q0 6.16 3.08 11.54 3.07 5.39 9.23 9.23L460-171.46Zm40 0 247.69-143.62q6.16-3.84 9.23-9.23 3.08-5.38 3.08-11.54v-283.23L500-468.54v297.08Zm-52.31 38.92L192.31-279.69q-15.16-8.69-23.73-23.62-8.58-14.92-8.58-32.31v-288.76q0-17.39 8.58-32.31 8.57-14.93 23.73-23.62l255.38-147.15q15.16-8.69 32.31-8.69 17.15 0 32.31 8.69l255.38 147.15q15.16 8.69 23.73 23.62 8.58 14.92 8.58 32.31v288.76q0 17.39-8.58 32.31-8.57 14.93-23.73 23.62L512.31-132.54q-15.16 8.69-32.31 8.69-17.15 0-32.31-8.69ZM628.46-589 737-651.46 492.31-793.08q-6.16-3.84-12.31-3.84t-12.31 3.84l-95.69 55L628.46-589ZM480-502.92l108-62.7-257-148.53-108 62.69 257 148.54Z"/></svg>
-                            <h3 class="fw-light">{{ space.name }}</h3>
-                        </div>
-                        <p>{{ space.description|striptags|truncatechars:150 }}</p>
+            <div
+                class="card mb-1 on-hover-border cursor-pointer"
+                onclick="window.location.href='{% url 'space_details' space.slug %}'"
+            >
+                <div class="card-body position-relative">
+                    <div class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#000000"><path d="M460-171.46v-297.08L200-619.08v283.23q0 6.16 3.08 11.54 3.07 5.39 9.23 9.23L460-171.46Zm40 0 247.69-143.62q6.16-3.84 9.23-9.23 3.08-5.38 3.08-11.54v-283.23L500-468.54v297.08Zm-52.31 38.92L192.31-279.69q-15.16-8.69-23.73-23.62-8.58-14.92-8.58-32.31v-288.76q0-17.39 8.58-32.31 8.57-14.93 23.73-23.62l255.38-147.15q15.16-8.69 32.31-8.69 17.15 0 32.31 8.69l255.38 147.15q15.16 8.69 23.73 23.62 8.58 14.92 8.58 32.31v288.76q0 17.39-8.58 32.31-8.57 14.93-23.73 23.62L512.31-132.54q-15.16 8.69-32.31 8.69-17.15 0-32.31-8.69ZM628.46-589 737-651.46 492.31-793.08q-6.16-3.84-12.31-3.84t-12.31 3.84l-95.69 55L628.46-589ZM480-502.92l108-62.7-257-148.53-108 62.69 257 148.54Z"/></svg>
+                        <h3 class="fw-light">{{ space.name }}</h3>
                     </div>
+                    <p>{{ space.description|striptags|truncatechars:150 }}</p>
                 </div>
+            </div>
             {% endfor %}
             {% if not spaces %}<p>Няма теми</p>{% endif %}
         </div>
 
         <div v-if="window === 'users'">
             {% for user in users %}
-                <h3>{{ user.username }}</h3>
+            <div class="card cursor-pointer on-hover-border mb-1" onclick="window.location.href='{% url 'user_profile' user.username %}'">
+                <div class="card-body d-flex align-items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-504.62q-49.5 0-84.75-35.25T360-624.62q0-49.5 35.25-84.75T480-744.62q49.5 0 84.75 35.25T600-624.62q0 49.5-35.25 84.75T480-504.62ZM200-215.38v-65.85q0-24.77 14.42-46.35 14.43-21.57 38.81-33.5 56.62-27.15 113.31-40.73 56.69-13.57 113.46-13.57 56.77 0 113.46 13.57 56.69 13.58 113.31 40.73 24.38 11.93 38.81 33.5Q760-306 760-281.23v65.85H200Zm40-40h480v-25.85q0-13.31-8.58-25-8.57-11.69-23.73-19.77-49.38-23.92-101.83-36.65-52.45-12.73-105.86-12.73t-105.86 12.73Q321.69-349.92 272.31-326q-15.16 8.08-23.73 19.77-8.58 11.69-8.58 25v25.85Zm240-289.24q33 0 56.5-23.5t23.5-56.5q0-33-23.5-56.5t-56.5-23.5q-33 0-56.5 23.5t-23.5 56.5q0 33 23.5 56.5t56.5 23.5Zm0-80Zm0 369.24Z"/></svg>
+                    <h5 class="fw-light mb-0">{{ user.username }}</h5>
+                    <small>&middot; {{ user.followers.count }} последователя</small>
+                </div>
+            </div>
             {% endfor %}
             {% if not users %}<p>Няма потребители</p>{% endif %}
         </div>
@@ -88,7 +94,7 @@
         },
         methods: {
             getClass(windowName) {
-                return ['windowButton', 'fs-2', 'cursor-pointer', 'd-flex', 'gap-1', 'align-items-end', { 'active': this.window === windowName }];
+                return ['windowButton', 'fs-2', 'fw-light', 'cursor-pointer', 'd-flex', 'gap-1', 'align-items-end', { 'active': this.window === windowName }];
             },
         },
     });

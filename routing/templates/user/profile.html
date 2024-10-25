@@ -10,9 +10,9 @@
 
         <div class="card mb-4 cursor-pointer on-hover-border" onclick="window.location.href='{% url 'user_ffs' user.profile.slug %}'">
             <div class="card-body">
-                <h2 class="fw-light">Последователи (го следват): <b>[[ followers ]]</b></h2>
+                <h2 class="fw-light">Последователи: <b>[[ followers ]]</b></h2>
                 <hr>
-                <h2 class="fw-light">Последвани (следва): <b>[[ following ]]</b></h2>
+                <h2 class="fw-light">Следва: <b>[[ following ]]</b></h2>
             </div>
         </div>
 
@@ -69,7 +69,7 @@
 
             {# POSTS #}
             <div class="card p-4 mt-2" id="posts">
-                <h1 class="fw-light">&middot; Публикации на {{ user.username }} ({{ posts.count }})</h1>
+                <h1 class="fw-light text-center">Публикации на {{ user.username }} ({{ posts.count }})</h1>
                 {% for post in posts %}
                 <div
                     {% if not post.visibility %}
@@ -96,12 +96,12 @@
                                 </div>
                             </div>
                         {% endif %}
-                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px;" @click="deletePost({{ post.pk }})">Изтрий</button>
+                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px;" @click.stop="confirmDeletePost({{ post.pk }})">Изтрий</button>
                     </div>
                 </div>
                 {% endfor %}
 
-                <h3 id="saved_posts" class="fw-light mb-1">Запазени ({{ saved_posts.count }})</h3>
+                <h3 id="saved_posts" class="fw-light mb-1">&middot; Запазени ({{ saved_posts.count }})</h3>
                 {% for saved_post in saved_posts %}
                 <div
                     {% if not saved_post.post.visibility %}
@@ -111,7 +111,7 @@
                         onclick="window.location.href='{% url 'post_details' saved_post.post.slug %}'"
                     {% endif %}
                 >
-                    <div id="post_{{ saved_post.post.pk }}" class="card-body position-relative">
+                    <div id="post_{{ saved_post.post.pk }}" class="card-body">
                         <h2 class="fw-light">{{ saved_post.post.name }}</h2>
                         <small>{{ saved_post.post.content|striptags|truncatechars:150 }}</small>
                         {% if saved_post.post.space %}
@@ -130,7 +130,6 @@
                                 </div>
                             </div>
                         {% endif %}
-                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px;" @click="deletePost({{ saved_post.post.pk }})">Изтрий</button>
                     </div>
                 </div>
                 {% endfor %}
@@ -138,7 +137,7 @@
 
             {# COMMENTS #}
             <div class="card p-4 mt-2" id="comments">
-                <h1 class="fw-light">&middot; Коментари на {{ user.username }} ({{ comments.count }})</h1>
+                <h1 class="fw-light text-center">Коментари на {{ user.username }} ({{ comments.count }})</h1>
                 {% for comment in comments %}
                 <div
                     class="card mb-1 on-hover-border cursor-pointer"
@@ -151,7 +150,7 @@
                 </div>
                 {% endfor %}
 
-                <h3 id="replies" class="fw-light mb-1">Отговори на {{ user.username }} ({{ replies.count }})</h3>
+                <h3 id="replies" class="fw-light mb-1">&middot; Отговори на {{ user.username }} ({{ replies.count }})</h3>
                 {% for reply in replies %}
                 <div
                     class="card mb-1 on-hover-border cursor-pointer"
@@ -164,7 +163,7 @@
                 </div>
                 {% endfor %}
 
-                <h3 id="liked_comments" class="fw-light mb-1">Харесани ({{ liked_comments.count }})</h3>
+                <h3 id="liked_comments" class="fw-light mb-1">&middot; Харесани ({{ liked_comments.count }})</h3>
                 {% for comment_like in liked_comments %}
                 <div
                     class="card mb-1 on-hover-border cursor-pointer"
@@ -180,7 +179,7 @@
 
             {# SPACES #}
             <div class="card p-4 mt-2" id="spaces">
-                <h1 class="fw-light">&middot; Теми на {{ user.username }} ({{ spaces.count }})</h1>
+                <h1 class="fw-light text-center">Теми на {{ user.username }} ({{ spaces.count }})</h1>
                 {% for space in spaces %}
                 <div
                     class="card mb-1 on-hover-border cursor-pointer"
@@ -192,12 +191,12 @@
                             <h3 class="fw-light">{{ space.name }}</h3>
                         </div>
                         <p>{{ space.description|striptags|truncatechars:150 }}</p>
-                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px; z-index: 100;" @click="deleteSpace({{ space.pk }})">Изтрий</button>
+                        <button class="btn btn-sm btn-danger position-absolute" style="top: 10px; right: 10px; z-index: 100;" @click.stop="confirmDeleteSpace({{ space.pk }})">Изтрий</button>
                     </div>
                 </div>
                 {% endfor %}
 
-                <h3 id="followed_spaces" class="fw-light mb-1">Последвани ({{ followed_spaces.count }})</h3>
+                <h3 id="followed_spaces" class="fw-light mb-1">&middot; Последвани ({{ followed_spaces.count }})</h3>
                 {% for followed_space in followed_spaces %}
                 <div
                     class="card mb-1 on-hover-border cursor-pointer"
@@ -300,6 +299,11 @@
                     }, 1000);
                 }
             },
+            confirmDeletePost(postId) {
+                if (window.confirm("Сигурни ли сте, че искате да изтриете тази публикация?")) {
+                    this.deletePost(postId);
+                }
+            },
             deletePost(postId) {
                 axios
                 .delete(`/api/post/${postId}/delete/`)
@@ -309,6 +313,11 @@
                 .catch(error => {
                     console.error(error)
                 })
+            },
+            confirmDeleteSpace(spaceId) {
+                if (window.confirm("Сигурни ли сте, че искате да изтриете тази тема?")) {
+                    this.deleteSpace(spaceId);
+                }
             },
             deleteSpace(spaceId) {
                 axios

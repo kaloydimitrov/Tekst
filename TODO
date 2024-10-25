@@ -9,34 +9,16 @@ implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 add groups, permissions, roles
 
-hover on username - popup with info
-
-Report, block spaces
+TODO FAST:
 Report, block user
+fix email authentication page
+text-decoration-none on all a tags
+facebook share
 
-TODO:
-share feature in post details (look how is done in facebook)
-notifications (redis)
+client validation for create space and post
 
-site search functionality (search icon in input)
-avoid tags with same name (should be unique) (show from which space the tag in search tags)
+share:
+copy current link to clipboard
 
-add views post
-profile page
--follow
--posts sorted by space
-TODO END
-
-My posts:
-Delete post
-Edit post
-
-My spaces:
-Delete space
-Edit space
-Blocked spaces -> user settings -> Blocked spaces
-
-My comments:
-Delete comment
-Edit comment
-view in post button
+private post:
+copy to clipboard

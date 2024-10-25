@@ -45,8 +45,16 @@
             </a>
 
             <div class="d-flex flex-grow-1 align-items-center">
-                <div class="d-flex gap-1 w-100 me-2" id="search-app">
-                    <input type="text" class="site-search-input" placeholder="Търси в сайта (ctrl + p)" v-model="searchInput" @keyup.enter="search">
+                <div id="search-app" class="d-flex gap-1 w-100 me-2">
+                    <input
+                        type="text"
+                        class="site-search-input"
+                        id="siteSearchInput"
+                        ref="siteSearchInput"
+                        placeholder="Търси в сайта (Ctrl + I)"
+                        v-model="searchInput"
+                        @keyup.enter="search"
+                    >
                     <button class="btn btn-primary" @click="search">Търси</button>
                 </div>
                 {% if request.user.is_authenticated %}
@@ -122,7 +130,12 @@
         <div class="collapse" id="navbarToggleExternalContent">
             <ul class="list-group">
                 {% if request.user.is_authenticated %}
-                <li><a class="dropdown-item" href="{% url 'user_profile' request.user.profile.slug %}">Профил</a></li>
+                <li><a class="dropdown-item" href="{% url 'home' %}">Начало</a></li>
+                <li><a class="dropdown-item" href="{% url 'user_profile' request.user.profile.slug %}">Моят профил</a></li>
+                <li><a class="dropdown-item" href="{% url 'list_spaces' %}">Виж теми</a></li>
+                <hr>
+                <li><a class="dropdown-item" href="{% url 'create_space' %}">Създай тема</a></li>
+                <li><a class="dropdown-item" href="{% url 'create_post' %}">Създай публикация</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -221,6 +234,7 @@
     </div>
 </body>
 <script>
+    {# Closing button for all messages #}
     const closingElements = document.getElementsByClassName("closing-x");
         for (let i = 0; i < closingElements.length; i++) {
             closingElements[i].addEventListener("click", function() {
@@ -228,6 +242,7 @@
             });
     }
 
+    {# Site Search App #}
     new Vue({
         delimiters: ['[[', ']]'],
         el: '#search-app',
@@ -236,13 +251,18 @@
         },
         methods: {
             search() {
-                if (!this.searchInput) {
-                    return;
-                }
-
+                if (!this.searchInput) return;
                 window.location.href = `{% url 'search' %}?q=${this.searchInput}`;
             }
         },
-    })
+        mounted() {
+            document.addEventListener("keydown", (event) => {
+                if (event.ctrlKey && event.code === 'KeyI') {
+                    event.preventDefault();
+                    this.$refs.siteSearchInput.focus();
+                }
+            });
+        }
+    });
 </script>
 </html>

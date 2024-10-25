@@ -5,7 +5,7 @@
 {% block main %}
     {% for notification in notifications %}
     <div class="card p-3 mb-2">
-        <h1>{{ notification.message }}</h1>
+        <h1 class="fw-light">{{ notification.message }}</h1>
         {% if notification.notification_type == 'follow' %}
             <a href="{% url 'user_profile' notification.extra_data.user_slug %}" class="d-flex gap-1 align-items-end">
                 <span>Виж профил:</span>

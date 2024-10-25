@@ -185,7 +185,7 @@
         },
         methods: {
             generateURL() {
-                return `{% url 'list_spaces' %}?name=${this.name}&content=${this.content}`
+                return '{% url 'list_spaces' %}'
             },
             navigateToSpace(slug) {
                 window.location.href = `/space/${slug}/`;
