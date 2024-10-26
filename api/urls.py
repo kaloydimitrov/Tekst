@@ -4,7 +4,7 @@ from .views import (SpaceDetailView, SpaceListView, TagListView, FollowSpaceView
                     CreateCommentView, CommentListView, LikeCommentView, DislikeCommentView, CreateReactionView,
                     DeleteReactionView, DeleteCommentView, UpdateCommentView, PostListView, CommentGetView,
                     PostSaveView, PostSavedRemoveView, FollowUserView, UnfollowUserView, ProfileVisibilityUpdateView,
-                    update_profile_view, DeletePostView, DeleteSpaceView)
+                    update_profile_view, DeletePostView, DeleteSpaceView, ReportUserView)
 
 urlpatterns = [
     path('space/', include([
@@ -40,6 +40,7 @@ urlpatterns = [
     path('user/', include([
         path('follow/', FollowUserView.as_view(), name='follow_user'),
         path('unfollow/', UnfollowUserView.as_view(), name='unfollow_user'),
+        path('report/', ReportUserView.as_view(), name='report_user'),
     ])),
     path('profile/', include([
         path('<int:pk>/visibility/', ProfileVisibilityUpdateView.as_view(), name='update_profile_visibility'),

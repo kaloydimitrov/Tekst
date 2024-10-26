@@ -50,3 +50,32 @@ class UserFollows(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['following', 'follower'], name='unique_following_follower')
         ]
+
+
+class UserReport(models.Model):
+    REPORT_TYPES = [
+        ('SPAM', 'Спам'),
+        ('INAPPROPRIATE', 'Неподходящо съдържание'),
+        ('HARASSMENT', 'Обида'),
+    ]
+
+    STATUS_CHOICES = [
+        ('PENDING', 'В процес'),
+        ('RESOLVED', 'Готово'),
+        ('REJECTED', 'Отхвърлено'),
+    ]
+
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_made')
+    reported_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_received')
+    report_type = models.CharField(max_length=20, choices=REPORT_TYPES)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    reported_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-reported_on']
+        verbose_name = "User Report"
+        verbose_name_plural = "User Reports"
+
+    def __str__(self):
+        return f"{self.report_type} report by {self.reporter} on {self.reported_user} - Status: {self.status}"

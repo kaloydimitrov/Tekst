@@ -5,7 +5,24 @@
 {% block main %}
     <div id="app">
         {% if not is_owner %}
-            <button type="button" class="btn btn-outline-primary mb-2" @click="followUnfollowUser"><span v-if="followed">Отследвай</span><span v-else>Следвай</span></button>
+            <div class="d-flex justify-content-between mb-2">
+                <button type="button" class="btn btn-outline-primary" @click="followUnfollowUser"><span v-if="followed">Отследвай</span><span v-else>Следвай</span></button>
+                <button class="btn btn-secondary dropdown-toggle d-flex gap-1 align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false" {% if is_reported %}disabled{% endif %}>
+                    {% if is_reported %}
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M382-267.69 183.23-466.46 211.77-495 382-324.77 748.23-691l28.54 28.54L382-267.69Z"/></svg>
+                    {% endif %}
+                    <span>Докладвай</span>
+                </button>
+                {% if not is_reported %}
+                <ul class="dropdown-menu">
+                    {% for value, display in report_choices %}
+                    <li class="dropdown-item cursor-pointer" @click="confirmReport('{{ value }}', '{{ display }}')">{{ display }}</li>
+                    {% endfor %}
+                    <hr>
+                    <li><a class="dropdown-item" href="#">Друго &middot; Контакти</a></li>
+                </ul>
+                {% endif %}
+            </div>
         {% endif %}
 
         <div class="card mb-4 cursor-pointer on-hover-border" onclick="window.location.href='{% url 'user_ffs' user.profile.slug %}'">
@@ -299,6 +316,26 @@
                     }, 1000);
                 }
             },
+            confirmReport(reportType, reportTypeDisplay) {
+                if (window.confirm(`Сигурни ли сте, че докладвате този потребител за ${reportTypeDisplay}?`)) {
+                    this.reportUser(reportType);
+                }
+            },
+            reportUser(reportType) {
+                axios
+                .post('{% url 'report_user' %}', {
+                    reporter: {{ request.user.pk }},
+                    reported_user: {{ user.pk }},
+                    report_type: reportType
+                })
+                .then(() => {
+                    messageApp.triggerNotification('Докладва потребител {{ user.username }} успешно.');
+                    setInterval(() => location.reload(), 2000);
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+            },
             confirmDeletePost(postId) {
                 if (window.confirm("Сигурни ли сте, че искате да изтриете тази публикация?")) {
                     this.deletePost(postId);
@@ -309,6 +346,7 @@
                 .delete(`/api/post/${postId}/delete/`)
                 .then(() => {
                     messageApp.triggerNotification('Изтри публикацията усшешно.');
+                    setInterval(() => location.reload(), 2000);
                 })
                 .catch(error => {
                     console.error(error)
@@ -324,6 +362,7 @@
                 .delete(`/api/space/${spaceId}/delete/`)
                 .then(() => {
                     messageApp.triggerNotification('Изтри темата усшешно.');
+                    setInterval(() => location.reload(), 2000);
                 })
                 .catch(error => {
                     console.error(error)

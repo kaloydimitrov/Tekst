@@ -10,14 +10,12 @@ implement logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 add groups, permissions, roles
 
 TODO FAST:
-Report, block user
-fix email authentication page
-text-decoration-none on all a tags
-facebook share
-
 client validation for create space and post
+fix email authentication page (add reload button - 'Reload if you authenticate from different device')
+text-decoration-none on all a tags
 
 share:
+facebook share
 copy current link to clipboard
 
 private post:

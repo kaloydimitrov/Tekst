@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.views.generic.base import TemplateView
 from posts.models import Post, Comment
 from spaces.models import Space
-from authentication.models import Profile, UserFollows
+from authentication.models import Profile, UserFollows, UserReport
 from spaces.models import Space
 from django.db.models import Q
 from django.contrib.auth import get_user_model
@@ -98,6 +98,7 @@ class UserProfile(TemplateView):
         else:
             context['posts'] = Post.objects.filter(user=user, visibility=True).order_by('-created_at')
             context['saved_posts'] = user.saved_posts.filter(post__visibility=True)
+            context['is_reported'] = UserReport.objects.filter(reporter=self.request.user, reported_user=user).exists()
 
         context['comments'] = Comment.objects.filter(user=user, parent_comment__isnull=True).order_by('-created_at')
         context['replies'] = Comment.objects.filter(user=user, parent_comment__isnull=False).order_by('-created_at')
@@ -107,6 +108,7 @@ class UserProfile(TemplateView):
         context['followed_spaces'] = user.followed_spaces.all()
 
         context['display_choices'] = Profile.DISPLAY_CHOICES
+        context['report_choices'] = UserReport.REPORT_TYPES
         return context
 
 

@@ -10,7 +10,7 @@ from authentication.models import Profile
 from authentication.models import UserFollows
 from .serializers import (SpaceSerializer, TagSerializer, UserSpaceFollowSerializer, PostSerializer, CommentSerializer,
                           CommentLikeSerializer, ReactionSerializer, SavedPostsSerializer, UserFollowsSerializer,
-                          ProfileSerializer, UserUpdateSerializer, ProfileUpdateSerializer)
+                          ProfileSerializer, UserUpdateSerializer, ProfileUpdateSerializer, UserReportSerializer)
 from rest_framework import views
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
@@ -316,6 +316,11 @@ class UnfollowUserView(generics.DestroyAPIView):
         following_user = get_object_or_404(User, pk=following_user_id)
 
         return get_object_or_404(UserFollows, follower=follower, following=following_user)
+
+
+class ReportUserView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserReportSerializer
 
 
 class ProfileVisibilityUpdateView(generics.UpdateAPIView):

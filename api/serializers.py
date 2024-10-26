@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from spaces.models import Space, Tag, UserSpaceFollow
 from posts.models import Post, Comment, CommentLikes, Reaction, ReactionType, SavedPosts
-from authentication.models import UserFollows, Profile
+from authentication.models import UserFollows, Profile, UserReport
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -30,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_slug(self, obj):
         return obj.profile.slug
+
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,6 +63,12 @@ class UserSpaceFollowSerializer(serializers.ModelSerializer):
         if data['following'] == data['follower']:
             raise serializers.ValidationError("Потребител не може да се последва.")
         return data
+
+
+class UserReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserReport
+        fields = ['id', 'reporter', 'reported_user', 'report_type']
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -161,4 +168,5 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'instagram_handle', 'tiktok_handle', 'x_handle', 'facebook_url', 'bio', 'birth_date', 'gender', 'country', 'city']
+        fields = ['id', 'instagram_handle', 'tiktok_handle', 'x_handle', 'facebook_url', 'bio', 'birth_date', 'gender',
+                  'country', 'city']
