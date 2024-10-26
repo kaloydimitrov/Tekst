@@ -20,7 +20,7 @@ class CreateSpaceForm(forms.ModelForm):
 
     name = forms.CharField(
         widget=forms.TextInput(
-            attrs={'placeholder': 'Enter Name', 'class': 'form-control'}
+            attrs={'placeholder': 'Enter Name', ':class': "['form-control', {'is-invalid': !nameInputValid && showInvalidMessage}]", 'v-model': 'nameInput'}
         ))
 
     description = forms.CharField(
